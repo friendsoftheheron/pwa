@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+            integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+            crossorigin=""
+    />
+    <link rel="manifest" href="manifest.json" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Power Walk Adventure</title>
+    <!-- ios support -->
+    <link rel="apple-touch-icon" href="images/icons/icon-72-72.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-96-96.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-128-128.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-144-144.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-152-152.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-192-192.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-384-384.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-512-512.png" />
+    <meta name="apple-mobile-web-app-status-bar" content="#f15927" />
+    <meta name="theme-color" content="#cdeaf1" />
+    <style id="compass-style"></style>
+</head>
+<body>
+<input id="symbol-menu" class="hidden" type="checkbox" />
+<input id="symbol-labs" class="hidden" type="radio" name="top" />
+<input id="symbol-map" class="hidden" type="radio" name="top" />F
+<input id="symbol-settings" class="hidden" type="radio" name="top" />
+<input id="symbol-page" class="hidden" type="radio" name="top" />
+<input id="symbol-popup" class="hidden" type="checkbox" />
+<input id="authenticated" class="hidden" type="checkbox" />
+<input id="debug" class="hidden" data-setting-default="" type="checkbox" />
+<header>
+    <div id="menu" class="popup">Menu (loading)</div>
+    <div id="popup" class="popup">Popup (loading)</div>
+    <span class="larger dark-blue right">&nbsp;</span>
+    <label for="symbol-menu" class="symbol">☰</label>
+    <label for="symbol-settings" class="symbol debug">⚙</label>
+    <label for="symbol-map" id="icon-map" class="symbol" data-loading-counter="0"></label>
+    <label for="symbol-labs" id="icon-labs" class="symbol">⚗️</label>
+    <h1>Power Walk Adventure</h1>
+    <div id="messages" class="messages debug"> &nbsp; -- messages --</div>
+    <a id="hash" class="hidden"></a>
+</header>
+<main>
+    <div id="labs">Labs (Loading)</div>
+    <div id="map">Map (Loading)</div>
+    <div id="settings" data-changes="[]">Settings (Loading)</div>
+    <div id="page">Page (loading)</div>
+</main>
+<footer>
+    <div id="location">Getting Location</div>
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>

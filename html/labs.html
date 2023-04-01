@@ -1,0 +1,53 @@
+<template id="lab_template">
+    <input id="details-${id}" class="details hidden" type="radio" name="radio-lab" />
+    <div class="lab border-${color}">
+        <a href="${firebase_dynamic_link}"><div	class="compass ${needle_class}"></div></a>
+        <label for="details-${id}" class="image"><img src="${key_image_url}"/></label>
+        <label for="details-${id}">
+            <div class="title dark-blue"><span class="${linear_class}">${_nr}</span>) ${title}</div>
+            <div class="adventure">${adventure}</div>
+            <div class="details blur">
+                <div class="flex">
+                    <div class="owner">The Pythons</div>
+                    <div class="location">${position}</div>
+                </div>
+                <div class="description">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Romani ite domum.
+                </div>
+                <div class="challenge">
+                    What is the airspeed velocity of an unladen swallow?
+                </div>
+                <div class="answer">
+                    <select><option value="">Select:</option></select>
+                    <input value="An African or European swallow?" />
+                    <button data-id="${id}" class="log-button">Log</button>
+                </div>
+                <div id="journal-${id}" class="journal hidden"></div>
+            </div>
+            <div class="distance">${distance_formatted}</div>
+            <div class="bearing">${bearing_formatted}</div>
+        </label>
+
+        <button id="special-update-${id}" class="warning debug" style="float:right; margin-right:4rem; font-size:0.6rem;">Update</button>
+    </div>
+</template>
+
+<template id="no-labs-template">
+    <input id="details-no-labs" class="details hidden" type="checkbox" checked="checked"/>
+    <div class="lab border-orange background-sky">
+        <div  class="description">
+            <h2>No Adventures found</h2>
+            No Adventures near.
+            Go to a more interesting place,
+            or increase the block size.
+            <img style="width: 100%" src="/images/desert.png" />
+        </div>
+    </div>
+</template>
+
+<div id="labs-holder">
+    <h2>Launching</h2>
+    <img style="width: 100%" src="/images/launch.png" />
+</div>

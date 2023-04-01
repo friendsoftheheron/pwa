@@ -1,0 +1,90 @@
+ <h2>Settings</h2>
+
+<div class="p unauthenticated">
+    Enter your geocaching.com credentials
+    to be able to log labs
+    and see your logged labs.
+</div>
+<form method="post" action="javascript:void(0);" >
+<div class="grid-auto-auto">
+    <label for="username">Username:</label>
+    <div><input id="username" data-setting-default="" autocomplete="username" value=""></div>
+
+    <label for="password">Password:</label>
+    <div><input id="password" data-setting-default="" type="password" autocomplete="current-password" value=""></div>
+
+    <label for="primary-page">Primary:</label>
+    <select id="primary-page" data-setting-default="labs">
+        <option value="labs">Labs</option>
+        <option value="map">Map</option>
+    </select>
+
+    <label for="block-size">Block size:</label>
+    <div class="flex"><input id="block-size" data-setting-default="5" type="number">&nbsp;km</div>
+
+    <label for="notification-distance">Notif. dist.:</label>
+    <div class="flex"><input id="notification-distance" data-setting-default="0" type="number">&nbsp;m</div>
+
+    <label for="update-interval">Update interval:</label>
+    <div class="flex"><input id="update-interval" data-setting-default="0" type="number">&nbsp;sec</div>
+
+    <label for="data-url" class="debug">Data URL:</label>
+    <div class="debug"><input id="data-url" data-setting-default="" value=""></div>
+
+    <label for="hide-logged">Hide logged:</label>
+    <div>
+        <input id="hide-logged" data-setting-default="true" type="checkbox">
+        <label for="hide-logged" class="small">Removes labs after logging</label>
+    </div>
+
+    <label for="high-accuracy">High accuracy:</label>
+    <div>
+        <input id="high-accuracy" data-setting-default="" type="checkbox">
+        <label for="high-accuracy" class="small">May increase power consumption</label>
+    </div>
+
+    <label class="debug">Debug stuff:</label>
+    <div class="debug">
+        <!-- overview of unicode birds -->
+        &#128019; <!-- 🐓 Rooster -->
+        &#128020; <!-- 🐔 Chicken -->
+        &#128035; <!-- 🐣 Hatching chick -->
+        &#128036; <!-- 🐤 Baby chick -->
+        &#128037; <!-- 🐥 Front facing baby chick -->
+        &#128038; <!-- 🐦 Bird -->
+        &#128039; <!-- 🐧 Pinguin -->
+        &#128330; <!-- 🕊 Dove of peace -->
+        &#129411; <!-- 🦃 Turkey -->
+        &#129413; <!-- 🦅 Eagle -->
+        &#129414; <!-- 🦆 Duck -->
+        &#129417; <!-- 🦉 Owl -->
+        &#129434; <!-- 🦚 Peacock -->
+        &#129436; <!-- 🦜 Parrot -->
+        &#129442; <!-- 🦢 Swan -->
+        &#129444; <!-- 🦤 Dodo -->
+        &#129449; <!-- 🦩 Flamingo -->
+        &#129718; <!-- 🪶 Feather -->
+        &#129722; <!-- 🪺 Nest with eggs -->
+        &#129721; <!-- 🪹 Empty nest -->
+    </div>
+
+    <label class="debug">Clear cache:</label>
+    <div class="debug"><button id="clear-cache">Clear cache</button></div>
+
+    <div></div><div>&nbsp;</div>
+    <div></div><div>
+        <button id="save-and-exit">Save and Exit</button>
+        <button id="restore-default-settings" class="warning right">Restore defaults</button>
+    </div>
+    <div></div><div>&nbsp;</div>
+    <div></div><div>
+        <button id="reload-labs" class="left margin debug">Reload Labs</button>
+        <button id="special-update" class="warning left debug">Update Labs</button>
+        <label for="debug" class="right hidden">🐞<!--🐛--></label>
+    </div>
+</div>
+</form>
+
+<!--
+
+ -->
