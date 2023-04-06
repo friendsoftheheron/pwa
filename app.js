@@ -256,8 +256,7 @@ const init = () => {
        }
     });
 
-
-    if ('serviceWorker' in navigator && 1==1) {
+    if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker
                 .register('./sw.js', {type: 'module'})

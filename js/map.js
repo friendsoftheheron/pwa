@@ -36,7 +36,7 @@ export default class Map {
             onAdd: function(map) {
                 this.center_img = L.DomUtil.create('img');
                 this.center_img.setAttribute('id', 'center_img');
-                this.center_img.src = '/images/center.png';
+                this.center_img.src = './images/center.png';
 
                 L.DomEvent.on(this.center_img, 'dblclick', (e) => {
                     L.DomEvent.stopPropagation(e);

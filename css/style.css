@@ -160,7 +160,7 @@ li {
 }
 .select-or-input[data-value=""] select {
     width: auto;
-    max-widh: 30%;
+    max-width: 30%;
 }
 .select-or-input[data-value=""] input {
     width: 100%;
@@ -197,7 +197,7 @@ li {
 }
 .wait .description::before {
     animation: animatedBackground 2.5s linear infinite;
-    background-image: url('/images/balloon-cloud.png');
+    background-image: url('../images/balloon-cloud.png');
     background-position: bottom right;
     background-repeat: repeat-x;
     background-size: 50%;
@@ -264,18 +264,18 @@ li {
     }
     80% {
         transform: rotate(45deg);
-        background-position-x: 0%
+        background-position-x: 0;
     }
     100% {
-        background-position-x: 100%
+        background-position-x: 100%;
     }
 }
 @keyframes animatedBackground {
     0% {
-        background-position-x: 0%
+        background-position-x: 0;
     }
     100% {
-        background-position-x: 100%
+        background-position-x: 100%;
     }
 }
 
@@ -536,7 +536,7 @@ input.details:checked ~ .lab .image {
 }
 
 .lab .image img {
-    background-image: url("/images/balloon.png");
+    background-image: url("../images/balloon.png");
     background-size: cover;
     object-fit: cover;
     width: 100%;
@@ -679,7 +679,7 @@ input.details:checked ~ .border-yellow .title::before {
 .journal img {
     width: 100%;
     height: auto;
-    background-image: url("/images/balloon.png");
+    background-image: url("../images/balloon.png");
 }
 
 
@@ -704,7 +704,7 @@ input.details:checked ~ .lab .distance {
 }
 
 .map img {
-    background-image: url("/images/balloon.png");
+    background-image: url("../images/balloon.png");
     background-size: cover;
     max-width: 3rem;
     max-height: 3rem;
@@ -733,7 +733,7 @@ input.details:checked ~ .lab .distance {
 
 
 .compass {
-    background-image: url("/images/compass.png");
+    background-image: url("../images/compass.png");
     background-size: cover;
     width: 3rem;
     height: 3rem;
@@ -746,7 +746,7 @@ input.details:checked ~ .lab .distance {
 }
 .compass::before {
     content: "";
-    background-image: url("/images/needle.png");
+    background-image: url("../images/needle.png");
     background-size: cover;
     width: 100%;
     height: 100%;
