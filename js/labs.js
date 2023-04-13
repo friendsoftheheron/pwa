@@ -28,7 +28,11 @@ export default class Labs {
                     if ('r' === p[0]) {
                         p[0] = 'referrer';
                     }
-                    acc[decodeURIComponent(p[0])] = decodeURIComponent(p[1])
+                    if (acc.hasOwnProperty(decodeURIComponent(p[0]))) {
+                        acc[decodeURIComponent(p[0])] += ';' + decodeURIComponent(p[1])
+                    } else {
+                        acc[decodeURIComponent(p[0])] = decodeURIComponent(p[1])
+                    }
                 }
                 return acc;
             }, data)
@@ -163,6 +167,24 @@ export default class Labs {
             .catch(err => reject(err))
     });
 
+    static updateLocalStorage = (id, values = null) => {
+        const labs = JSON.parse(localStorage.getItem(config.fetched_labs));
+        if (null === values) {
+            labs.labs = labs.labs.filter(lab => lab.id !== id);
+            labs.max_labs--;
+        } else {
+            labs.labs
+                .filter(lab => lab.id === id)
+                .forEach(lab => {
+                    Object.keys(values).forEach(key => {
+                        lab[key] = values[key];
+                    });
+                })
+            ;
+        }
+        localStorage.setItem(config.fetched_labs, JSON.stringify(labs))
+    }
+
     static setBorderColor = (elem, color) => {
         elem.classList.forEach(x => {
             if (x.startsWith('border-')) {
@@ -282,6 +304,7 @@ export default class Labs {
                     block_size: block_size,
                 })
                 .then(labs => {
+                    localStorage.setItem(config.fetched_labs, JSON.stringify(labs));
                     this.updateLabs(labs, 'labs')
                     return resolve(labs);
                 })

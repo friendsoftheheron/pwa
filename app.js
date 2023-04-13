@@ -81,7 +81,11 @@ const sentNotification = (title, payload) => {
 const notify = (distance) => {
     null != Labs.labs && Labs
         .labs
-        .filter(lab => lab.distance < distance && 'undefined' == typeof lab.notified)
+        .filter(lab =>
+            lab.distance < distance &&
+            lab.color !== 'yellow' &&
+            'undefined' === typeof lab.notified
+        )
         .forEach(lab => {
             lab.notified = true;
             Labs
@@ -111,7 +115,6 @@ const changedPositionLarge = () => new Promise((resolve, reject) => {
         .getLabs()
         .then(
             (labs) => {
-                localStorage.setItem(config.fetched_labs, JSON.stringify(labs));
                 Labs.showLabs();
             })
         .catch(err => reject(err))
@@ -328,7 +331,7 @@ const main = () => {
                 }
             })
         });
-    du.loadUrlToElem('menu', './html/menu.html').catch(err => console.log(err));
+    du.loadUrlToElem('menu', './html/menu.html').catch(err => console.error(err));
 }
 
 document.addEventListener('click', (e) => {
@@ -342,6 +345,7 @@ document.addEventListener('click', (e) => {
                 case 'about':
                     config.count_labs = Labs.labs.length;
                     config.count_map = Object.keys(Map.map._layers).length;
+                    // Extra data has been added, continue as with regular pages
                 case 'help':
                     du
                         .loadUrlToElem('page', './html/'+href.slice(1)+'.html', config)
@@ -364,9 +368,10 @@ document.addEventListener('click', (e) => {
                             Labs.getData({'special': 'referrer'}),
                             du.loadUrlToElem('page', './html/friends.html'),
                         ])
-                        .then(res => {
-                            du.setInnerHtml('friends-container', res[0]);
-                            du.setSelectOptions('friend-username-select',  [...res[1],{'': 'Other:'}])
+                        .then(([friends, referrers]) => {
+                            du.setInnerHtml('friends-container', friends);
+                            du.setSelectOptions('friend-username-select',  [...referrers,{'': 'Other:'}]);
+                            du.dispatchEvent('friend-username-select', 'change');
                             du.setChecked('symbol-page');
                         });
                     return false;
@@ -398,7 +403,14 @@ document.addEventListener('click', (e) => {
                     du
                         .loadUrlToElem('popup', './html/qr-code.html')
                         .then(() => QrCode.show())
-                        .then(() => du.setChecked('symbol-popup'))
+                        .then(() => {
+                            const elem = document.getElementById('qr-url')
+                            if (elem) {
+                                elem.innerHTML = QrCode.qrcode._options.data;
+                                elem.href = QrCode.qrcode._options.data;
+                            }
+                            du.setChecked('symbol-popup')
+                        })
                         .catch(err => console.error(err))
                     ;
                     return false;
@@ -503,24 +515,27 @@ document.addEventListener('click', (e) => {
                     }
                     elem.parentNode.classList.remove('wait');
                     st.getSetting('hide-logged').then(hide_logged => {
-                        if (hide_logged && 'yellow' == color) {
-                            Labs.labs = Labs.labs.filter(lab => lab.id !== elem.parentNode.id.slice(2))
-                            const circle = Map.id2layer(elem.parentNode.id.slice(2));
+                        const id = elem.parentNode.id.slice(2)
+                        if (hide_logged && 'yellow' === color) {
+                            Labs.labs = Labs.labs.filter(lab => lab.id !== id)
+                            const circle = Map.id2layer(id);
                             if (circle) {
                                 Map.map.removeLayer(circle);
                             }
                             elem.remove();
+                            Labs.updateLocalStorage(id);
                         } else {
                             Labs.setBorderColor(elem, color);
                             Labs
                                 .labs
-                                .filter(lab => 'id' + lab.id === elem.parentElement.id)
+                                .filter(lab => 'id' + lab.id === id)
                                 .forEach(lab => {
                                     lab.color = color;
                                     Map.setCircleColor(lab.id, color);
                                 })
                             ;
-                        }
+                            Labs.updateLocalStorage(id, { color: color });
+                       }
                     })
                 })
                 .catch(err => console.error(err))
@@ -535,7 +550,7 @@ document.addEventListener('click', (e) => {
                         'id': pp.friendsBits() + ':::' +
                             (
                                 document.getElementById('friend-username-select').value ||
-                                document.getElementById('friend-username-select').value
+                                document.getElementById('friend-username-select').input
                             )
                     })
                     .then(res => {

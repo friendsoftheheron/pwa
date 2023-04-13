@@ -66,7 +66,7 @@ self.addEventListener('fetch', e => {
                     cache.put(e.request, res.clone()).catch(err => console.log(err));
                     return res;
                 });
-            });
+            }).catch(err => console.error('sw:fetch:'+e.request.url, err));
         })
     );
 });

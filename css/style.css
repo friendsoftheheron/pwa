@@ -89,6 +89,13 @@ h3 {
     line-height: 1.21rem;
 }
 
+a:link { color: var(--medium-blue); }
+a:visited { color: var(--dark-blue); }
+a:hover { color: var(--orange); }
+a:active { color: var(--light-blue); }
+
+
+
 [id^="map-"],
 [href],
 label {
@@ -343,7 +350,7 @@ li {
     100% {  transform: rotate(360deg); }
 }
 
-#qr_image {
+#qr-image {
     margin-top: 1rem;
     width: 100%
 }
