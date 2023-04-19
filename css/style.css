@@ -11,6 +11,8 @@
     --black: #00222d;
     --gray: #c1c3c7;
 
+    --max-width: 800px;
+
     --disabled-color: #AAA;
     --disabled-background: #F5F5F5;
     --enabled-color: var(--black);
@@ -33,13 +35,13 @@ body {
     line-height: 1.1rem;
     margin-left: auto;
     margin-right: auto;
-    max-width: 800px;
+    max-width: var(--max-width);
 }
 header {
     background: var(--white);
     border-bottom: 1px solid var(--orange);
     height: var(--header-height);
-    max-width: 800px;
+    max-width: var(--max-width);
     position: absolute;
     text-align: center;
     top: 0;
@@ -53,7 +55,7 @@ footer {
     color: var(--white);
     height: var(--footer-height);
     margin: auto;
-    max-width: 800px;
+    max-width: var(--max-width);
     padding-bottom: 0;
     padding-top: 0.5rem;
     padding-left: 1rem;
@@ -62,7 +64,7 @@ footer {
 }
 
 main {
-    max-width: 800px;
+    max-width: var(--max-width);
     position: absolute;
     top: var(--header-height);
     bottom: var(--footer-height);
@@ -118,18 +120,19 @@ li {
 .very-light-blue { color: var(--sky); }
 .orange { color: var(--orange); }
 
-.w100 { width: 100% }
-.clear { clear: both; }
 .blur { filter: blur(0.25rem); }
+.clear { clear: both; }
+.colon:after { content: ':'; }
 .flex {	display: flex; }
 .relative { position: relative; }
+.w100 { width: 100% }
 .left { float: left; }
 .right {
     float: right; /* for block */
     margin-left: auto; /* for flex */
 }
 .margin > * {
-    margin: 0.1rem;;
+    margin: 0.1rem;
 }
 
 .left.margin {
@@ -837,6 +840,7 @@ input.details:checked ~ .lab .distance {
 label[for="symbol-labs"],
 label[for="symbol-map"],
 label[for="symbol-settings"],
+label[for="translate"],
 label[for="debug"] {
     filter: grayscale(1);
     opacity: 0.5;
@@ -846,6 +850,7 @@ label[for="debug"] {
 #symbol-labs:checked ~ * label[for="symbol-labs"],
 #symbol-map:checked ~ * label[for="symbol-map"],
 #symbol-settings:checked ~ * label[for="symbol-settings"],
+#translate:checked ~ * label[for="translate"],
 #debug:checked ~ * label[for="debug"] {
     filter: grayscale(0);
     opacity: 1;
@@ -891,3 +896,19 @@ input.details ~ .lab div.details,
 #debug:checked ~ main {
     top: 5rem;
 }
+
+#translate:checked ~ * .i18n-untranslated {
+    text-decoration: var(--orange) wavy underline;
+}
+#translate:checked ~ * .i18n-edit:after {
+    color: var(--medium-blue);
+    content: '✎'; /* ✏️ */
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.84rem;
+    line-height: 0.84rem;
+
+    font-weight: normal;
+    text-decoration-line: none;
+}
+

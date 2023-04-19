@@ -1,49 +1,55 @@
- <h2>Settings</h2>
+<h2 data-i18n-key="settings">Settings</h2>
 
-<div class="p unauthenticated">
+<div class="p unauthenticated" data-i18n-key="settings-unauthenticated">
     Enter your geocaching.com credentials
     to be able to log labs
     and see your logged labs.
 </div>
 <form method="post" action="javascript:void(0);" >
 <div class="grid-auto-auto">
-    <label for="username">Username:</label>
+    <label for="username" class="colon" data-i18n-key="settings-username">Username</label>
     <div><input id="username" data-setting-default="" autocomplete="username" value=""></div>
 
-    <label for="password">Password:</label>
+    <label for="password" class="colon" data-i18n-key="settings-password">Password</label>
     <div><input id="password" data-setting-default="" type="password" autocomplete="current-password" value=""></div>
 
-    <label for="primary-page">Primary:</label>
+    <label for="language" class="colon">
+        <span data-i18n-key="settings-language">Language</span>
+        <span class="small"><sup>文</sup><sub>A</sub></span>
+    </label>
+    <select id="language" data-setting-default="en"></select>
+
+    <label for="primary-page" class="colon" data-i18n-key="settings-primary-page">Primary page</label>
     <select id="primary-page" data-setting-default="labs">
-        <option value="labs">Labs</option>
-        <option value="map">Map</option>
+        <option value="labs" data-i18n-key="labs">Labs</option>
+        <option value="map" data-i18n-key="map">Map</option>
     </select>
 
-    <label for="block-size">Block size:</label>
+    <label for="block-size" class="colon" data-i18n-key="settings-block-size">Block size</label>
     <div class="flex"><input id="block-size" data-setting-default="5" type="number">&nbsp;km</div>
 
-    <label for="notification-distance">Notif. dist.:</label>
+    <label for="notification-distance" class="colon" data-i18n-key="settings-notification-distance">Notif. dist.</label>
     <div class="flex"><input id="notification-distance" data-setting-default="0" type="number">&nbsp;m</div>
 
-    <label for="update-interval">Update interval:</label>
+    <label for="update-interval" class="colon" data-i18n-key="settings-update-interval">Update interval</label>
     <div class="flex"><input id="update-interval" data-setting-default="0" type="number">&nbsp;sec</div>
 
-    <label for="data-url" class="debug">Data URL:</label>
+    <label for="data-url" class="colon debug" data-i18n-key="settings-data-url">Data URL</label>
     <div class="debug"><input id="data-url" data-setting-default="" value=""></div>
 
-    <label for="hide-logged">Hide logged:</label>
+    <label for="hide-logged" class="colon" data-i18n-key="settings-hide-logged">Hide logged</label>
     <div>
         <input id="hide-logged" data-setting-default="true" type="checkbox">
-        <label for="hide-logged" class="small">Removes labs after logging</label>
+        <label for="hide-logged" class="small" data-i18n-key="settings-hide-logged-explanation">Removes labs after logging</label>
     </div>
 
-    <label for="high-accuracy">High accuracy:</label>
+    <label for="high-accuracy" class="colon" data-i18n-key="settings-high-accuracy">High accuracy</label>
     <div>
         <input id="high-accuracy" data-setting-default="" type="checkbox">
-        <label for="high-accuracy" class="small">May increase power consumption</label>
+        <label for="high-accuracy" class="small" data-i18n-key="settings-high-accuracy-explanation">May increase power consumption</label>
     </div>
 
-    <label class="debug">Debug stuff:</label>
+    <label class="colon debug" data-i18n-key="settings-debug">Debug stuff</label>
     <div class="debug">
         <!-- overview of unicode birds -->
         &#128019; <!-- 🐓 Rooster -->
@@ -68,19 +74,20 @@
         &#129721; <!-- 🪹 Empty nest -->
     </div>
 
-    <label class="debug">Clear cache:</label>
-    <div class="debug"><button id="clear-cache">Clear cache</button></div>
+    <label class="debug" data-i18n-key="settings-clear-cache">Clear cache:</label>
+    <div class="debug"><button id="clear-cache" data-i18n-key="settings-clear-cache">Clear cache</button></div>
 
     <div></div><div>&nbsp;</div>
     <div></div><div>
-        <button id="save-and-exit">Save and Exit</button>
-        <button id="restore-default-settings" class="warning right">Restore defaults</button>
+        <button id="save-and-exit" data-i18n-key="settings-save-and-exit">Save and Exit</button>
+        <button id="restore-default-settings" class="warning right" data-i18n-key="settings-restore-defaults">Restore defaults</button>
     </div>
     <div></div><div>&nbsp;</div>
     <div></div><div>
-        <button id="reload-labs" class="left margin debug">Reload Labs</button>
-        <button id="special-update" class="warning left debug">Update Labs</button>
+        <button id="reload-labs" class="left margin debug" data-i18n-key="settings-reload-labs">Reload Labs</button>
+        <button id="special-update" class="warning left debug" data-i18n-key="settings-update-labs">Update Labs</button>
         <label for="debug" class="right hidden">🐞<!--🐛--></label>
+        <label for="translate" class="right hidden">🐠<!--🐟--> </label>
     </div>
 </div>
 </form>

@@ -1,53 +1,58 @@
 <template id="paypal-error-template">
-    <h2>Error</h2>
-    Sorry, your transaction could not be processed.<br>
+    <h2 data-i18n-key="error">Error</h2>
+    <span data-i18n-key="paypal-sorry">Sorry, your transaction could not be processed.</span><br>
     ${description} ${debug_id}
 </template>
 <template id="paypal-succes-template">
-    <h2>Success</h2>
-    Thank you for your support.
+    <h2 data-i18n-key="succes">Success</h2>
+    <span data-i18n-key="paypal-thanks">Thank you for your support.</span>
 </template>
-<h2>Donate</h2>
-Support the development of <span class="pwa">Power Walk Adventure</span>
-by buying a friend.
+<h2 data-i18n=-key="donate">Donate</h2>
+<span
+    data-i18n-key="paypal-support"
+    data-i18n-tag-power-walk-adventure='{"attr": {"class": "pwa"}, "content": "Power Walk Adventure"}'
+>
+    Support the development of <span class="pwa">Power Walk Adventure</span>
+    by buying a friend.
+</span>
 
 <div class="p clear"></div>
 
 <div class="p">
-    <h3>Friends</h3>
+    <h3 data-i18n-key="friends">Friends</h3>
     <div id="friends-container" class="friends-container">
         Norwegian Blue parrot
     </div>
 </div>
 
 <div class="p">
-    <h3>Period</h3>
+    <h3 data-i18n-key="paypal-period">Period</h3>
     <label class="ribbon-box">
         <input type="radio" name="friends-period" value="1">
-        1 month
+        <span data-i18n-key="paypal-1-month">1 month</span>
     </label></br>
     <label class="ribbon-box">
         <input type="radio" name="friends-period" value="11" checked="checked">
-        1 year
-        <span class="small">(1 month free!)</span>
+        <span data-i18n-key="paypal-1-year">1 year</span>
+        <span class="small">(<span data-i18n-key="paypal-1-month-free">1 month free!</span>)</span>
         <div class="ribbon ribbon-green ribbon-13">8%</div>
     </label></br>
     <label class="ribbon-box">
         <input type="radio" name="friends-period" value="30">
-        3 years
-        <span class="small">(half year free!)</span>
+        <span data-i18n-key="paypal-3-years">3 years</span>
+        <span class="small">(<span data-i18n-key="paypal-half-year-free">half year free!</span>)</span>
         <div class="ribbon ribbon-yellow ribbon-11">16%</div>
     </label></br>
     <label class="ribbon-box">
         <input type="radio" name="friends-period" value="48">
-        5 years
-        <span class="small">(FULL year free!)</span>
+        <span data-i18n-key="paypal-5-years">5 years</span>
+        <span class="small">(<span data-i18n-key="paypal-full-year-free">FULL year free!</span>)</span>
         <div class="ribbon ribbon-red ribbon-7">20%</div>
     </label></br>
 </div>
 
 <div class="p">
-<h3 class="left">Price</h3>
+<h3 class="left" data-i18n-key="paypal-price">Price</h3>
 &nbsp; &euro;: <span class="" id="friends-price"></span>
 &nbsp; <input class="right debug" id="friends-bits" />
 &nbsp; <input class="hidden" id="friends-funding-source" />

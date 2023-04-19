@@ -1,11 +1,12 @@
-import config from './js/config.js'
-import du from './js/domutils.js'
-import Labs from './js/labs.js'
-import Location from './js/location.js'
-import Map from './js/map.js'
-import QrCode from './js/qr-code.js'
-import st from './js/settings.js'
-import pp from './js/paypal.js'
+import config from './js/config.js';
+import du from './js/domutils.js';
+import i18n from './js/i18n.js';
+import Labs from './js/labs.js';
+import Location from './js/location.js';
+import Map from './js/map.js';
+import QrCode from './js/qr-code.js';
+import st from './js/settings.js';
+import pp from './js/paypal.js';
 
 console.log(config.name, config.version);
 
@@ -15,7 +16,6 @@ let swRegistration = null;
 const send_message_to_service_worker = (data) => new Promise((resolve) => {
     console.info('send_message', data);
     navigator.serviceWorker.ready.then((reg) => {
-        console.info('registration:', reg);
         reg.active.postMessage(data);
         return resolve(reg);
     });
@@ -54,6 +54,8 @@ const updateUser = () => new Promise((resolve) => {
             config.expire_formatted = res.expire_formatted;
             config.level = res.membership_level;
             config.level_formatted = res.level_formatted;
+            config.translator = res.translator;
+	        config.translator_formatted = res.translator_formatted;
 	        du.setChecked('authenticated', res.authenticated);
 
             if (config.level & 1) {
@@ -61,6 +63,28 @@ const updateUser = () => new Promise((resolve) => {
             } else {
                 document.querySelectorAll('[for="debug"]').forEach(elem => elem.classList.add('hidden'));
                 du.setChecked('debug', false);
+            }
+
+            if (config.translator.length) {
+                document.querySelectorAll('[for="translate"]').forEach(elem => elem.classList.remove('hidden'));
+                st
+                    .getSetting('data-url').then(data_url => {
+                        data_url ||= config.data_url;
+                        data_url += data_url.includes('?') ? '&' : '?';
+                        i18n.supported_url = data_url + 'special=language';
+                        i18n.translations_url = data_url + 'special=language&id=@@';
+                    })
+                    .then(() => st.getSetting('language'))
+                    .then((locale) => {
+                        i18n._supported_locales = null;
+                        i18n.setLanguageSelector(i18n.selector_id, locale)
+                    })
+                    .then(() => i18n.setTranslations())
+            } else {
+                document.querySelectorAll('[for="translate"]').forEach(elem => elem.classList.add('hidden'));
+                i18n.supported_url = i18n._supported_url;
+                i18n.translations_url = i18n._translations_url;
+                du.setChecked('translate', false);
             }
 
             if (Date.parse(res.last_logs_update) < new Date().setDate(new Date().getDate()-1)) {
@@ -113,10 +137,7 @@ const changedPositionLarge = () => new Promise((resolve, reject) => {
     addMessage('changedPositionLarge: '+ current_position);
     Labs
         .getLabs()
-        .then(
-            (labs) => {
-                Labs.showLabs();
-            })
+        .then(() => Labs.showLabs())
         .catch(err => reject(err))
     ;
     ['latitude', 'longitude', 'timestamp'].forEach(key => {
@@ -228,7 +249,7 @@ const watchLocation = (() => {
     }
 })()
 
-const enableNotifications = (e) => {
+const enableNotifications = () => {
     if ('Notification' in window) {
         if (Notification.permission !== 'granted') {
             Notification.requestPermission().then(permission => {
@@ -270,7 +291,6 @@ const init = () => {
              addMessage(e.data);
             if (e.data.startsWith('id-')) {
                 Labs.openLab(e.data.slice(3))
-                return
             }
         });
     }
@@ -335,8 +355,10 @@ const main = () => {
 }
 
 document.addEventListener('click', (e) => {
+    var popup_close = true;
     let target = e.target;
     while(target) {
+        popup_close &&= !target.classList.contains('do-not-close');
         // Menu and hash pages
         const href = target.getAttribute('href')
         if (href && href.startsWith('#')) {
@@ -554,7 +576,12 @@ document.addEventListener('click', (e) => {
                             )
                     })
                     .then(res => {
-                        du.setInnerHtml('popup', res.message);
+                        du.setInnerHtml(
+                            'popup',
+                            i18n.translateHtml(
+                                `<span data-i18n-key="${res.label}">${res.message}</span>`
+                            )
+                        );
                         du.setChecked('symbol-popup')
                     })
                 return false;
@@ -566,7 +593,36 @@ document.addEventListener('click', (e) => {
             case 'restore-default-settings':
                 st.clearSettings();
                 return false;
+            case 'translate-save':
+                e.preventDefault();
+                Promise.all(
+                    Array.from(
+                        target
+                            .parentNode
+                            .getElementsByTagName('textarea')
+                    )
+                        .filter(textarea =>
+                            undefined !== textarea.dataset.content &&
+                            textarea.dataset.content != textarea.value
+                        )
+                        .map(textarea => new Promise((resolve, reject) => {
+                            Labs
+                                .getData({
+                                    special: 'language',
+                                    id: textarea.dataset.label + '|' + textarea.dataset.locale,
+                                    code: textarea.value,
+                                })
+                                .then(res => resolve(res))
+                                .catch(err => reject(err))
+                        }))
+                ).then(res => {
+                    res
+                        .filter(res => res.locale == i18n.locale)
+                        .forEach(res => i18n.setTranslation(res.label, res.content));
+                    du.setChecked('symbol-popup', false)
+                });
 
+                return false;
             // Debug stuff
             case 'reload-labs':
                 changedPositionLarge().then();
@@ -583,7 +639,7 @@ document.addEventListener('click', (e) => {
         }
     }
     //This closes the popups very fanatic
-    du.setChecked('symbol-popup', false);
+    popup_close && du.setChecked('symbol-popup', false);
     du.setChecked('symbol-menu', false);
     return true;
 });
@@ -668,6 +724,49 @@ document.addEventListener('change', (e) => {
 document.addEventListener('message', (e) => {
     console.log('Message', e.data);
     addMessage(e.data)
+});
+
+document.addEventListener('translate', (e) => {
+    if (!config.translator) { return false; }
+    st.getSetting('language').then(locale => {
+        Labs
+            .getData({
+                'special': 'language',
+                'id': e.target.dataset.i18nKey + '|' +
+                    config.translator.map(x => x.split(':')[0]).join('|')
+            }).then(json =>
+            du.loadUrlToElem(
+                'popup',
+                './html/translate.html',
+                {'label': json[0].label}
+            ).then(() => i18n.supported_locales)
+                .then (supported_locales =>
+            {
+                const template = du.elemOrId('translation-template');
+                const holder = du.elemOrId('translation-holder');
+                json.forEach(data => {
+                    ['flag', 'language'].forEach(
+                        x => data[x] = supported_locales[data.locale.split(':')[0]]
+                            ? supported_locales[data.locale.split(':')[0]][x]
+                            : data.locale
+                    );
+                    const node = document.createElement('div');
+                    node.innerHTML = du.renderTemplate(i18n.translateHtml(template.innerHTML), data);
+                    const textarea  = node.getElementsByTagName('textarea')[0];
+                    textarea.style.width = (Math.min(config.max_width,  window.innerWidth ) * .7) + 'px';
+                    if (config.translator.includes(data['locale'])) {
+                        ['content', 'label', 'locale'].forEach(x => {
+                            textarea.dataset[x] = data[x];
+                        });
+                    } else {
+                        textarea.disabled = true;
+                    }
+                    holder.append(node);
+                })
+                du.setChecked('symbol-popup');
+            })
+        );
+    });
 });
 
 init()

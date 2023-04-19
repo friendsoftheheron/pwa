@@ -33,7 +33,7 @@ export default class QrCode {
 
 
     static show = (id='qr-image', data='') => new Promise((resolve, reject) => {
-        this.qrcode.update({ data: data || (config.home_url + (config.user_id ? '?r='+gc.id2code(config.user_id) : '')) })
+        this.qrcode.update({ data: data || (config.home_url.replace(/\?.*/, '') + (config.user_id ? '?r='+gc.id2code(config.user_id) : '')) })
         this.qrcode.getRawData('svg')
             .then(data => {
                 const elem = document.getElementById(id);

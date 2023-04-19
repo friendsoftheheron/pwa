@@ -1,41 +1,41 @@
-<h2>About</h2>
+<h2 data-i18n-key="about">About</h2>
 
 <h3>${name}</h3>
 ${version}
 <div class="p">
-    <b>Attention</b>: Bèta release.<br />
-    For <b>testing</b> purposes <b>only!</b>
+    <b data-i18n-key="about-attention">Attention</b>: <span data-i18n-key="about-beta-release">Bèta release.</span><br />
+    <span data-i18n-key="about-testing-purposes">For <b>testing</b> purposes <b>only!</b></span>
 </div>
 
-<div class="p">
+<div class="p" data-i18n-key="about-tool">
     A tool to log multiple Adventure Lab<sup>®</sup>s in a single walk/ride.
-    Not missing a point from an different one while doing some adventure.
+    Not missing a point from a different one while doing some adventure.
 </div>
 
-<div class="p">
+<div class="p" data-i18n-key="about-name">
     This App was created to learn Progressive Web Applications.
     Hence, the inspiration for the name.
 </div>
 
-<div class="p unauthenticated">
+<div
+        class="p unauthenticated"
+        data-i18n-key="about-not-logged-in"
+        data-i18n-tag-url='{"tag":"a", "attr": {"href": "#settings"}}'
+>
   Not logged in.
   Go to <a href="#settings">settings</a>
   to log in.
 </div>
 
-<div class="debug">
-    <div class=" grid-auto-auto">
-    </div>
-</div>
-
 <div class="p authenticated">
     <div class=" grid-auto-auto">
-        <div class="debug">Count labs:</div><div class="debug">${count_labs}</div>
-        <div class="debug">Count map:</div><div class="debug">${count_map}</div>
+        <div class="colon debug" data-i18n-key="about-count-labs">Count labs</div><div class="debug">${count_labs}</div>
+        <div class="colon debug" data-i18n-key="about-count-map">Count map</div><div class="debug">${count_map}</div>
         <div class="debug"></div><div class="debug">&nbsp;</div>
-        <div>Username:</div><div>${username}</div>
-        <div>Friend:</div><div>${level_formatted}<span class="debug">${level}</span></div>
-        <div>Expire:</div><div>${expire_formatted}</div>
+        <div class="colon" data-i18n-key="settings-username">Username</div><div>${username}</div>
+        <div class="colon" data-i18n-key="about-friend">Friend</div><div>${level_formatted}<span class="debug">${level}</span></div>
+        <div class="colon" data-i18n-key="about-expire">Expire</div><div>${expire_formatted}</div>
+        <div class="colon" data-i18n-key="about-translator">Translator</div><div>${translator_formatted}</div>
     </div>
 </div>
 

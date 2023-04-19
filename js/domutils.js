@@ -1,6 +1,12 @@
+import i18n from './i18n.js'
+
 export default class DomUtils {
     static camelcaseify = (str) => str.replace(/-([a-z])/g, g =>  g[1].toUpperCase());
-    static renderTemplate = (template, obj) =>	template.replace(/\${(\w+)}/g, (_, k) => obj[k]);
+    static renderTemplate = (template, obj) =>
+        template.replace(/\${(\w+)}/g, (_, k) =>
+            obj.hasOwnProperty(k) ? obj[k] : '${'+k+'}'
+        )
+    ;
 
     static escapeHTML = (text) => {
         const div = document.createElement('div');
@@ -99,10 +105,12 @@ export default class DomUtils {
     static setInnerHtml = (elem, html, obj=null) => {
         elem = this.elemOrId(elem);
         if (!elem) return;
+        elem.innerHTML = html;
+        i18n.translate(elem);
         if (obj) {
-            return elem.innerHTML = this.renderTemplate(html, obj)
+            elem.innerHTML = this.renderTemplate(elem.innerHTML, obj)
         }
-        return 	elem.innerHTML = html;
+        return 	html;
     };
 
     static setInnerHtmlByQuery = (query, html, node = null, obj=null) => {

@@ -1,8 +1,9 @@
-import config from './config.js'
-import du from './domutils.js'
-import Location from './location.js'
-import Map from './map.js'
-import st from './settings.js'
+import config from './config.js';
+import du from './domutils.js';
+import i18n from './i18n.js';
+import Location from './location.js';
+import Map from './map.js';
+import st from './settings.js';
 
 export default class Labs {
     static labs = null;
@@ -226,7 +227,7 @@ export default class Labs {
         if (!node) {
             node = document.createElement('div');
             node.id = 'id' + lab.id;
-            node.innerHTML = du.renderTemplate(template.innerHTML, lab);
+            node.innerHTML = du.renderTemplate(i18n.translateHtml(template.innerHTML), lab);
         }
         node.dataset.distance = lab.distance;
 
@@ -269,7 +270,7 @@ export default class Labs {
                 console.error('Lab template not found');
                 return null;
             }
-            labs_holder.innerHTML = template.innerHTML;
+            labs_holder.innerHTML = i18n.translateHtml(template.innerHTML);
             return labs_holder;
         }
 

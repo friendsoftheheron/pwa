@@ -1,5 +1,7 @@
-import du from './domutils.js'
-import cr from './crypto.js'
+import cr from './crypto.js';
+import du from './domutils.js';
+import i18n from './i18n.js';
+
 export default class Settings {
 
     static prefix = 'setting-'
@@ -49,7 +51,10 @@ export default class Settings {
 
     static fillSettingsDiv = () => new Promise((resolve, reject) => {
         du.loadUrlToElem(this.div, this.url)
+            .then(() => i18n.setLanguageSelector())
             .then(() => this.initialiseSettings())
+            .then(() => this.getSetting('language'))
+            .then(locale => i18n.locale = locale)
             .then(res => resolve(res))
             .catch(err => reject(err))
     });
@@ -72,7 +77,6 @@ export default class Settings {
                 .map(elem => new Promise((resolve) => {
                     this.getSetting(elem.id)
                         .then(value => {
-                            /* attention */
                             localStorage.setItem(this.prefix + elem.id, value);
                             return resolve(du.setElementValue(elem, value));
                         })
