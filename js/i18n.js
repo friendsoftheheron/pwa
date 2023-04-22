@@ -91,11 +91,32 @@ export default class I18N {
                     elem.classList.add('i18n-untranslated')
                 }
 
-                if (elem.lastChild.nodeType !== Node.ELEMENT_NODE ||
+                const span = document.createElement('span');
+                span.classList.add('i18n-edit');
+                span.dataset.i18nEditKey = elem.dataset.i18nKey;
+
+                if (['OPTION'].includes(elem.tagName)) { return;  } // Options are difficult to handle
+                if (['BUTTON'].includes(elem.tagName)) {
+                    if (
+                        null === elem.nextSibling ||
+                        elem.nextSibling.nodeType !== Node.ELEMENT_NODE ||
+                        !elem.nextSibling.dataset.i18nEditKey ||
+                        elem.nextSibling.dataset.i18nEditKey !== span.dataset.i18nEditKey
+                    ) {
+                        elem.classList.forEach(c => {
+                            if (['left', 'margin', 'right', 'debug']) {
+                                span.classList.add(c)
+                            } else {
+                                console.log('cl', c)
+                            }
+                        });
+                        elem.parentNode.insertBefore(span, elem.nextSibling);
+                        console.log(elem.nextSibling);
+                    }
+                } else if (
+                    elem.lastChild.nodeType !== Node.ELEMENT_NODE ||
                     !elem.lastChild.classList.contains('i18n-edit')
                 ) {
-                    const span = document.createElement('span');
-                    span.classList.add('i18n-edit');
                     elem.appendChild(span);
                 }
             })
@@ -150,7 +171,11 @@ document.addEventListener('click', (e) => {
                 cancelable: true,
             }
         );
-        e.target.parentNode.dispatchEvent(event);
+        if (e.target.parentNode.dataset.i18nKey) {
+            e.target.parentNode.dispatchEvent(event);
+        } else {
+            e.target.previousSibling.dispatchEvent(event);
+        }
     }
     return false;
  })
