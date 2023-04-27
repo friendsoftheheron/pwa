@@ -46,7 +46,8 @@ export default class Labs {
             st.getSetting('username'),
             st.getSetting('password'),
             st.getSetting('data-url'),
-        ]).then(([username, password, data_url]) => {
+            st.getSetting('friend-bits'),
+        ]).then(([username, password, data_url, friend_bits]) => {
             if (null === data) {
                 data = {};
             }
@@ -61,6 +62,7 @@ export default class Labs {
             data.longitude = data.longitude || localStorage.getItem(config.current_longitude) || 5;
             data.username = username || '';
             data.password = password || '';
+            data.friends = friend_bits || 0;
             const form_data = new FormData();
             Object.keys(data).forEach(key => form_data.append(key, data[key]));
             fetch(

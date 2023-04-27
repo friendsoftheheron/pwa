@@ -11,7 +11,7 @@ import pp from './js/paypal.js';
 console.log(config.name, config.version);
 
 const MESSAGES = [];
-let swRegistration = null;
+let SW_REGISTRATION = null;
 
 const send_message_to_service_worker = (data) => new Promise((resolve) => {
     console.info('send_message', data);
@@ -97,8 +97,8 @@ const updateUser = () => new Promise((resolve) => {
 })
 
 const sentNotification = (title, payload) => {
-    if(swRegistration && 'showNotification' in swRegistration) {
-        return swRegistration.showNotification(title, payload);
+    if(SW_REGISTRATION && 'showNotification' in SW_REGISTRATION) {
+        return SW_REGISTRATION.showNotification(title, payload);
     }
     return  new Notification(title, payload);
 }
@@ -284,7 +284,7 @@ const init = () => {
         window.addEventListener('load', function() {
             navigator.serviceWorker
                 .register('./sw.js', {type: 'module'})
-                .then(reg => swRegistration = reg)
+                .then(reg => SW_REGISTRATION = reg)
                 .catch(err => console.error('service worker not registered', err))
         })
         navigator.serviceWorker.addEventListener('message', (e) => {
@@ -355,7 +355,7 @@ const main = () => {
 }
 
 document.addEventListener('click', (e) => {
-    var popup_close = true;
+    let popup_close = true;
     let target = e.target;
     while(target) {
         popup_close &&= !target.classList.contains('do-not-close');
@@ -421,6 +421,45 @@ document.addEventListener('click', (e) => {
                     du.setChecked('symbol-settings');
                     return false;
                 }
+                case 'translate':
+                    Promise.all([
+                        Labs.getData({
+                            special: 'language',
+                            id: i18n.locale,
+                            block_size: target.dataset.page || 1,
+                        }),
+                        du.loadUrlToElem('page', './html/translate.html'),
+                    ]).then(([json, html]) => {
+                        console.log(json);
+                        console.log(html);
+
+                        const template = du.elemOrId('translation-template');
+                        const holder = du.elemOrId('translation-holder');
+
+                        holder.innerHtml = '';
+                        json.labels.forEach(key => {
+                            const node = document.createElement('div');
+                            node.innerHTML = template.innerHTML;
+                            const span  = node.getElementsByTagName('span')[0];
+                            span.innerHTML = key;
+                            const edit  = node.getElementsByTagName('span')[1];
+                            edit.dataset.i18nKey = key;
+                            holder.append(node);
+                        });
+                        i18n.translate();
+                        du.setChecked('symbol-page');
+                        Array
+                            .from(document.getElementsByClassName('pagination'))
+                            .forEach(elem => {
+                               elem.innerHTML = '';
+                               Array.from(Array(+json.pages)).forEach((_,p) => {
+                                   elem.innerHTML += ` <span data-page="${p+1}" ${p+1 === json.page ? 'class="orange"' : 'href="#translate"'}>${p+1}</span>`;
+                               })
+
+                            });
+
+                    });
+                    return false;
                 case 'qr':
                     du
                         .loadUrlToElem('popup', './html/qr-code.html')
@@ -460,16 +499,31 @@ document.addEventListener('click', (e) => {
             }
         }
 
+        // Friend bits
+        if (target.dataset.friendBits) {
+            const bits = document.getElementById('friend-bits')
+            if (bits)
+                if (du.getElementValue(target.getAttribute('for'))) {
+                    bits.value |= target.dataset.friendBits;
+                } else {
+                    bits.value &= ~target.dataset.friendBits;
+                }
+                st.updateSetting(bits);
+        }
+
+
         if (target.id.startsWith('symbol-')) {
             // Handled by the change listener
             // Don't close the popups
             return false;
         }
 
+        // Map
         if (target.id.startsWith('map-')) {
             return Labs.openLab(target.id.slice(4));
         }
 
+        // Update
         if (
             'special-update' === target.id ||
             target.id.startsWith('special-update-')
@@ -737,13 +791,13 @@ document.addEventListener('translate', (e) => {
             }).then(json =>
             du.loadUrlToElem(
                 'popup',
-                './html/translate.html',
+                './html/i18n.html',
                 {'label': json[0].label}
             ).then(() => i18n.supported_locales)
                 .then (supported_locales =>
             {
-                const template = du.elemOrId('translation-template');
-                const holder = du.elemOrId('translation-holder');
+                const template = du.elemOrId('i18n-template');
+                const holder = du.elemOrId('i18n-holder');
                 json.forEach(data => {
                     ['flag', 'language'].forEach(
                         x => data[x] = supported_locales[data.locale.split(':')[0]]

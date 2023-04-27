@@ -1,6 +1,7 @@
 {
     "name": "Power Walk Adventure",
     "short_name": "PW Adventure",
+    "description": "A tool to log multiple Adventure Lab®s in a single walk/ride. Not missing a point from an different one while doing some adventure.",
     "start_url": "index.html",
     "id": "./index.html",
     "lang": "en",
@@ -47,7 +48,12 @@
         {
             "src": "./images/icons/icon-512-512.png",
             "type": "image/png", "sizes": "512x512",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "./images/icons/icon-512-512.png",
+            "type": "image/png", "sizes": "512x512",
+            "purpose": "maskable"
         }
     ]
 }

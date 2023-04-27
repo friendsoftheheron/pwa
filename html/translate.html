@@ -1,16 +1,10 @@
 <template id="translation-template">
-    <span>${flag}</span>
-    <span>${language}</span><br/>
-    <textarea class="w100">${content}</textarea><br />
-    <br />
+    <span></span>
+    <span style="width:0px; overflow:hidden"></span>
 </template>
 
 <h2 data-i18n-key="translate">Translate</h2>
 
-<form class="do-not-close w100">
-    ${label}<br />
-    <br />
-    <div id="translation-holder">
-    </div>
-    <button id="translate-save" data-i18n-key="translate-save">Save</button>
-</form>
+<div class="pagination"></div>
+<div id="translation-holder"></div>
+<div class="pagination"></div>

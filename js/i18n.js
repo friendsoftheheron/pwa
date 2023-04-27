@@ -96,7 +96,7 @@ export default class I18N {
                 span.dataset.i18nEditKey = elem.dataset.i18nKey;
 
                 if (['OPTION'].includes(elem.tagName)) { return;  } // Options are difficult to handle
-                if (['BUTTON'].includes(elem.tagName)) {
+                if (['BUTTON', 'TEXTAREA'].includes(elem.tagName)) {
                     if (
                         null === elem.nextSibling ||
                         elem.nextSibling.nodeType !== Node.ELEMENT_NODE ||
@@ -111,9 +111,9 @@ export default class I18N {
                             }
                         });
                         elem.parentNode.insertBefore(span, elem.nextSibling);
-                        console.log(elem.nextSibling);
                     }
                 } else if (
+                    null === elem.lastChild ||
                     elem.lastChild.nodeType !== Node.ELEMENT_NODE ||
                     !elem.lastChild.classList.contains('i18n-edit')
                 ) {

@@ -841,6 +841,15 @@ label[for="symbol-labs"],
 label[for="symbol-map"],
 label[for="symbol-settings"],
 label[for="translate"],
+label[for="bit-dove"],
+label[for="bit-eagle"],
+label[for="bit-flamingo"],
+label[for="bit-owl"],
+label[for="bit-parrot"],
+label[for="bit-peacock"],
+label[for="bit-rooster"],
+label[for="bit-swan"],
+label[for="bit-turkey"],
 label[for="debug"] {
     filter: grayscale(1);
     opacity: 0.5;
@@ -851,6 +860,15 @@ label[for="debug"] {
 #symbol-map:checked ~ * label[for="symbol-map"],
 #symbol-settings:checked ~ * label[for="symbol-settings"],
 #translate:checked ~ * label[for="translate"],
+#bit-dove:checked ~ * label[for="bit-dove"],
+#bit-eagle:checked ~ * label[for="bit-eagle"],
+#bit-flamingo:checked ~ * label[for="bit-flamingo"],
+#bit-owl:checked ~ * label[for="bit-owl"],
+#bit-parrot:checked ~ * label[for="bit-parrot"],
+#bit-peacock:checked ~ * label[for="bit-peacock"],
+#bit-rooster:checked ~ * label[for="bit-rooster"],
+#bit-swan:checked ~ * label[for="bit-swan"],
+#bit-turkey:checked ~ * label[for="bit-turkey"],
 #debug:checked ~ * label[for="debug"] {
     filter: grayscale(0);
     opacity: 1;
@@ -867,6 +885,7 @@ input.details:checked ~ .lab div.details,
 #authenticated:checked ~ * .authenticated,
 .unauthenticated,
 #debug:checked ~ * .debug,
+#translate:checked ~ * .translate,
 .block
 {
     display: block;
@@ -885,6 +904,7 @@ input.details ~ .lab div.details,
 .authenticated,
 #authenticated:checked ~ * .unauthenticated,
 .debug,
+.translate,
 .hidden {
     display: none;
     visibility: hidden;
