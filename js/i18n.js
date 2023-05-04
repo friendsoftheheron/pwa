@@ -67,7 +67,9 @@ export default class I18N {
                     case '*': return '<b>'+text+'</b>';
                     case '/': return '<i>'+text+'</i>';
                     default:
-                        const json = JSON.parse(elem.dataset['i18nTag'+key[0].toUpperCase() + key.slice(1)]);
+                        const data = elem.dataset['i18nTag'+key[0].toUpperCase() + key.slice(1)]
+                        if (!data) return `(${key})[${text}]`
+                        const json = JSON.parse(data);
                         const tag = document.createElement(json.tag || 'span')
                         Object.entries(json.attr || {}).forEach(([key, value]) => {
                             tag.setAttribute(key, value);

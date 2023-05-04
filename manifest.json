@@ -55,5 +55,42 @@
             "type": "image/png", "sizes": "512x512",
             "purpose": "maskable"
         }
+    ],
+    "screenshots":[
+        {
+            "label": "Labs",
+            "platform": "narrow",
+            "sizes": "750x1334",
+            "src": "./images/screenshots/labs.png",
+            "type": "image/png"
+        },
+        {
+            "label": "Map",
+            "platform": "narrow",
+            "sizes": "750x1334",
+            "src": "./images/screenshots/map.png",
+            "type": "image/png"
+        },
+        {
+            "label": "Detail",
+            "platform": "narrow",
+            "sizes": "750x1334",
+            "src": "./images/screenshots/detail.png",
+            "type": "image/png"
+        },
+        {
+            "label": "Menu",
+            "platform": "narrow",
+            "sizes": "750x1334",
+            "src": "images/screenshots/menu.png",
+            "type": "image/png"
+        },
+        {
+            "label": "Settings",
+            "platform": "narrow",
+            "sizes": "750x1334",
+            "src": "images/screenshots/settings.png",
+            "type": "image/png"
+        }
     ]
 }

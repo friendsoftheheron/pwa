@@ -232,7 +232,7 @@ const watchLocation = (() => {
                     {enableHighAccuracy: high_accuracy},
                 );
                 addMessage('watchPosition: ' + watch_id);
-            } else {
+            } else if (0 < update_interval) {
                 interval_id = window.setInterval(
                     () => {
                         window.navigator.geolocation.getCurrentPosition(
@@ -244,6 +244,21 @@ const watchLocation = (() => {
                     update_interval * 1000
                 );
                 addMessage('setInterval: ' + interval_id);
+            } else {
+                changedPosition(
+                    {
+                        coords: {
+                            latitude: 52.0880131,
+                            longitude: 5.1273913,
+                            heading: 314,
+                        },
+                        timestamp: Math.floor(Date.now() / 86400000) * 86400000 -
+                            2 * 3600000 +
+                            16 * 3600000 + 18 * 60000 + 3 * 1000
+                            // 1.61803398875
+                    },
+                    'D'
+                )
             }
         })
     }

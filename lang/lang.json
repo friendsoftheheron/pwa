@@ -1,4 +1,9 @@
 {
+    "de": {
+        "flag": "🇩🇪",
+        "language": "Deutsch",
+        "locale": "de"
+    },
     "en": {
         "flag": "🇬🇧",
         "language": "English",
@@ -8,5 +13,10 @@
         "flag": "🇳🇱",
         "language": "Nederlands",
         "locale": "nl"
+    },
+    "sv": {
+        "flag": "🇸🇪",
+        "language": "Svenska",
+        "locale": "sv"
     }
 }
