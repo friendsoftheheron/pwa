@@ -31,7 +31,7 @@
     "help": "Help",
     "help-geofence-circles": "The circles on the map show the size of the geofence.",
     "help-geofence-distance": "This distance shown is the distance to the geofence.",
-    "help-geofence-input": "The input bar is active when inside the geofence.\r\nIt's becomes inactive on leaving the geofence.\r\nUnless the lab is \"red\".\r\nMeaning wrong answers can be corrected outside the geofence.",
+    "help-geofence-input": "The input bar is active when inside the geofence.\r\nIt becomes inactive upon leaving the geofence.\r\nException is when the lab is \"red\": \r\nMeaning wrong answers can be corrected outside the geofence.",
     "help-labs-number": "A maximum number of labs, depending on the donation status, can be loaded.\r\nWhen this number of labs in (/)[block size] is too big the alembic shakes.\r\nThe globe shakes when the number of labs to be displayed on the map exceeds the limit.",
     "help-loaded": "All labs in a (*)[square] of (/)[block size] as entered in the settings are loaded.\r\n",
     "help-logging": "Labs can be logged when there is an answer in the input bar.",
