@@ -322,6 +322,7 @@ const main = () => {
             du.loadUrlToElem('labs', './html/labs.html'),
             du.loadUrlToElem('map', './html/map.html')
         ]).then(() => {
+            du.fitFont('h1');
             Map.init();
             watchLocation();
 

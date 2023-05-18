@@ -1,7 +1,7 @@
 import i18n from './i18n.js'
 
 export default class DomUtils {
-    static camelcaseify = (str) => str.replace(/-([a-z])/g, g =>  g[1].toUpperCase());
+    static camelaseify = (str) => str.replace(/-([a-z])/g, g =>  g[1].toUpperCase());
     static renderTemplate = (template, obj) =>
         template.replace(/\${(\w+)}/g, (_, k) =>
             obj.hasOwnProperty(k) ? obj[k] : '${'+k+'}'
@@ -64,10 +64,7 @@ export default class DomUtils {
 
     static dispatchEvent = (elem, type) => {
         elem = this.elemOrId(elem);
-        if (!elem) {
-            console.error(`du.dispatchEvent(${elem}, ${type})`)
-            return;
-        }
+        if (!elem) { return; }
         const event = new InputEvent(
             type,
             {
@@ -79,6 +76,33 @@ export default class DomUtils {
         );
         elem.dispatchEvent(event);
     }
+
+
+    static isOverflow = (elem) => {
+        while (elem) {
+            if (elem.clientWidth && elem.scrollWidth && elem.clientHeight && elem.scrollHeight &&
+                (elem.clientWidth < elem.scrollWidth || elem.clientHeight < elem.scrollHeight)
+            ) {
+                return true;
+            }
+            elem = elem.parentNode;
+        }
+        return false;
+    }
+
+    static fitFont = (selector, factor = 0.95) => {
+        const elem = document.querySelector(selector);
+        if (!elem) { return; }
+        let font_size = +window
+            .getComputedStyle(elem)
+            .getPropertyValue('font-size')
+            .slice(0, -2);
+        while (this.isOverflow(elem) && font_size && font_size > 1) {
+            font_size *= factor;
+            elem.style.fontSize = font_size+'px';
+        }
+    }
+
 
     static getElementValue = (elem) => {
         elem = this.elemOrId(elem);
