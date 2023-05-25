@@ -1,7 +1,7 @@
 import i18n from './i18n.js'
 
 export default class DomUtils {
-    static camelaseify = (str) => str.replace(/-([a-z])/g, g =>  g[1].toUpperCase());
+    static camelcaseify = (str) => str.replace(/-([a-z])/g, g =>  g[1].toUpperCase());
     static renderTemplate = (template, obj) =>
         template.replace(/\${(\w+)}/g, (_, k) =>
             obj.hasOwnProperty(k) ? obj[k] : '${'+k+'}'
@@ -18,7 +18,7 @@ export default class DomUtils {
         if ("string" === typeof str) {
             const elem = document.getElementById(str)
             if (!elem) {
-                console.error("Element not found: " + str)
+                console.warn("Element not found: " + str)
             }
             return elem;
         }
@@ -78,29 +78,39 @@ export default class DomUtils {
     }
 
 
-    static isOverflow = (elem) => {
+    static isOverflow = (selector) => {
+        let elem = document.querySelector(selector);
+        console.warn('isOverflow', elem)
         while (elem) {
+            const overflow = window
+                .getComputedStyle(elem)
+                .getPropertyValue('overflow')
+            elem.style.overflow = 'hidden';
             if (elem.clientWidth && elem.scrollWidth && elem.clientHeight && elem.scrollHeight &&
                 (elem.clientWidth < elem.scrollWidth || elem.clientHeight < elem.scrollHeight)
             ) {
+                elem.style.overflow = overflow;
                 return true;
             }
-            elem = elem.parentNode;
+            elem.style.overflow = overflow;
+            elem = (['div', 'header'].includes(elem.tagName.toLowerCase())) ? null : elem.parentNode;
         }
         return false;
     }
 
-    static fitFont = (selector, factor = 0.95) => {
+    static fitFont = (selector, factor = 0.95, extra = 0) => {
         const elem = document.querySelector(selector);
         if (!elem) { return; }
         let font_size = +window
             .getComputedStyle(elem)
             .getPropertyValue('font-size')
             .slice(0, -2);
-        while (this.isOverflow(elem) && font_size && font_size > 1) {
+        while (this.isOverflow(selector) && font_size && font_size > 1) {
             font_size *= factor;
             elem.style.fontSize = font_size+'px';
         }
+        font_size -= extra;
+        elem.style.fontSize = font_size + 'px';
     }
 
 
@@ -176,3 +186,21 @@ export default class DomUtils {
         ;
     });
 }
+
+document.addEventListener('dblclick', (e) => {
+    let target = e.target;
+    while (target && target.dataset) {
+        const source = target.dataset.dblclickSource;
+        const classname = target.dataset.dblclickClass;
+        if (source && classname) {
+            document.querySelectorAll('[data-dblclick-target="' + source + '"]').forEach(elem => {
+                if (elem.classList.contains(classname)) {
+                    elem.classList.remove(classname);
+                } else {
+                    elem.classList.add(classname)
+                }
+            });
+        }
+        target = target.parentNode;
+    }
+});

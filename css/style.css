@@ -140,7 +140,8 @@ li {
 }
 
 .p {
-    padding-top: 0.5rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.2rem;
 }
 
 .small {
@@ -412,18 +413,24 @@ li {
     font-size: 0.7rem;
     margin-right: 1rem;
     line-height: 0.9rem;
-
-
 }
 
 .friends-container {
     display: grid;
-    grid-template-columns: min-content max-content min-content;
+    grid-template-columns: min-content auto min-content;
     row-gap: 0.2rem;
     column-gap: 10%;
 }
-.friends-container div {
+.friends-container span {
+    display: block;
     white-space: nowrap;
+    width: 100%;
+}
+div.friends-desc {
+    grid-column: 2 / 4;
+    font-size: 0.84rem;
+    line-height: 0.924rem;
+    overflow: hidden;
 }
 
 #paypal-button-container.disabled {
@@ -837,19 +844,9 @@ input.details:checked ~ .lab .distance {
 .needle355::before { transform: rotate(355deg); }
 
 
-label[for="symbol-labs"],
-label[for="symbol-map"],
-label[for="symbol-settings"],
+label[for^="bit-"],
+label[for^="symbol-"],
 label[for="translate"],
-label[for="bit-dove"],
-label[for="bit-eagle"],
-label[for="bit-flamingo"],
-label[for="bit-owl"],
-label[for="bit-parrot"],
-label[for="bit-peacock"],
-label[for="bit-rooster"],
-label[for="bit-swan"],
-label[for="bit-turkey"],
 label[for="debug"] {
     filter: grayscale(1);
     opacity: 0.5;
@@ -860,9 +857,11 @@ label[for="debug"] {
 #symbol-map:checked ~ * label[for="symbol-map"],
 #symbol-settings:checked ~ * label[for="symbol-settings"],
 #translate:checked ~ * label[for="translate"],
+#bit-dodo:checked ~ * label[for="bit-dodo"],
 #bit-dove:checked ~ * label[for="bit-dove"],
 #bit-eagle:checked ~ * label[for="bit-eagle"],
 #bit-flamingo:checked ~ * label[for="bit-flamingo"],
+#bit-goose:checked ~ * label[for="bit-goose"],
 #bit-owl:checked ~ * label[for="bit-owl"],
 #bit-parrot:checked ~ * label[for="bit-parrot"],
 #bit-peacock:checked ~ * label[for="bit-peacock"],

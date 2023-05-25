@@ -322,7 +322,9 @@ const main = () => {
             du.loadUrlToElem('labs', './html/labs.html'),
             du.loadUrlToElem('map', './html/map.html')
         ]).then(() => {
-            du.fitFont('h1');
+            if (du.isOverflow('h1')) {
+                du.fitFont('h1', 0.95, 1);
+            }
             Map.init();
             watchLocation();
 
@@ -603,6 +605,7 @@ document.addEventListener('click', (e) => {
                             color = 'orange';
                             break;
                         default:
+                            console.log(res);
                             color = 'red';
                     }
                     elem.parentNode.classList.remove('wait');
