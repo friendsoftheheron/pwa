@@ -883,6 +883,7 @@ label[for="debug"] {
 input.details:checked ~ .lab div.details,
 #authenticated:checked ~ * .authenticated,
 .unauthenticated,
+#bit-swan:checked ~ * special,
 #debug:checked ~ * .debug,
 #translate:checked ~ * .translate,
 .block
@@ -903,6 +904,7 @@ input.details ~ .lab div.details,
 .authenticated,
 #authenticated:checked ~ * .unauthenticated,
 .debug,
+.special,
 .translate,
 .hidden {
     display: none;

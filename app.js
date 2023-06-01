@@ -473,9 +473,7 @@ document.addEventListener('click', (e) => {
                                Array.from(Array(+json.pages)).forEach((_,p) => {
                                    elem.innerHTML += ` <span data-page="${p+1}" ${p+1 === json.page ? 'class="orange"' : 'href="#translate"'}>${p+1}</span>`;
                                })
-
                             });
-
                     });
                     return false;
                 case 'qr':
@@ -770,10 +768,10 @@ document.addEventListener('change', (e) => {
     switch(e.target.id) {
         case 'friends-bits':
             Array.from(document.getElementsByClassName('friend-selector')).forEach(x => {
-                x.checked = x.value === (
-                    x.dataset.bitValue &
+                x.checked = +x.value === (
                     // + to convert to int
-                    +document.getElementById('friends-bits').value
+                    (+x.dataset.bitValue) &
+                    (+document.getElementById('friends-bits').value)
                 );
             })
             break;

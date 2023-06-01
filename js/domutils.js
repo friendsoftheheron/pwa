@@ -80,7 +80,6 @@ export default class DomUtils {
 
     static isOverflow = (selector) => {
         let elem = document.querySelector(selector);
-        console.warn('isOverflow', elem)
         while (elem) {
             const overflow = window
                 .getComputedStyle(elem)
