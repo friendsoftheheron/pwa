@@ -85,6 +85,13 @@ export default class DomUtils {
                 .getComputedStyle(elem)
                 .getPropertyValue('overflow')
             elem.style.overflow = 'hidden';
+            console.warn(
+                elem,
+                'w', elem.clientWidth,
+                elem.scrollWidth,
+                'h', elem.clientHeight,
+                elem.scrollHeight
+            )
             if (elem.clientWidth && elem.scrollWidth && elem.clientHeight && elem.scrollHeight &&
                 (elem.clientWidth < elem.scrollWidth || elem.clientHeight < elem.scrollHeight)
             ) {
@@ -139,10 +146,10 @@ export default class DomUtils {
         elem = this.elemOrId(elem);
         if (!elem) return;
         elem.innerHTML = html;
-        i18n.translate(elem);
         if (obj) {
             elem.innerHTML = this.renderTemplate(elem.innerHTML, obj)
         }
+        i18n.translate(elem);
         return 	html;
     };
 

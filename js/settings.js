@@ -9,7 +9,6 @@ export default class Settings {
     static url = './html/settings.html'
     static encrypt_field_start = 'password'
 
-
     static getItem = (id) => new Promise((resolve, reject) => {
         const value = localStorage.getItem(this.prefix + id);
         if (null === value) {
@@ -76,10 +75,8 @@ export default class Settings {
             )
                 .map(elem => new Promise((resolve) => {
                     this.getSetting(elem.id)
-                        .then(value => {
-                            localStorage.setItem(this.prefix + elem.id, value);
-                            return resolve(du.setElementValue(elem, value));
-                        })
+                        .then(value => this.setItem(elem.id, value))
+                        .then(value => resolve(du.setElementValue(elem, value)))
                     })
                 )
         )

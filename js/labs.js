@@ -47,7 +47,14 @@ export default class Labs {
             st.getSetting('password'),
             st.getSetting('data-url'),
             st.getSetting('friend-bits'),
-        ]).then(([username, password, data_url, friend_bits]) => {
+            st.getSetting('language'),
+        ]).then(([
+            username,
+            password,
+            data_url,
+            friend_bits,
+            language
+        ]) => {
             if (null === data) {
                 data = {};
             }
@@ -63,6 +70,7 @@ export default class Labs {
             data.username = username || '';
             data.password = password || '';
             data.friends = friend_bits || 0;
+            data.language = language || 'en';
             const form_data = new FormData();
             Object.keys(data).forEach(key => form_data.append(key, data[key]));
             fetch(

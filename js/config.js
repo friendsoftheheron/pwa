@@ -1,7 +1,7 @@
 export default class Config {
 
     static name = 'Power Walk Adventure';
-    static version = 'v0.2.3.3.1';
+    static version = 'v0.2.3.4';
 
     // Heron Island S23.44240 E151.91500
     static start_latitude = -23.44240;

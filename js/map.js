@@ -1,4 +1,4 @@
-import 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js'
+import 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 import config from './config.js'
 import Labs from './labs.js'
 import Location from './location.js'
