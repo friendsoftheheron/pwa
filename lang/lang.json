@@ -9,6 +9,11 @@
         "language": "English",
         "locale": "en"
     },
+    "fr": {
+        "flag": "🇫🇷",
+        "language": "Français",
+        "locale": "fr"
+    },
     "nl": {
         "flag": "🇳🇱",
         "language": "Nederlands",

@@ -278,6 +278,122 @@ const enableNotifications = () => {
     }
 }
 
+const logLab = (id) => {
+    const elem = document
+        .getElementById('id'+id)
+        .getElementsByClassName('lab')[0];
+    elem.parentNode.classList.add('wait');
+
+    Labs.
+        logLab(
+            id,
+            elem.querySelector('select').value ||
+            elem.querySelector('input:nth-child(2)').value
+        )
+        .then(res => {
+            let color;
+            switch (res.Result) {
+                case 0:
+                case 3:
+                    color = 'yellow';
+                    const html = '' +
+                        (res.JournalImageUrl ? '<img src="' + res.JournalImageUrl + '" />' : '') +
+                        (res.JournalMessage ? res.JournalMessage.replace('\n', '<br />') : '') +
+                        '';
+                    du.setInnerHtml(
+                        'popup',
+                        '<div class="journal">' + html + '</div>'
+                    );
+                    const journal = document.getElementById(
+                        'journal-' + elem.parentNode.id.slice(2)
+                    );
+                    if (journal) {
+                        journal.innerHTML = html;
+                        journal.classList.remove('hidden');
+                    }
+                    du.setChecked('symbol-popup');
+                    if (res.hasOwnProperty('rating')) {
+                        rateAdventure(res);
+                    }
+                    console.warn(res);
+                    break;
+                case 2:
+                    color = 'orange';
+                    break;
+                default:
+                    console.log(res);
+                    color = 'red';
+            }
+            elem.parentNode.classList.remove('wait');
+            st.getSetting('hide-logged').then(hide_logged => {
+                const id = elem.parentNode.id.slice(2)
+                if (hide_logged && 'yellow' === color) {
+                    Labs.labs = Labs.labs.filter(lab => lab.id !== id)
+                    const circle = Map.id2layer(id);
+                    if (circle) {
+                        Map.map.removeLayer(circle);
+                    }
+                    elem.remove();
+                    Labs.updateLocalStorage(id);
+                } else {
+                    Labs.setBorderColor(elem, color);
+                    Labs
+                        .labs
+                        .filter(lab => 'id' + lab.id === id)
+                        .forEach(lab => {
+                            lab.color = color;
+                            Map.setCircleColor(lab.id, color);
+                        })
+                    ;
+                    Labs.updateLocalStorage(id, { color: color });
+               }
+            })
+        })
+        .catch(err => console.error(err))
+    ;
+
+}
+
+const postReview = () => {
+    Promise.all([
+        du.getElementValue('adventure_id'),
+        du.getRadioValue('rating'),
+        du.getElementValue('review'),
+    ]).then(([adventure_id, rating, review,]) => {
+        document.getElementById('post-review').disabled=true;
+        Labs.getData({
+            'id': adventure_id,
+            'block_size': rating,
+            'code': review,
+            'special': 'ratings',
+        }).then(res => {
+            console.warn(res);
+            document.getElementById('post-review').disabled=false;
+            du.dispatchEvent(du.elemOrId('cancel'), 'click')
+        })
+    })
+}
+
+const rateAdventure = (data=null) => {
+    if (null === data) {
+        data = {
+            rating: Math.floor(Math.random()*10+1)/2,
+            adventure_id: '',
+        }
+    }
+    data.rating = (Math.round(data.rating * 2) / 2).toFixed(1);
+
+    console.warn('rateAdventure', data.rating);
+    du
+        .loadUrlToElem('page', './html/review.html')
+        .then(() => {
+            du.setRadioValue('rating', data.rating);
+            du.setElementValue('adventure_id', data.adventure_id);
+            du.setChecked('symbol-page');
+        });
+    return false
+}
+
 const init = () => {
     pp
         .appendScript()
@@ -418,6 +534,9 @@ document.addEventListener('click', (e) => {
                 case 'labs':
                     du.setChecked('symbol-labs');
                     return false;
+                case 'rate': {
+                    return rateAdventure();
+                }
                 case 'licence': {
                     du
                         .loadUrl('./LICENCE')
@@ -448,9 +567,6 @@ document.addEventListener('click', (e) => {
                         }),
                         du.loadUrlToElem('page', './html/translate.html'),
                     ]).then(([json, html]) => {
-                        console.log(json);
-                        console.log(html);
-
                         const template = du.elemOrId('translation-template');
                         const holder = du.elemOrId('translation-holder');
 
@@ -546,6 +662,8 @@ document.addEventListener('click', (e) => {
         ) {
             const data = {
                 'special': 'update-adventure',
+                'latitude':  Map.map.getCenter().lat,
+                'longitude':  Map.map.getCenter().lng,
             }
             if (target.id.startsWith('special-update-')) {
                 data['id'] = target.id.slice('special-update-'.length);
@@ -565,74 +683,7 @@ document.addEventListener('click', (e) => {
         }
 
         if (target.classList.contains('log-button')) {
-            const elem = document
-                .getElementById('id'+target.dataset.id)
-                .getElementsByClassName('lab')[0];
-            elem.parentNode.classList.add('wait');
-
-            Labs.
-                logLab(
-                    target.dataset.id,
-                    elem.querySelector('select').value ||
-                    elem.querySelector('input:nth-child(2)').value
-                )
-                .then(res => {
-                    let color;
-                    switch (res.Result) {
-                        case 0:
-                        case 3:
-                            color = 'yellow';
-                            const html = '' +
-                                (res.JournalImageUrl ? '<img src="' + res.JournalImageUrl + '" />' : '') +
-                                (res.JournalMessage ? res.JournalMessage.replace('\n', '<br />') : '') +
-                                '';
-                            du.setInnerHtml(
-                                'popup',
-                                '<div class="journal">' + html + '</div>'
-                            );
-                            const journal = document.getElementById(
-                                'journal-' + elem.parentNode.id.slice(2)
-                            );
-                            if (journal) {
-                                journal.innerHTML = html;
-                                journal.classList.remove('hidden');
-                            }
-                            du.setChecked('symbol-popup')
-                            break;
-                        case 2:
-                            color = 'orange';
-                            break;
-                        default:
-                            console.log(res);
-                            color = 'red';
-                    }
-                    elem.parentNode.classList.remove('wait');
-                    st.getSetting('hide-logged').then(hide_logged => {
-                        const id = elem.parentNode.id.slice(2)
-                        if (hide_logged && 'yellow' === color) {
-                            Labs.labs = Labs.labs.filter(lab => lab.id !== id)
-                            const circle = Map.id2layer(id);
-                            if (circle) {
-                                Map.map.removeLayer(circle);
-                            }
-                            elem.remove();
-                            Labs.updateLocalStorage(id);
-                        } else {
-                            Labs.setBorderColor(elem, color);
-                            Labs
-                                .labs
-                                .filter(lab => 'id' + lab.id === id)
-                                .forEach(lab => {
-                                    lab.color = color;
-                                    Map.setCircleColor(lab.id, color);
-                                })
-                            ;
-                            Labs.updateLocalStorage(id, { color: color });
-                       }
-                    })
-                })
-                .catch(err => console.error(err))
-            ;
+            logLab(target.dataset.id);
         }
 
         switch(target.id) {
@@ -656,11 +707,14 @@ document.addEventListener('click', (e) => {
                         du.setChecked('symbol-popup')
                     })
                 return false;
+            case 'cancel':
             case 'save-and-exit':
                 st.getSetting('primary-page').then(primary_page => {
                     du.setChecked('symbol-' + primary_page)
                 });
                 return false;
+            case 'post-review':
+                return postReview();
             case 'restore-default-settings':
                 st.clearSettings();
                 return false;

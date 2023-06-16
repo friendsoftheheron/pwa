@@ -1,10 +1,10 @@
 import i18n from './i18n.js'
 
 export default class DomUtils {
-    static camelcaseify = (str) => str.replace(/-([a-z])/g, g =>  g[1].toUpperCase());
+    static camelcaseify = (str) => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
     static renderTemplate = (template, obj) =>
         template.replace(/\${(\w+)}/g, (_, k) =>
-            obj.hasOwnProperty(k) ? obj[k] : '${'+k+'}'
+            obj.hasOwnProperty(k) ? obj[k] : '${' + k + '}'
         )
     ;
 
@@ -25,7 +25,7 @@ export default class DomUtils {
         return str;
     }
 
-    static getElementByClassName = (name, node=null, number=0) => {
+    static getElementByClassName = (name, node = null, number = 0) => {
         if (null === node) {
             node = document;
         }
@@ -64,7 +64,9 @@ export default class DomUtils {
 
     static dispatchEvent = (elem, type) => {
         elem = this.elemOrId(elem);
-        if (!elem) { return; }
+        if (!elem) {
+            return;
+        }
         const event = new InputEvent(
             type,
             {
@@ -85,13 +87,7 @@ export default class DomUtils {
                 .getComputedStyle(elem)
                 .getPropertyValue('overflow')
             elem.style.overflow = 'hidden';
-            console.warn(
-                elem,
-                'w', elem.clientWidth,
-                elem.scrollWidth,
-                'h', elem.clientHeight,
-                elem.scrollHeight
-            )
+            //console.warn(elem, 'w', elem.clientWidth, elem.scrollWidth, 'h', elem.clientHeight, elem.scrollHeight);
             if (elem.clientWidth && elem.scrollWidth && elem.clientHeight && elem.scrollHeight &&
                 (elem.clientWidth < elem.scrollWidth || elem.clientHeight < elem.scrollHeight)
             ) {
@@ -106,14 +102,16 @@ export default class DomUtils {
 
     static fitFont = (selector, factor = 0.95, extra = 0) => {
         const elem = document.querySelector(selector);
-        if (!elem) { return; }
+        if (!elem) {
+            return;
+        }
         let font_size = +window
             .getComputedStyle(elem)
             .getPropertyValue('font-size')
             .slice(0, -2);
         while (this.isOverflow(selector) && font_size && font_size > 1) {
             font_size *= factor;
-            elem.style.fontSize = font_size+'px';
+            elem.style.fontSize = font_size + 'px';
         }
         font_size -= extra;
         elem.style.fontSize = font_size + 'px';
@@ -140,6 +138,21 @@ export default class DomUtils {
             elem.checked = state;
             this.dispatchEvent(elem, "change");
         }
+    }
+
+    static getRadioValue = (name) => {
+        return Array.from(
+            document.querySelectorAll('input[type="radio"][name="'+name+'"]')
+        ).filter(elem => elem.checked)[0].value;
+    }
+
+    static setRadioValue = (name, value) => {
+        document
+            .querySelectorAll('input[type="radio"][name="'+name+'"]')
+            .forEach(elem => {
+                elem.checked = elem.value == value;
+            })
+        ;
     }
 
     static setInnerHtml = (elem, html, obj=null) => {

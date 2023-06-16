@@ -1,27 +1,5 @@
-:root {
-    --orange: #f15927;
-    --sky: #cdeaf1;
-    --light-blue: #99d3df;
-    --medium-blue: #00708e;
-    --dark-blue: #00334e;
-    --green: #02874D;
-    --red: #90040B;
-    --yellow: #E98300;
-    --white: #f9fcff;
-    --black: #00222d;
-    --gray: #c1c3c7;
-
-    --max-width: 800px;
-
-    --disabled-color: #AAA;
-    --disabled-background: #F5F5F5;
-    --enabled-color: var(--black);
-    --enabled-background: var(--white);
-
-    --header-height: 2.5rem;
-    --footer-height: 2rem;
-}
-
+@import url('../css/vars.css');
+@import url('../css/ratings.css');
 * {
     margin: 0;
     padding: 0;
@@ -123,7 +101,7 @@ li {
 .orange { color: var(--orange); }
 
 .blur { filter: blur(0.25rem); }
-.clear { clear: both; }
+.clear { clear: both; display: block; }
 .colon:after { content: ':'; }
 .flex {	display: flex; }
 .relative { position: relative; }
@@ -885,7 +863,7 @@ label[for="debug"] {
 input.details:checked ~ .lab div.details,
 #authenticated:checked ~ * .authenticated,
 .unauthenticated,
-#bit-swan:checked ~ * special,
+#bit-swan:checked ~ * .special,
 #debug:checked ~ * .debug,
 #translate:checked ~ * .translate,
 .block

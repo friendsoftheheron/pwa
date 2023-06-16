@@ -88,7 +88,14 @@ export default class I18N {
                 const key = elem.dataset.i18nKey;
                 if (key in this.translations) {
                     elem.classList.remove('i18n-untranslated')
-                    elem.innerHTML = this.parse(this.translations[key], elem);
+                    if ('i18nAttr' in elem.dataset) {
+                        elem.setAttribute(
+                            elem.dataset.i18nAttr,
+                            this.parse(this.translations[key], elem)
+                        );
+                    } else {
+                        elem.innerHTML = this.parse(this.translations[key], elem);
+                    }
                 } else {
                     elem.classList.add('i18n-untranslated')
                 }

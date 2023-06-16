@@ -65,8 +65,8 @@ export default class Labs {
                 .loadingCounter++;
             document.dispatchEvent(new MessageEvent('message', {data: 'fetch:' + JSON.stringify(data)}));
 
-            data.latitude = data.latitude || localStorage.getItem(config.current_latitude) || 52;
-            data.longitude = data.longitude || localStorage.getItem(config.current_longitude) || 5;
+            data.latitude = data.latitude || localStorage.getItem(config.current_latitude) || 52.0880131;
+            data.longitude = data.longitude || localStorage.getItem(config.current_longitude) || 5.1273913;
             data.username = username || '';
             data.password = password || '';
             data.friends = friend_bits || 0;
