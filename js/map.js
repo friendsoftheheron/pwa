@@ -13,8 +13,10 @@ export default class Map {
     static zoom = null;
     static block_size = null;
     static center_img = null;
-    static drag_timer = false;
     static down_timer = false;
+    static down_timeout = 932;
+    static drag_timer = false;
+    static drag_timeout = 1053;
 
     //static labs = {}
 
@@ -22,6 +24,7 @@ export default class Map {
         yellow: 0,
         red: 3,
     }
+
 
     static init = () => {
         this.map = L.map('leaflet').fitWorld();
@@ -54,7 +57,7 @@ export default class Map {
                     } else {
                         Map.down_timer = window.setTimeout(
                             () => { Map.down_timer = false; },
-                            1000
+                            this.down_timeout
                         );
                     }
                     return false;
@@ -113,7 +116,7 @@ export default class Map {
                         .catch(err => reject(err))
                 }
             }),
-            1974
+            this.drag_timeout
         );
     });
 

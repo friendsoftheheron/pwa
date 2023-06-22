@@ -1,5 +1,3 @@
-import i18n from './i18n.js'
-
 export default class DomUtils {
     static camelcaseify = (str) => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
     static renderTemplate = (template, obj) =>
@@ -162,7 +160,7 @@ export default class DomUtils {
         if (obj) {
             elem.innerHTML = this.renderTemplate(elem.innerHTML, obj)
         }
-        i18n.translate(elem);
+        this.dispatchEvent(elem, 'i18n-translate');
         return 	html;
     };
 
@@ -205,6 +203,25 @@ export default class DomUtils {
         ;
     });
 }
+
+document.addEventListener('change', (e) => {
+    if ('INPUT' === e.target.tagName && 'range' === e.target.type) {
+        document
+            .querySelectorAll('[data-for-range="'+e.target.id+'"')
+            .forEach(elem => {
+                console.warn(elem)
+                if ("rangeAttr" in elem.dataset) {
+                    elem.setAttribute(elem.dataset.rangeAttr, e.target.value);
+                } else {
+                    elem.innerHTML = e.target.value;
+                }
+                if ("rangeEvent" in elem.dataset) {
+                    DomUtils.dispatchEvent(elem, elem.dataset.rangeEvent);
+                }
+            })
+        //console.warn('tag', e.target.tagName, e.target.type, e.target.dataset.forRange);
+    }
+});
 
 document.addEventListener('dblclick', (e) => {
     let target = e.target;

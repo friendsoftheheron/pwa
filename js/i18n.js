@@ -59,13 +59,28 @@ export default class I18N {
         ;
     });
 
+    static getContent = (key, elem) => {
+        if (key.endsWith('_p')) {
+            return this.translations[key] &&
+                this.translations[key][
+                    new Intl
+                        .PluralRules(this.locale || undefined)
+                        .select(+elem.dataset.i18nValue)
+                ]
+            ;
+        }
+        return this.translations[key];
+    }
+
+
     static parse = (str, elem) => {
         return str.replaceAll(
-            /\((\w+|\*|\/)\)\[([^\]]*)]/g,
+            /\((\w+|\*|\/|\$)\)\[([^\]]*)]/g,
             (_, key, text) => {
                 switch (key) {
                     case '*': return '<b>'+text+'</b>';
                     case '/': return '<i>'+text+'</i>';
+                    case '$': return elem.dataset.i18nValue;
                     default:
                         const data = elem.dataset['i18nTag'+key[0].toUpperCase() + key.slice(1)]
                         if (!data) return `(${key})[${text}]`
@@ -80,55 +95,57 @@ export default class I18N {
             }
         )
     }
+
+    static translateElement = (elem) => {
+        const content = I18N.getContent(elem.dataset.i18nKey, elem);
+        if (undefined === content) {
+            elem.classList.add('i18n-untranslated')
+        } else {
+            elem.classList.remove('i18n-untranslated')
+            if ('i18nAttr' in elem.dataset) {
+                elem.setAttribute(
+                    elem.dataset.i18nAttr,
+                    this.parse(content)
+                );
+            } else {
+                elem.innerHTML = this.parse(content, elem);
+            }
+        }
+        const span = document.createElement('span');
+        span.classList.add('i18n-edit');
+        span.dataset.i18nEditKey = elem.dataset.i18nKey;
+
+        if (['OPTION'].includes(elem.tagName)) { return;  } // Options are difficult to handle
+        if (['BUTTON', 'TEXTAREA'].includes(elem.tagName)) {
+            if (
+                null === elem.nextSibling ||
+                elem.nextSibling.nodeType !== Node.ELEMENT_NODE ||
+                !elem.nextSibling.dataset.i18nEditKey ||
+                elem.nextSibling.dataset.i18nEditKey !== span.dataset.i18nEditKey
+            ) {
+                elem.classList.forEach(c => {
+                    if (['left', 'margin', 'right', 'debug']) {
+                        span.classList.add(c)
+                    } else {
+                        console.log('cl', c)
+                    }
+                });
+                elem.parentNode.insertBefore(span, elem.nextSibling);
+            }
+        } else if (
+            null === elem.lastChild ||
+            elem.lastChild.nodeType !== Node.ELEMENT_NODE ||
+            !elem.lastChild.classList.contains('i18n-edit')
+        ) {
+            elem.appendChild(span);
+        }
+    }
+
     static translate = (elem = null) => {
         if (null === elem) { elem = document; }
         elem
             .querySelectorAll('[data-i18n-key]')
-            .forEach(elem => {
-                const key = elem.dataset.i18nKey;
-                if (key in this.translations) {
-                    elem.classList.remove('i18n-untranslated')
-                    if ('i18nAttr' in elem.dataset) {
-                        elem.setAttribute(
-                            elem.dataset.i18nAttr,
-                            this.parse(this.translations[key], elem)
-                        );
-                    } else {
-                        elem.innerHTML = this.parse(this.translations[key], elem);
-                    }
-                } else {
-                    elem.classList.add('i18n-untranslated')
-                }
-
-                const span = document.createElement('span');
-                span.classList.add('i18n-edit');
-                span.dataset.i18nEditKey = elem.dataset.i18nKey;
-
-                if (['OPTION'].includes(elem.tagName)) { return;  } // Options are difficult to handle
-                if (['BUTTON', 'TEXTAREA'].includes(elem.tagName)) {
-                    if (
-                        null === elem.nextSibling ||
-                        elem.nextSibling.nodeType !== Node.ELEMENT_NODE ||
-                        !elem.nextSibling.dataset.i18nEditKey ||
-                        elem.nextSibling.dataset.i18nEditKey !== span.dataset.i18nEditKey
-                    ) {
-                        elem.classList.forEach(c => {
-                            if (['left', 'margin', 'right', 'debug']) {
-                                span.classList.add(c)
-                            } else {
-                                console.log('cl', c)
-                            }
-                        });
-                        elem.parentNode.insertBefore(span, elem.nextSibling);
-                    }
-                } else if (
-                    null === elem.lastChild ||
-                    elem.lastChild.nodeType !== Node.ELEMENT_NODE ||
-                    !elem.lastChild.classList.contains('i18n-edit')
-                ) {
-                    elem.appendChild(span);
-                }
-            })
+            .forEach(elem => this.translateElement(elem))
         ;
     }
 
@@ -194,4 +211,11 @@ document.addEventListener('change', (e) => {
     if (e.target.id === I18N.selector_id) {
         I18N.locale = e.target.value;
     }
+})
+
+document.addEventListener('i18n-translate', (e) => {
+    I18N.translate(e.target);
+})
+document.addEventListener('i18n-translate-element', (e) => {
+    I18N.translateElement(e.target);
 })

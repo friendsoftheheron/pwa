@@ -65,6 +65,8 @@ const updateUser = () => new Promise((resolve) => {
                 du.setChecked('debug', false);
             }
 
+            du.setInnerHtml('friends-formatted', config.level_formatted);
+
             if (config.translator.length) {
                 document.querySelectorAll('[for="translate"]').forEach(elem => elem.classList.remove('hidden'));
                 st
@@ -301,7 +303,7 @@ const logLab = (id) => {
                         (res.JournalMessage ? res.JournalMessage.replace('\n', '<br />') : '') +
                         '';
                     du.setInnerHtml(
-                        'popup',
+                        'popup-content',
                         '<div class="journal">' + html + '</div>'
                     );
                     const journal = document.getElementById(
@@ -336,15 +338,15 @@ const logLab = (id) => {
                     elem.remove();
                     Labs.updateLocalStorage(id);
                 } else {
-                    Labs.setBorderColor(elem, color);
                     Labs
                         .labs
-                        .filter(lab => 'id' + lab.id === id)
+                        .filter(lab => lab.id === id)
                         .forEach(lab => {
                             lab.color = color;
                             Map.setCircleColor(lab.id, color);
                         })
                     ;
+                    Labs.setBorderColor(elem, color);
                     Labs.updateLocalStorage(id, { color: color });
                }
             })
@@ -367,7 +369,6 @@ const postReview = () => {
             'code': review,
             'special': 'ratings',
         }).then(res => {
-            console.warn(res);
             document.getElementById('post-review').disabled=false;
             du.dispatchEvent(du.elemOrId('cancel'), 'click')
         })
@@ -382,8 +383,6 @@ const rateAdventure = (data=null) => {
         }
     }
     data.rating = (Math.round(data.rating * 2) / 2).toFixed(1);
-
-    console.warn('rateAdventure', data.rating);
     du
         .loadUrlToElem('page', './html/review.html')
         .then(() => {
@@ -393,6 +392,44 @@ const rateAdventure = (data=null) => {
         });
     return false
 }
+
+const translate = (page = 1) => {
+    Promise.all([
+        Labs.getData({
+            special: 'language',
+            id: i18n.locale,
+            block_size: page || 1,
+        }),
+        du.loadUrlToElem('page', './html/translate.html'),
+    ]).then(([json, html]) => {
+        const template = du.elemOrId('translation-template');
+        const holder = du.elemOrId('translation-holder');
+
+        holder.innerHtml = '';
+        json.labels.forEach(key => {
+            const node = document.createElement('div');
+            node.innerHTML = template.innerHTML;
+            const span = node.getElementsByTagName('span')[0];
+            span.innerHTML = key;
+            const edit = node.getElementsByTagName('span')[1];
+            edit.dataset.i18nKey = key;
+            holder.append(node);
+        });
+        i18n.translate();
+        du.setChecked('symbol-page');
+        Array
+            .from(document.getElementsByClassName('pagination'))
+            .forEach(elem => {
+                elem.innerHTML = '';
+                Array.from(Array(+json.pages)).forEach((_, p) => {
+                    elem.innerHTML += ` <span data-page="${p + 1}" ${p + 1 === json.page ? 'class="orange"' : 'href="#translate"'}>${p + 1}</span>`;
+                })
+            });
+    });
+    return false;
+}
+
+
 
 const init = () => {
     pp
@@ -559,42 +596,10 @@ document.addEventListener('click', (e) => {
                     return false;
                 }
                 case 'translate':
-                    Promise.all([
-                        Labs.getData({
-                            special: 'language',
-                            id: i18n.locale,
-                            block_size: target.dataset.page || 1,
-                        }),
-                        du.loadUrlToElem('page', './html/translate.html'),
-                    ]).then(([json, html]) => {
-                        const template = du.elemOrId('translation-template');
-                        const holder = du.elemOrId('translation-holder');
-
-                        holder.innerHtml = '';
-                        json.labels.forEach(key => {
-                            const node = document.createElement('div');
-                            node.innerHTML = template.innerHTML;
-                            const span  = node.getElementsByTagName('span')[0];
-                            span.innerHTML = key;
-                            const edit  = node.getElementsByTagName('span')[1];
-                            edit.dataset.i18nKey = key;
-                            holder.append(node);
-                        });
-                        i18n.translate();
-                        du.setChecked('symbol-page');
-                        Array
-                            .from(document.getElementsByClassName('pagination'))
-                            .forEach(elem => {
-                               elem.innerHTML = '';
-                               Array.from(Array(+json.pages)).forEach((_,p) => {
-                                   elem.innerHTML += ` <span data-page="${p+1}" ${p+1 === json.page ? 'class="orange"' : 'href="#translate"'}>${p+1}</span>`;
-                               })
-                            });
-                    });
-                    return false;
+                    return translate(+target.dataset.page);
                 case 'qr':
                     du
-                        .loadUrlToElem('popup', './html/qr-code.html')
+                        .loadUrlToElem('popup-content', './html/qr-code.html')
                         .then(() => QrCode.show())
                         .then(() => {
                             const elem = document.getElementById('qr-url')
@@ -695,11 +700,12 @@ document.addEventListener('click', (e) => {
                             (
                                 document.getElementById('friend-username-select').value ||
                                 document.getElementById('friend-username-select').input
-                            )
+                            ) +
+                            ':::' + document.getElementById('friend-duration').value * 7,
                     })
                     .then(res => {
                         du.setInnerHtml(
-                            'popup',
+                            'popup-content',
                             i18n.translateHtml(
                                 `<span data-i18n-key="${res.label}">${res.message}</span>`
                             )
@@ -814,7 +820,10 @@ document.addEventListener('change', (e) => {
         'friends-period' === e.target.name
     ) {
         const period = document.querySelector( 'input[name="friends-period"]:checked');
-        du.setInnerHtml('friends-price', pp.friendsPrice() * (period ? period.value : 11));
+        du.setInnerHtml(
+            'friends-price',
+            (pp.friendsPrice() * (period ? period.value : 11)/100).toFixed(2)
+        );
         const bits_elem = document.getElementById('friends-bits')
         if (bits_elem) { bits_elem.value = pp.friendsBits(); }
     }
@@ -861,7 +870,7 @@ document.addEventListener('translate', (e) => {
                     config.translator.map(x => x.split(':')[0]).join('|')
             }).then(json =>
             du.loadUrlToElem(
-                'popup',
+                'popup-content',
                 './html/i18n.html',
                 {'label': json[0].label}
             ).then(() => i18n.supported_locales)
@@ -875,18 +884,34 @@ document.addEventListener('translate', (e) => {
                             ? supported_locales[data.locale.split(':')[0]][x]
                             : data.locale
                     );
-                    const node = document.createElement('div');
-                    node.innerHTML = du.renderTemplate(i18n.translateHtml(template.innerHTML), data);
-                    const textarea  = node.getElementsByTagName('textarea')[0];
-                    textarea.style.width = (Math.min(config.max_width,  window.innerWidth ) * .7) + 'px';
-                    if (config.translator.includes(data['locale'])) {
-                        ['content', 'label', 'locale'].forEach(x => {
-                            textarea.dataset[x] = data[x];
-                        });
+                    const label = data['label'];
+                    const content = data['content'];
+                    let options = [];
+                    if (data.label.endsWith('_p')) {
+                        // TODO: Handle cardinal / ordinal
+                        options =  new Intl.PluralRules('en').resolvedOptions().pluralCategories;
                     } else {
-                        textarea.disabled = true;
+                        options = [''];
                     }
-                    holder.append(node);
+                    options.forEach(option => {
+                        if (option) {
+                            data['label'] = label + '__' + option
+                        }
+                        data['option'] = option;
+                        data['content'] = typeof content === 'string' ? content : content[option] || '';
+                        const node = document.createElement('div');
+                        node.innerHTML = du.renderTemplate(i18n.translateHtml(template.innerHTML), data);
+                        const textarea  = node.getElementsByTagName('textarea')[0];
+                        textarea.style.width = (Math.min(config.max_width,  window.innerWidth ) * .7) + 'px';
+                        if (config.translator.includes(data['locale'])) {
+                            ['content', 'label', 'locale'].forEach(x => {
+                                textarea.dataset[x] = data[x];
+                            });
+                        } else {
+                            textarea.disabled = true;
+                        }
+                        holder.append(node);
+                        })
                 })
                 du.setChecked('symbol-popup');
             })

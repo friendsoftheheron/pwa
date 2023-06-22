@@ -129,6 +129,18 @@ li {
     line-height: 0.924rem;
 }
 
+.label:not(:empty) {
+    font-size: 0.84rem;
+    line-height: 0.924rem;
+    background-color: var(--dark-blue);
+    border-radius: 0.3rem;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    margin-top: 0.088rem;
+    margin-bottom: 0.088rem;
+    color: var(--white);
+}
+
 .grid-auto-auto {
     display: grid;
     grid-template-columns: auto auto ;
@@ -361,12 +373,10 @@ li {
     top: 4rem;
     left: 5%;
     max-width: 80%;
-    overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .popup {
-    position: absolute;
+    position: absolute; /* Not fixed because I want it to be relative to the border */
     background-color: var(--white);
     border: 0.25rem solid var(--light-blue);
     border-radius: 1rem;
@@ -376,6 +386,7 @@ li {
     margin-left: 1rem;
     margin-right: 1rem;
     text-align: left;
+    height: auto;
 }
 
 .popup::before {
@@ -395,6 +406,11 @@ li {
     line-height: 0.9rem;
 }
 
+.popup .content {
+    max-height: calc(100vh - var(--header-height) - var(--footer-height) - 4rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .friends-container {
     display: grid;
     grid-template-columns: min-content auto min-content;
@@ -682,7 +698,7 @@ input.details:checked ~ .border-yellow .title::before {
 
 .lab .distance {
     text-align: right;
-    width: 6rem;
+    width: 5rem;
     display: inline-block;
     font-size: 0.94rem;
     line-height: 1.034rem;

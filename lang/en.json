@@ -28,13 +28,15 @@
     "donate-support": "Support the development of (PowerWalkAdventure)[] \r\nby (url)[donating].",
     "friends": "Friends",
     "friends-chick": "Chick",
-    "friends-description": "Double click on the brids name for more information. ",
+    "friends-crab": "Crab",
+    "friends-description": "Double click on the birds name for more information. ",
     "friends-dodo": "Dodo",
     "friends-dove": "Dove",
     "friends-duck": "Duck",
     "friends-duck-description": "You don't have or want to spent much money, but still like to support us. We love you, don't let anybody tell you you're lame. ",
+    "friends-duration": "Duration",
     "friends-eagle": "Eagle",
-    "friends-explanation": "Give brids to your friends. ",
+    "friends-explanation": "Give birds to your friends. ",
     "friends-flamingo": "Flamingo",
     "friends-give": "Give Friend",
     "friends-hatching": "Hatching",
@@ -42,6 +44,8 @@
     "friends-ladybug-description": "You're gonna get that bug.",
     "friends-not-registered": "Not registered or already has friends.",
     "friends-owl": "Owl",
+    "friends-ox": "Ox",
+    "friends-panda": "Panda",
     "friends-parrot": "Parrot",
     "friends-peacock": "Peacock",
     "friends-peacock-description": "You want to show off? Fine with us, thank you for your generous contribution.",
@@ -50,6 +54,7 @@
     "friends-rooster": "Rooster",
     "friends-swan": "Swan",
     "friends-turkey": "Turkey",
+    "friends-whale": "Whale",
     "help": "Help",
     "help-geofence-circles": "The circles on the map show the size of the geofence.",
     "help-geofence-distance": "This distance shown is the distance to the geofence.",
@@ -126,5 +131,9 @@
     "settings-update-labs": "Update labs",
     "settings-username": "Username",
     "translate": "Translate",
-    "translate-save": "Save"
+    "translate-save": "Save",
+    "unit-week_p": {
+        "one": "($)[] Week",
+        "other": "($)[] Weeks"
+    }
 }

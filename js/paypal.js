@@ -66,7 +66,7 @@ export default class PayPal {
                     },
                     onInit(data, actions) {
                         const observer = new MutationObserver(() =>{
-                            if (PayPal.friendsPrice() * PayPal.period() <= 10) {
+                            if (PayPal.friendsPrice() * PayPal.period() <= 1000) {
                                 actions.disable();
                                 document
                                     .getElementById('paypal-button-container')
@@ -109,7 +109,7 @@ export default class PayPal {
                                 }
                                 if (errorDetail) {
                                     du.setInnerHtml(
-                                        'popup',
+                                        'popup-content',
                                         document.getElementById('paypal-error-template').innerHTML,
                                         {
                                             description: errorDetail.description || '',
