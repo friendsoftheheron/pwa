@@ -176,10 +176,10 @@ const changedPosition = (position, type='?') => {
     du.setInnerHtml(
         'location',
         new Location(position.coords) + ' &nbsp; ' +
-        Location.formatBearing(position.coords.heading || 0) +
-        '<span style="float:right; font-size: 0.6rem; margin-right: 1rem;">' +
-        Location.formatTimestamp(position.timestamp) + '</span>'
+        Location.formatBearing(position.coords.heading || 0)
     );
+    du.setInnerHtml('timestamp', Location.formatTimestamp(position.timestamp));
+	    
     du.setInnerHtml(
         'compass-style',
         `.compass{transform: rotate(-${position.coords.heading||0}deg);}`
