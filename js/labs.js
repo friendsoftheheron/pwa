@@ -376,7 +376,7 @@ export default class Labs {
             select && lab.choices.split('\n').forEach(x => {
                 option = document.createElement('option');
                 option.textContent = x;
-                option.value = x.replaceAll(' ', '').toLowerCase();
+                option.value = x.replaceAll(' ', '').replaceAll('\t', '').toLowerCase();
                 option.selected = option.value === lab.completion_code;
                 select.appendChild(option);
             })
