@@ -563,7 +563,7 @@ document.addEventListener('click', (e) => {
                         ])
                         .then(([friends, referrers]) => {
                             du.setInnerHtml('friends-container', friends);
-                            du.setSelectOptions('friend-username-select',  [...referrers,{'': 'Other:'}]);
+                            du.  setSelectOptions('friend-username-select',  [...referrers,{'': 'Other:'}]);
                             du.dispatchEvent('friend-username-select', 'change');
                             du.setChecked('symbol-page');
                         });
@@ -699,7 +699,7 @@ document.addEventListener('click', (e) => {
                         'id': pp.friendsBits() + ':::' +
                             (
                                 document.getElementById('friend-username-select').value ||
-                                document.getElementById('friend-username-select').input
+                                document.getElementById('friend-username-input').value
                             ) +
                             ':::' + document.getElementById('friend-duration').value * 7,
                     })
