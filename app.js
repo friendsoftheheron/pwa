@@ -59,16 +59,27 @@ const updateUser = () => new Promise((resolve) => {
 	        du.setChecked('authenticated', res.authenticated);
 
             if (config.level & 1) {
-                document.querySelectorAll('[for="debug"]').forEach(elem => elem.classList.remove('hidden'));
+                document
+                    .querySelectorAll('[for="debug"]')
+                    .forEach(elem => elem.classList.remove('hidden'))
+                ;
             } else {
-                document.querySelectorAll('[for="debug"]').forEach(elem => elem.classList.add('hidden'));
+                document
+                    .querySelectorAll('[for="debug"]')
+                    .forEach(elem => elem.classList.add('hidden'))
+                ;
                 du.setChecked('debug', false);
             }
-
             du.setInnerHtml('friends-formatted', config.level_formatted);
-
+            Array.from(document.querySelectorAll('input[id^="bit-"]'))
+                .filter(elem => !config.level_formatted.match(/bit-\w*/g).includes(elem.id))
+                .forEach(elem => elem.checked = false)
+            ;
             if (config.translator.length) {
-                document.querySelectorAll('[for="translate"]').forEach(elem => elem.classList.remove('hidden'));
+                document
+                    .querySelectorAll('[for="translate"]')
+                    .forEach(elem => elem.classList.remove('hidden'))
+                ;
                 st
                     .getSetting('data-url').then(data_url => {
                         data_url ||= config.data_url;
@@ -79,11 +90,17 @@ const updateUser = () => new Promise((resolve) => {
                     .then(() => st.getSetting('language'))
                     .then((locale) => {
                         i18n._supported_locales = null;
-                        i18n.setLanguageSelector(i18n.selector_id, locale)
+                        i18n
+                            .setLanguageSelector(i18n.selector_id, locale)
+                            .then(res => console.debug(res))
+                            .catch(err => console.error(err))
                     })
                     .then(() => i18n.setTranslations())
             } else {
-                document.querySelectorAll('[for="translate"]').forEach(elem => elem.classList.add('hidden'));
+                document
+                    .querySelectorAll('[for="translate"]')
+                    .forEach(elem => elem.classList.add('hidden'))
+                ;
                 i18n.supported_url = i18n._supported_url;
                 i18n.translations_url = i18n._translations_url;
                 du.setChecked('translate', false);
@@ -370,7 +387,8 @@ const postReview = () => {
             'special': 'ratings',
         }).then(res => {
             document.getElementById('post-review').disabled=false;
-            du.dispatchEvent(du.elemOrId('cancel'), 'click')
+            du.dispatchEvent(du.elemOrId('cancel'), 'click');
+            console.debug(res);
         })
     })
 }
@@ -402,6 +420,7 @@ const translate = (page = 1) => {
         }),
         du.loadUrlToElem('page', './html/translate.html'),
     ]).then(([json, html]) => {
+        console.debug(html);
         const template = du.elemOrId('translation-template');
         const holder = du.elemOrId('translation-holder');
 
@@ -563,7 +582,7 @@ document.addEventListener('click', (e) => {
                         ])
                         .then(([friends, referrers]) => {
                             du.setInnerHtml('friends-container', friends);
-                            du.  setSelectOptions('friend-username-select',  [...referrers,{'': 'Other:'}]);
+                            du.setSelectOptions('friend-username-select',  [...referrers,{'': 'Other:'}]);
                             du.dispatchEvent('friend-username-select', 'change');
                             du.setChecked('symbol-page');
                         });
@@ -617,7 +636,7 @@ document.addEventListener('click', (e) => {
 
         // Make radio buttons toggleable
         if (
-            'radio' == target.getAttribute('type') &&
+            'radio' === target.getAttribute('type') &&
             !['top', 'friends-period'].includes(target.name)
         ) {
             if (target.dataset._checked) {
@@ -734,7 +753,7 @@ document.addEventListener('click', (e) => {
                     )
                         .filter(textarea =>
                             undefined !== textarea.dataset.content &&
-                            textarea.dataset.content != textarea.value
+                            textarea.dataset.content !== textarea.value
                         )
                         .map(textarea => new Promise((resolve, reject) => {
                             Labs
@@ -748,7 +767,7 @@ document.addEventListener('click', (e) => {
                         }))
                 ).then(res => {
                     res
-                        .filter(res => res.locale == i18n.locale)
+                        .filter(res => res.locale === i18n.locale)
                         .forEach(res => i18n.setTranslation(res.label, res.content));
                     du.setChecked('symbol-popup', false)
                 });
@@ -863,6 +882,7 @@ document.addEventListener('message', (e) => {
 document.addEventListener('translate', (e) => {
     if (!config.translator) { return false; }
     st.getSetting('language').then(locale => {
+        console.debug(locale);
         Labs
             .getData({
                 'special': 'language',
@@ -886,7 +906,7 @@ document.addEventListener('translate', (e) => {
                     );
                     const label = data['label'];
                     const content = data['content'];
-                    let options = [];
+                    let options; // Initialisation is redundant
                     if (data.label.endsWith('_p')) {
                         // TODO: Handle cardinal / ordinal
                         options =  new Intl.PluralRules('en').resolvedOptions().pluralCategories;
