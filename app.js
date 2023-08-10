@@ -306,8 +306,8 @@ const logLab = (id) => {
     Labs.
         logLab(
             id,
-            elem.querySelector('select').value ||
-            elem.querySelector('input:nth-child(2)').value
+            elem.querySelector('.answer').querySelector('select').value ||
+            elem.querySelector('.answer').querySelector('input').value
         )
         .then(res => {
             let color;
