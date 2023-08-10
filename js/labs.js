@@ -7,6 +7,7 @@ import st from './settings.js';
 
 export default class Labs {
     static labs = null;
+    static data_theme = {}
 
     static blockSize = () => new Promise(resolve =>
         Promise.all([
@@ -69,7 +70,7 @@ export default class Labs {
             data.longitude = data.longitude || localStorage.getItem(config.current_longitude) || 5.1273913;
             data.username = username || '';
             data.password = password || '';
-            data.friends = friend_bits || 0;
+            data.friends = data.friends ?? (friend_bits || 0);
             data.language = language || 'en';
             const form_data = new FormData();
             Object.keys(data).forEach(key => form_data.append(key, data[key]));
@@ -97,6 +98,22 @@ export default class Labs {
                 .catch(err => reject(err));
         });
     });
+
+    static extraLabProperties = (lab, source) => {
+        lab.source = [source];
+        lab.position = new Location(lab.location_latitude, lab.location_longitude);
+        lab.linear_class = +lab.is_linear ? 'linear' : 'random';
+        lab.theme_formatted = (lab.theme_ids||'').split(',').map(x =>
+            x ? `<div class="flex">
+                <div class="theme ${Labs.data_theme[x].name.toLowerCase()}" title="${Labs.data_theme[x].name}"></div>
+                <div class="tag">${Labs.data_theme[x].name}</div>
+                </div>
+        ` : ''
+        ).join('');
+        // <div class="theme other" ></div><div class="theme architecture" ></div>
+        // No return, this us used as a procedure
+    }
+
     static checkLabs = (labs, source) => {
         document.dispatchEvent(
             new MessageEvent(
@@ -135,9 +152,7 @@ export default class Labs {
         }
         labs.labs.forEach(lab => {
             if (!this.labs.filter(l => l.id === lab.id).length) {
-                lab.source = [source];
-                lab.position = new Location(lab.location_latitude, lab.location_longitude);
-                lab.linear_class = +lab.is_linear ? 'linear' : 'random';
+                Labs.extraLabProperties(lab, source);
                 this.labs.push(lab);
             }
         })
@@ -337,9 +352,7 @@ export default class Labs {
                     lab = {...labs[0], ...lab};
                 }
                 if (!lab.hasOwnProperty('position')) {
-                   lab.source = ['id'];
-                   lab.position = new Location(lab.location_latitude, lab.location_longitude);
-                   lab.linear_class = +lab.is_linear ? 'linear' : 'random';
+                    Labs.extraLabProperties(lab, 'id');
                 }
                 if (!labs.length) {
                     if (null === this.labs) {
@@ -368,8 +381,8 @@ export default class Labs {
             elem.querySelector('.journal').classList.remove('hidden');
         }
 
-        const select = elem.querySelector('select');
-        const input = elem.querySelector('input:nth-child(2)');
+        const select = elem.querySelector('.answer').querySelector('select');
+        const input = elem.querySelector('.answer').querySelector('input');
 
         if (lab.choices) {
             let option;

@@ -72,7 +72,6 @@ export default class I18N {
         return this.translations[key];
     }
 
-
     static parse = (str, elem) => {
         return str.replaceAll(
             /\((\w+|\*|\/|\$)\)\[([^\]]*)]/g,

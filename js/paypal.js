@@ -53,7 +53,10 @@ export default class PayPal {
                 du.waitForSelector('#paypal-script'),
                 du.loadUrlToElem('page', 'html/paypal.html', config),
             ])
-            .then(() => Labs.getData({'html': 'friends'}))
+            .then(() => Labs.getData({
+                'friends': 0,
+                'html': 'friends'
+            }))
             .then(html => {
                 du.setInnerHtml('friends-container', html);
                 paypal.Buttons({

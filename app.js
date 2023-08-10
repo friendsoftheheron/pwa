@@ -458,8 +458,10 @@ const init = () => {
     Promise.all([
         st.getSetting('username'),
         st.getSetting('password'),
+        fetch('./data/theme.json'),
     ])
-    .then(([username, password]) => {
+    .then(([username, password, theme]) => {
+       theme.json().then(json => Labs.data_theme = json);
        if (username && password) {
            updateUser()
                .then(res => console.debug("updateUser:", res))
@@ -552,8 +554,12 @@ document.addEventListener('click', (e) => {
         // Menu and hash pages
         const href = target.getAttribute('href')
         if (href && href.startsWith('#')) {
+            e.preventDefault();
             document.getElementById('symbol-menu').checked = false;
             switch(href.slice(1)) {
+                case 'close':
+                    // Used by leaflet
+                    return true;
                 case 'about':
                     config.count_labs = Labs.labs.length;
                     config.count_map = Object.keys(Map.map._layers).length;
@@ -630,6 +636,30 @@ document.addEventListener('click', (e) => {
                         })
                         .catch(err => console.error(err))
                     ;
+                    return false;
+                default:
+                    const [page, extension] = href.slice(1).split('.');
+                    console.warn(page, extension);
+                    let key = 'html';
+                    switch (extension) {
+                        case 'json':
+                            key = 'special';
+                            break;
+                        default:
+                            key = 'html';
+                            break
+                    }
+                    Labs
+                        .getData({[key]: page})
+                        .then(res => du.setInnerHtml(
+                            'page',
+                            '<h2 data-i18n-key="' +
+                                ('data-'+page).toLowerCase().replace(/(\s|_|-)+/g, '-') +
+                            '">' + du.htmlTitle(page) + '</h2>' +
+                            du.htmlFromData(res)
+                        ))
+                        .then(() => du.setChecked('symbol-page'))
+                        .catch(err => console.error(err))
                     return false;
             }
         }

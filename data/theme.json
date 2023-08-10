@@ -1,0 +1,126 @@
+{
+    "1": {
+        "id": 1,
+        "name": "Architecture"
+    },
+    "2": {
+        "id": 2,
+        "name": "Art"
+    },
+    "3": {
+        "id": 3,
+        "name": "DrivingTour"
+    },
+    "4": {
+        "id": 4,
+        "name": "Education"
+    },
+    "5": {
+        "id": 5,
+        "name": "Entertainment"
+    },
+    "6": {
+        "id": 6,
+        "name": "Exercise"
+    },
+    "7": {
+        "id": 7,
+        "name": "FoodDrink"
+    },
+    "8": {
+        "id": 8,
+        "name": "ForKids"
+    },
+    "9": {
+        "id": 9,
+        "name": "Games"
+    },
+    "10": {
+        "id": 10,
+        "name": "History"
+    },
+    "11": {
+        "id": 11,
+        "name": "Humor"
+    },
+    "12": {
+        "id": 12,
+        "name": "Indoor"
+    },
+    "13": {
+        "id": 13,
+        "name": "Music"
+    },
+    "14": {
+        "id": 14,
+        "name": "Mystery"
+    },
+    "15": {
+        "id": 15,
+        "name": "Nature"
+    },
+    "16": {
+        "id": 16,
+        "name": "Neighborhood"
+    },
+    "17": {
+        "id": 17,
+        "name": "Park"
+    },
+    "18": {
+        "id": 18,
+        "name": "Science"
+    },
+    "19": {
+        "id": 19,
+        "name": "Series"
+    },
+    "20": {
+        "id": 20,
+        "name": "Sightseeing"
+    },
+    "21": {
+        "id": 21,
+        "name": "Spooky"
+    },
+    "22": {
+        "id": 22,
+        "name": "Sports"
+    },
+    "23": {
+        "id": 23,
+        "name": "Storytelling"
+    },
+    "24": {
+        "id": 24,
+        "name": "Sustainability"
+    },
+    "25": {
+        "id": 25,
+        "name": "Technology"
+    },
+    "26": {
+        "id": 26,
+        "name": "Trail"
+    },
+    "27": {
+        "id": 27,
+        "name": "Travel"
+    },
+    "28": {
+        "id": 28,
+        "name": "Tribute"
+    },
+    "29": {
+        "id": 29,
+        "name": "WalkingTour"
+    },
+    "30": {
+        "id": 30,
+        "name": "Wildlife"
+    },
+    "999": {
+        "id": 999,
+        "name": "Other"
+    }
+}

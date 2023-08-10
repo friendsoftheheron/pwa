@@ -76,7 +76,17 @@ a:visited { color: var(--dark-blue); }
 a:hover { color: var(--orange); }
 a:active { color: var(--light-blue); }
 
+td,th {
+    text-align: left;
+    vertical-align: top;
+}
+td {
+    border-bottom: 1px solid var(--sky);
+}
 
+th {
+    border-bottom: 1px solid var(--orange);
+}
 
 [id^="map-"],
 [href],
@@ -500,12 +510,21 @@ div.friends-desc {
     100% { background-position: 20rem; }
 }
 
+.bar {
+    background-color: var(--medium-blue);
+    border: 1px solid var(--dark-blue);
+    border-radius: 3px;
+}
+.bar.max {
+    background-color: var(--orange);
+    border: 1px solid var(--orange);
+}
 
 .lab {
     border-width: 0.2rem;
     border-style: solid;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 0.625rem;
     margin-bottom: 0.2rem;
     height: 3.6rem;
     position: relative;
@@ -537,6 +556,46 @@ input.details:checked ~ .lab {
 [data-distance="0"] .answer button {
     color: var(--disabled-color);
 }
+
+.theme {
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    background-color: var(--medium-blue);
+    display: inline-block;
+    height: 0.84rem;
+    width: 0.84rem;
+}
+.theme.architecture { -webkit-mask-image: url("../images/themes/Architecture.svg");}
+.theme.art { -webkit-mask-image: url("../images/themes/Art.svg");}
+.theme.drivingtour { -webkit-mask-image: url("../images/themes/DrivingTour.svg");}
+.theme.education { -webkit-mask-image: url("../images/themes/Education.svg");}
+.theme.entertainment { -webkit-mask-image: url("../images/themes/Entertainment.svg");}
+.theme.exercise { -webkit-mask-image: url("../images/themes/Exercise.svg");}
+.theme.fooddrink { -webkit-mask-image: url("../images/themes/FoodDrink.svg");}
+.theme.forkids { -webkit-mask-image: url("../images/themes/ForKids.svg");}
+.theme.games { -webkit-mask-image: url("../images/themes/Games.svg");}
+.theme.history { -webkit-mask-image: url("../images/themes/History.svg");}
+.theme.humor { -webkit-mask-image: url("../images/themes/Humor.svg");}
+.theme.indoor { -webkit-mask-image: url("../images/themes/Indoor.svg");}
+.theme.music { -webkit-mask-image: url("../images/themes/Music.svg");}
+.theme.mystery { -webkit-mask-image: url("../images/themes/Mystery.svg");}
+.theme.nature { -webkit-mask-image: url("../images/themes/Nature.svg");}
+.theme.neighborhood { -webkit-mask-image: url("../images/themes/Neighborhood.svg");}
+.theme.park { -webkit-mask-image: url("../images/themes/Park.svg");}
+.theme.science { -webkit-mask-image: url("../images/themes/Science.svg");}
+.theme.series { -webkit-mask-image: url("../images/themes/Series.svg");}
+.theme.sightseeing { -webkit-mask-image: url("../images/themes/Sightseeing.svg");}
+.theme.sports { -webkit-mask-image: url("../images/themes/Sports.svg");}
+.theme.storytelling { -webkit-mask-image: url("../images/themes/Storytelling.svg");}
+.theme.sustainability { -webkit-mask-image: url("../images/themes/Sustainability.svg");}
+.theme.technology { -webkit-mask-image: url("../images/themes/Technology.svg");}
+.theme.trail { -webkit-mask-image: url("../images/themes/Trail.svg");}
+.theme.travel { -webkit-mask-image: url("../images/themes/Travel.svg");}
+.theme.tribute { -webkit-mask-image: url("../images/themes/Tribute.svg");}
+.theme.walkingtour { -webkit-mask-image: url("../images/themes/WalkingTour.svg");}
+.theme.wildlife { -webkit-mask-image: url("../images/themes/Wildlife.svg");}
+.theme.other { -webkit-mask-image: url("../images/themes/Other.svg");}
 
 .lab .image {
     height: 3.3rem;
@@ -611,6 +670,11 @@ input.details:checked ~ .lab .image {
     content: '⇆'
 }
 
+.lab .adventure-themes {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
 .lab .adventure {
     font-size: 0.84rem;
     line-height: 0.924rem;
@@ -618,7 +682,24 @@ input.details:checked ~ .lab .image {
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0.3rem;
+    display: inline-block;
+}
+
+.lab .themes {
+    display: flex;
+    float: right;
+    margin-left: -0.5rem; /* Hack to remove the gap between elements in flexbox */
+    padding-left: 0.3rem;
     padding-right: 3.3rem;
+}
+.lab .themes:checked ~
+* .themes {
+    display: grid;
+}
+.lab .themes .tag {
+    font-size: 0.84rem;
+    line-heigt: 0.924rem;
+    color: var(--medium-blue);
 }
 
 .lab .owner,
@@ -640,7 +721,7 @@ input.details:checked ~ .lab .image {
 }
 
 input.details:checked ~ .lab .title,
-input.details:checked ~ .lab .adventure {
+input.details:checked ~ .lab .themes {
     padding-right: 0.8rem;
 }
 input.details:checked ~ .border-green .title::before,
@@ -741,10 +822,12 @@ input.details:checked ~ .lab .distance {
     font-size: 0.84rem;
     line-height: 0.924rem;
     white-space: nowrap;
+    display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0.3rem;
     padding-right: 0.2rem;
+    float: left;
 }
 
 #timestamp {
@@ -884,9 +967,11 @@ label[for="debug"] {
 #symbol-page:checked ~ * #page,
 #symbol-popup:checked ~ * #popup,
 #symbol-settings:checked ~ * #settings,
-input.details:checked ~ .lab div.details,
+input.details:checked ~ .lab label.details,
 #authenticated:checked ~ * .authenticated,
+.lab .themes:checked ~ * .tag,
 .unauthenticated,
+#bit-eagle:checked ~ * .filter,
 #bit-swan:checked ~ * .special,
 #debug:checked ~ * .debug,
 #translate:checked ~ * .translate,
@@ -904,10 +989,13 @@ input.details:checked ~ .lab div.details,
 #page,
 #popup,
 #settings,
-input.details ~ .lab div.details,
+input.details ~ .lab label.details,
+input.themes,
 .authenticated,
+.lab .themes * .tag,
 #authenticated:checked ~ * .unauthenticated,
 .debug,
+.filter,
 .special,
 .translate,
 .hidden {

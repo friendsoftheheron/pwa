@@ -115,7 +115,6 @@ export default class DomUtils {
         elem.style.fontSize = font_size + 'px';
     }
 
-
     static getElementValue = (elem) => {
         elem = this.elemOrId(elem);
         if (!elem) return;
@@ -202,6 +201,38 @@ export default class DomUtils {
             .catch(err => reject(err))
         ;
     });
+
+    static htmlTitle = (str) => {
+        str = str.replace(/_/g, ' ').trim()
+        return str.charAt(0).toUpperCase() + str.slice(1)
+
+    }
+
+    static htmlFromArray = (data) => '' +
+            '<table>' +
+            '<tr>' + Object.keys(data[0]).map((x) => `<th data-i18n-key="${('data-'+x).toLowerCase().replace(/(\s|_|-)+/g, '-')}">${DomUtils.htmlTitle(x)}</th>`).join('\n') + '</tr>' +
+            data.map(x => '<tr>' + Object.values(x).map(
+                x => `<td${isNaN(x)?'':' style="text-align:right"'}>${x}</td>`
+            ).join('') + '</tr>').join('') +
+            '</table>'
+        ;
+    static htmlFromObject = (data) => '' +
+            '<table>' +
+            Object.keys(data).map((x) => `<tr><th>${DomUtils.htmlTitle(x)}</th><td${isNaN(data[x])?'':' style="text-align:right"'}>${data[x]}</td></tr>`).join('\n') +
+            '</table>'
+        ;
+
+
+    static htmlFromData = (data) => {
+        if (Array.isArray(data)) {
+            return DomUtils.htmlFromArray(data);
+        }
+        // First check array, because array is also an object (as is null)
+        if (typeof data === 'object') {
+            return DomUtils.htmlFromObject(data);
+        }
+        return data;
+    }
 }
 
 document.addEventListener('change', (e) => {

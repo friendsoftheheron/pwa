@@ -4,32 +4,35 @@
         <a href="${firebase_dynamic_link}" aria-label="${title}"><div class="compass ${needle_class}"></div></a>
         <label for="details-${id}" class="image"><img src="${key_image_url}" alt="" /></label>
         <label for="details-${id}">
-            <div class="title dark-blue"><span class="${linear_class}">${_nr}</span>) ${title}</div>
-            <div class="adventure">${adventure}</div>
-            <div class="details blur">
-                <div class="flex">
-                    <div class="owner">The Pythons</div>
-                    <div class="location">${position}</div>
-                </div>
-                <div class="description">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Romani ite domum.
-                </div>
-                <div class="challenge">
-                    What is the airspeed velocity of an unladen swallow?
-                </div>
-                <div class="answer">
-                    <select><option data-i18n-key="labs-select" value="">Select:</option></select>
-                    <input value="An African or European swallow?" />
-                    <button data-id="${id}"  data-i18n-key="labs-log" class="log-button">Log</button>
-                </div>
-                <div id="journal-${id}" class="journal hidden"></div>
-            </div>
-            <div class="distance">${distance_formatted}</div>
-            <div class="bearing">${bearing_formatted}</div>
+            <div for="details-${id}" class="title dark-blue"><span class="${linear_class}">${_nr}</span>) ${title}</div>
         </label>
-
+        <div class="adventure-themes">
+            <label for="details-${id}" class="adventure">${adventure}</label>
+            <input id="themes-${id}" type="checkbox" class="themes hidden">
+            <label for="themes-${id}"><div class="themes">${theme_formatted}</div></label>
+        </div>
+        <label for="details-${id}" class="details blur">
+            <div class="flex">
+                <div class="owner">The Pythons</div>
+                <div class="location">${position}</div>
+            </div>
+            <div class="description">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Romani ite domum.
+            </div>
+            <div class="challenge">
+                What is the airspeed velocity of an unladen swallow?
+            </div>
+            <div class="answer">
+                <select><option data-i18n-key="labs-select" value="">Select:</option></select>
+                <input value="An African or European swallow?" />
+                <button data-id="${id}"  data-i18n-key="labs-log" class="log-button">Log</button>
+            </div>
+            <div id="journal-${id}" class="journal hidden"></div>
+        </label>
+        <label for="details-${id}" class="distance">${distance_formatted}</label>
+        <label for="details-${id}" class="bearing">${bearing_formatted}</label>
         <button
                 id="special-update-${id}"
                 class="warning special"
