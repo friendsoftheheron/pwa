@@ -375,7 +375,12 @@ export default class Labs {
         du.setInnerHtmlByQuery('.description', lab.description.trim().replace('\n', '<br />'), elem);
         du.setInnerHtmlByQuery('.challenge', lab.question, elem);
         du.setInnerHtmlByQuery('.journal', lab.journal, elem);
+        du.setInnerHtmlByQuery('.median-time-to-complete', lab.median_time_to_complete, elem);
         du.setInnerHtmlByQuery('.owner', lab.owner, elem);
+        du.setInnerHtmlByQuery('.published-utc', lab.published_utc, elem);
+        du.setInnerHtmlByQuery('.ratings-average', lab.ratings_average, elem);
+        du.setInnerHtmlByQuery('.ratings-total-count', lab.ratings_total_count, elem);
+        du.setInnerHtmlByQuery('.themes', lab.theme_formatted, elem);
 
         if (lab.journal) {
             elem.querySelector('.journal').classList.remove('hidden');

@@ -297,6 +297,21 @@ const enableNotifications = () => {
     }
 }
 
+const showMessage = () => {
+    du
+        .loadUrlToElem('popup', './html/message.html')
+        .then(html => {
+            const html_hash = du.hash(html);
+            console.log(html_hash, html);
+            if (+localStorage.getItem(config.message_hash) !== html_hash) {
+                du.setChecked('symbol-popup')
+            }
+            localStorage.setItem(config.message_hash, html_hash);
+        })
+        // Not really an error if at this moment there is no message
+        .catch(err => console.debug(err))
+}
+
 const logLab = (id) => {
     const elem = document
         .getElementById('id'+id)
@@ -487,6 +502,7 @@ const init = () => {
     document.addEventListener('DOMContentLoaded', main);
 }
 
+
 const main = () => {
     addMessage('main()')
     addMessage(config.home_url);
@@ -501,6 +517,7 @@ const main = () => {
             }
             Map.init();
             watchLocation();
+            showMessage();
 
             const labs =
                 localStorage.getItem(config.fetched_latitude) &&

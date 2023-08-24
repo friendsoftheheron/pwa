@@ -6,31 +6,37 @@
         <label for="details-${id}">
             <div for="details-${id}" class="title dark-blue"><span class="${linear_class}">${_nr}</span>) ${title}</div>
         </label>
-        <div class="adventure-themes">
-            <label for="details-${id}" class="adventure">${adventure}</label>
-            <input id="themes-${id}" type="checkbox" class="themes hidden">
-            <label for="themes-${id}"><div class="themes">${theme_formatted}</div></label>
-        </div>
-        <label for="details-${id}" class="details blur">
-            <div class="flex">
+        <label for="details-${id}" class="adventure">${adventure}</label>
+        <div class="details blur">
+            <label for="details-${id}" class="flex">
                 <div class="owner">The Pythons</div>
                 <div class="location">${position}</div>
-            </div>
-            <div class="description">
+            </label>
+            <input id="themes-${id}" type="checkbox" />
+            <label for="themes-${id}" class="properties">
+                <div>
+                    <!-- ★ -->☆ <span class="ratings-average">avg</span>
+                    (<span class="ratings-total-count">tot</span>)
+                </div>
+                <div><!-- ⏱ --> ⌚︎&#xFE0E; <span class="median-time-to-complete">time</span> <div>min.</div></div>
+                <div class="themes-holder"><!--🏷 ⌫ ⛨-->⌦ <span class="themes"></span></div>
+                <div class="published-holder"><!-- ⮉ 🏵 --> 🗓&#xFE0E; <span class="published-utc">publish</span></div>
+            </label>
+            <label for="details-${id}" class="description">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Romani ite domum.
-            </div>
-            <div class="challenge">
+            </label>
+            <label for="details-${id}" class="challenge">
                 What is the airspeed velocity of an unladen swallow?
-            </div>
+            </label>
             <div class="answer">
                 <select><option data-i18n-key="labs-select" value="">Select:</option></select>
                 <input value="An African or European swallow?" />
                 <button data-id="${id}"  data-i18n-key="labs-log" class="log-button">Log</button>
             </div>
-            <div id="journal-${id}" class="journal hidden"></div>
-        </label>
+            <label for="details-${id}" id="journal-${id}" class="journal hidden"></label>
+        </div>
         <label for="details-${id}" class="distance">${distance_formatted}</label>
         <label for="details-${id}" class="bearing">${bearing_formatted}</label>
         <button

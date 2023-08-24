@@ -1,5 +1,6 @@
 export default class DomUtils {
     static camelcaseify = (str) => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
+    static hash = (str) => Array.from(str).reduce((a, c) => ((a<<5) -a) + c.charCodeAt(0), 0);
     static renderTemplate = (template, obj) =>
         template.replace(/\${(\w+)}/g, (_, k) =>
             obj.hasOwnProperty(k) ? obj[k] : '${' + k + '}'
@@ -160,7 +161,7 @@ export default class DomUtils {
             elem.innerHTML = this.renderTemplate(elem.innerHTML, obj)
         }
         this.dispatchEvent(elem, 'i18n-translate');
-        return 	html;
+        return html;
     };
 
     static setInnerHtmlByQuery = (query, html, node = null, obj=null) => {

@@ -68,6 +68,7 @@ self.addEventListener('fetch', e => {
                     e.request.method !== 'GET' ||
                     // e.request.url.includes('?') || // No query parameters
                     // e.request.url.includes('mediacontainer') ||
+                    e.request.url.endsWith('html/message.html') || // No messages
                     e.request.url.endsWith('js/config.js')  // Not the config
                 ) {
                     return res;

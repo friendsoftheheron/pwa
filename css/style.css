@@ -670,11 +670,6 @@ input.details:checked ~ .lab .image {
     content: '⇆'
 }
 
-.lab .adventure-themes {
-    display: grid;
-    grid-template-columns: auto auto auto;
-}
-
 .lab .adventure {
     font-size: 0.84rem;
     line-height: 0.924rem;
@@ -682,23 +677,30 @@ input.details:checked ~ .lab .image {
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0.3rem;
-    display: inline-block;
+    padding-right: 3.3rem;
+    display: block;
 }
 
 .lab .themes {
     display: flex;
-    float: right;
-    margin-left: -0.5rem; /* Hack to remove the gap between elements in flexbox */
-    padding-left: 0.3rem;
-    padding-right: 3.3rem;
 }
-.lab .themes:checked ~
-* .themes {
-    display: grid;
+
+.lab .properties > div {
+    display: flex;
 }
+
+[id^="themes-"]:checked + * .themes-holder {
+    margin-left: auto;
+    margin-right: auto;
+    grid-column: 1/5;
+    grid-row: 2/3;
+}
+
+
 .lab .themes .tag {
     font-size: 0.84rem;
     line-heigt: 0.924rem;
+    margin-right: 0.5rem;
     color: var(--medium-blue);
 }
 
@@ -721,7 +723,7 @@ input.details:checked ~ .lab .image {
 }
 
 input.details:checked ~ .lab .title,
-input.details:checked ~ .lab .themes {
+input.details:checked ~ .lab .adventure {
     padding-right: 0.8rem;
 }
 input.details:checked ~ .border-green .title::before,
@@ -731,6 +733,27 @@ input.details:checked ~ .border-yellow .title::before {
     overflow: visible;
     right: 0;
 }
+
+.lab .properties {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    font-size: 0.84rem;
+    line-height: 0.924rem;
+    padding-left: 0.3rem;
+    padding-right: 0.1rem;
+}
+.lab .properties div {
+    color: var(--dark-blue);
+    white-space: nowrap;
+}
+.lab .properties span {
+    color: var(--medium-blue);
+}
+.lab .properties .published-holder {
+    justify-self: right;
+    grid-column: 4/5;
+}
+
 
 .lab .description {
     font-size: 0.84rem;
@@ -742,6 +765,7 @@ input.details:checked ~ .border-yellow .title::before {
 }
 
 .lab .challenge {
+    display: block;
     padding-left: 0.3rem;
     margin-right: 3.5rem;
     color: var(--medium-blue);
@@ -961,20 +985,23 @@ label[for="debug"] {
     -webkit-transform: translateZ(0); /* fix iOS bug */
 }
 
+
+
+
 #symbol-labs:checked ~ * #labs,
 #symbol-map:checked ~ * #map,
 #symbol-menu:checked ~ * #menu,
 #symbol-page:checked ~ * #page,
 #symbol-popup:checked ~ * #popup,
 #symbol-settings:checked ~ * #settings,
-input.details:checked ~ .lab label.details,
+input.details:checked ~ .lab div.details,
 #authenticated:checked ~ * .authenticated,
-.lab .themes:checked ~ * .tag,
 .unauthenticated,
 #bit-eagle:checked ~ * .filter,
 #bit-swan:checked ~ * .special,
 #debug:checked ~ * .debug,
 #translate:checked ~ * .translate,
+[id^="themes-"]:checked + * .tag,
 .block
 {
     display: block;
@@ -989,14 +1016,14 @@ input.details:checked ~ .lab label.details,
 #page,
 #popup,
 #settings,
-input.details ~ .lab label.details,
-input.themes,
+input.details ~ .lab div.details,
+input[id^="themes-"],
 .authenticated,
-.lab .themes * .tag,
 #authenticated:checked ~ * .unauthenticated,
 .debug,
 .filter,
 .special,
+.tag,
 .translate,
 .hidden {
     display: none;
