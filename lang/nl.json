@@ -130,6 +130,7 @@
     "settings-username": "Gebruikersnaam",
     "translate": "Vertaal",
     "translate-save": "Bewaar",
+    "unit-minute-abbr": "min.",
     "unit-week_p": {
         "one": "($)[] Week ",
         "other": "($)[] Weken"

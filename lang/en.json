@@ -138,6 +138,7 @@
     "settings-username": "Username",
     "translate": "Translate",
     "translate-save": "Save",
+    "unit-minute-abbr": "min.",
     "unit-week_p": {
         "one": "($)[] Week",
         "other": "($)[] Weeks"

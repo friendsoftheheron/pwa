@@ -595,7 +595,8 @@ input.details:checked ~ .lab {
 .theme.tribute { -webkit-mask-image: url("../images/themes/Tribute.svg");}
 .theme.walkingtour { -webkit-mask-image: url("../images/themes/WalkingTour.svg");}
 .theme.wildlife { -webkit-mask-image: url("../images/themes/Wildlife.svg");}
-.theme.other { -webkit-mask-image: url("../images/themes/Other.svg");}
+.theme.other { -webkit-mask-image: url("../images/svg/ph/regular/dots-three-circle.svg");}
+.theme.none { -webkit-mask-image: url("../images/svg/ph/regular/x-circle.svg");}
 
 .lab .image {
     height: 3.3rem;
@@ -689,6 +690,24 @@ input.details:checked ~ .lab .image {
     display: flex;
 }
 
+.icon {
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    display: inline-block;
+}
+
+.lab .properties .icon {
+    background-color: var(--dark-blue);
+    height: 0.84rem;
+    width: 0.84rem;
+}
+.icon.calendar-check { -webkit-mask-image: url("../images/svg/ph/regular/calendar-check.svg");}
+.icon.star { -webkit-mask-image: url("../images/svg/ph/regular/star.svg");}
+.icon.label { -webkit-mask-image: url("../images/svg/ph/regular/tag.svg");}
+.icon.timer { -webkit-mask-image: url("../images/svg/ph/regular/timer.svg");}
+
+
 [id^="themes-"]:checked + * .themes-holder {
     margin-left: auto;
     margin-right: auto;
@@ -756,6 +775,7 @@ input.details:checked ~ .border-yellow .title::before {
 
 
 .lab .description {
+    display: block;
     font-size: 0.84rem;
     line-height: 0.924rem;
     padding-left: 0.3rem;
@@ -786,6 +806,7 @@ input.details:checked ~ .border-yellow .title::before {
 }
 
 .journal {
+    display: block;
     font-size: 0.84rem;
     line-height: 0.924rem;
     padding-left: 0.3rem;
@@ -798,11 +819,11 @@ input.details:checked ~ .border-yellow .title::before {
 }
 
 .journal img {
-    width: 100%;
-    height: auto;
     background-image: url("../images/balloon.png");
+    background-size: cover;
+    height: auto;
+    width: calc(100% - 0.2rem);
 }
-
 
 .lab .distance {
     text-align: right;

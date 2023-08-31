@@ -15,12 +15,23 @@
             <input id="themes-${id}" type="checkbox" />
             <label for="themes-${id}" class="properties">
                 <div>
-                    <!-- ★ -->☆ <span class="ratings-average">avg</span>
+                    <i class="icon star"></i>&hairsp;
+                    <span class="ratings-average">avg</span>&hairsp;
                     (<span class="ratings-total-count">tot</span>)
                 </div>
-                <div><!-- ⏱ --> ⌚︎&#xFE0E; <span class="median-time-to-complete">time</span> <div>min.</div></div>
-                <div class="themes-holder"><!--🏷 ⌫ ⛨-->⌦ <span class="themes"></span></div>
-                <div class="published-holder"><!-- ⮉ 🏵 --> 🗓&#xFE0E; <span class="published-utc">publish</span></div>
+                <div>
+                    <i class="icon timer"></i>&hairsp;
+                    <span class="median-time-to-complete">time</span>&hairsp;
+                    <div data-i18n-key="unit-minute-abbr">min.</div>
+                </div>
+                <div class="themes-holder">
+                    <i class="icon label"></i>&hairsp;
+                    <span class="themes"></span>
+                </div>
+                <div class="published-holder">
+                    <i class="icon calendar-check"></i>&hairsp;
+                    <span class="published-utc">publish</span>
+                </div>
             </label>
             <label for="details-${id}" class="description">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit,

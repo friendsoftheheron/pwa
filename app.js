@@ -299,7 +299,7 @@ const enableNotifications = () => {
 
 const showMessage = () => {
     du
-        .loadUrlToElem('popup', './html/message.html')
+        .loadUrlToElem('popup-content', './html/message.html')
         .then(html => {
             const html_hash = du.hash(html);
             console.log(html_hash, html);
@@ -656,7 +656,7 @@ document.addEventListener('click', (e) => {
                     return false;
                 default:
                     const [page, extension] = href.slice(1).split('.');
-                    console.warn(page, extension);
+                    console.debug(page, extension);
                     let key = 'html';
                     switch (extension) {
                         case 'json':

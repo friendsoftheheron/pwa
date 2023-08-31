@@ -96,6 +96,7 @@
     "settings-username": "Nom d'utilisateur",
     "translate": "Traduire",
     "translate-save": "Sauver",
+    "unit-minute-abbr": "min.",
     "unit-week_p": {
         "one": "($)[] Semaine",
         "other": "($)[] Semaines"
