@@ -309,7 +309,8 @@ const showMessage = () => {
             localStorage.setItem(config.message_hash, html_hash);
         })
         // Not really an error if at this moment there is no message
-        .catch(err => console.debug(err))
+        .catch(err => console.debug('No message:', err))
+    ;
 }
 
 const logLab = (id) => {

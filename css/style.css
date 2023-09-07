@@ -4,6 +4,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    accent-color: var(--medium-blue);
+
 }
 
 body {
@@ -88,6 +90,9 @@ th {
     border-bottom: 1px solid var(--orange);
 }
 
+/* <!-- https://moderncss.dev/pure-css-custom-styled-radio-buttons/#theme-variable-and-box-sizing-reset --> */
+
+
 [id^="map-"],
 [href],
 label {
@@ -97,6 +102,13 @@ label {
 li {
     margin-left: 2rem;
 }
+
+/* https://stackoverflow.com/questions/7617689/make-table-width-100-with-last-column-filling-remainder-without-squashing-other */
+.table-bar { width: 100%; }
+.table-bar td { width: 1px; } /* min width, actually: this causes the width to fit the content */
+.table-bar td:last-child { width: 100%; } /* well, it's less than 100% in the end, but this still works for me */
+
+
 
 .background-sky { background-color: var(--sky); }
 .border-green {	border-color: var(--green); }
@@ -157,7 +169,7 @@ li {
     grid-gap: 0.2rem;
 }
 
-.grid-auto-auto div input:not([type="checkbox"]) {
+.grid-auto-auto div input:not([type="checkbox"]):not([type="radio"]) {
     width: 100%;
 }
 
@@ -586,6 +598,7 @@ input.details:checked ~ .lab {
 .theme.science { -webkit-mask-image: url("../images/themes/Science.svg");}
 .theme.series { -webkit-mask-image: url("../images/themes/Series.svg");}
 .theme.sightseeing { -webkit-mask-image: url("../images/themes/Sightseeing.svg");}
+.theme.spooky { -webkit-mask-image: url("../images/themes/Spooky.svg");}
 .theme.sports { -webkit-mask-image: url("../images/themes/Sports.svg");}
 .theme.storytelling { -webkit-mask-image: url("../images/themes/Storytelling.svg");}
 .theme.sustainability { -webkit-mask-image: url("../images/themes/Sustainability.svg");}

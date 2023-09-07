@@ -189,8 +189,16 @@ export default class DomUtils {
 
     static loadUrl = (url) => new Promise((resolve, reject) => {
         fetch(url)
-            .then(response => response.text())
-            .then(data => resolve(data))
+            .then(response => {
+                if (response.status < 400) {
+                    resolve(response.text());
+                } else {
+                    reject({
+                        error: response.statusText,
+                        status: response.status,
+                    });
+                }
+            })
             .catch(err => reject(err))
         ;
     });
@@ -210,7 +218,7 @@ export default class DomUtils {
     }
 
     static htmlFromArray = (data) => '' +
-            '<table>' +
+            '<table' + ('bar' in data[0] ? ' class="table-bar"' : '') + '>' +
             '<tr>' + Object.keys(data[0]).map((x) => `<th data-i18n-key="${('data-'+x).toLowerCase().replace(/(\s|_|-)+/g, '-')}">${DomUtils.htmlTitle(x)}</th>`).join('\n') + '</tr>' +
             data.map(x => '<tr>' + Object.values(x).map(
                 x => `<td${isNaN(x)?'':' style="text-align:right"'}>${x}</td>`
@@ -236,7 +244,7 @@ export default class DomUtils {
     }
 }
 
-document.addEventListener('change', (e) => {
+document.addEventListener('input', (e) => {
     if ('INPUT' === e.target.tagName && 'range' === e.target.type) {
         document
             .querySelectorAll('[data-for-range="'+e.target.id+'"')

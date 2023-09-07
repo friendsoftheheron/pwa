@@ -88,14 +88,15 @@ export default class Labs {
                     }
                     return resolve(res.text());
                 })
-                .then(data => {
+                .catch(err => reject(err))
+                .finally(data => {
                     document
                         .querySelector('[data-loading-counter]')
                         .dataset
                         .loadingCounter--;
                     return resolve(data)
                 })
-                .catch(err => reject(err));
+            ;
         });
     });
 
@@ -103,10 +104,10 @@ export default class Labs {
         lab.source = [source];
         lab.position = new Location(lab.location_latitude, lab.location_longitude);
         lab.linear_class = +lab.is_linear ? 'linear' : 'random';
-        lab.theme_formatted = (lab.theme_ids||'').split(',').map(x =>
+        lab.theme_formatted = (lab.theme_ids||'0').split(',').map(x =>
             x ? `<div class="flex">
                 <div class="theme ${Labs.data_theme[x].name.toLowerCase()}" title="${Labs.data_theme[x].name}"></div>
-                <div class="tag">${Labs.data_theme[x].name}</div>
+                <div class="tag" data-i18n-key="theme-${Labs.data_theme[x].name.toLowerCase()}"}">${Labs.data_theme[x].name}</div>
                 </div>
         ` : ''
         ).join('');
