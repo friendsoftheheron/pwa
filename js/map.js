@@ -108,6 +108,7 @@ export default class Map {
                     Labs
                         .getData({
                             block_size: this.block_size * (hide_logged ? -1 : +1),
+                            filters: localStorage.getItem(config.filters_key),
                             latitude: center.latitude,
                             longitude: center.longitude,
                         })

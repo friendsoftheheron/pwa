@@ -1,3 +1,30 @@
+<template id="filter-themes-template">
+    <div class="hidden" data-is-other="${isother}" data-reorder="${name}" data-i18n-key="theme-${name}" data-i18n-attr="data-reorder"></div>
+    <input type="radio" id="filter-themes-inc[${id}]" class="inc-exc" name="filter-themes-${name}" value="${id}" data-setting-default="false">
+    <input type="radio" id="filter-themes-exc[${id}]" class="inc-exc" name="filter-themes-${name}" value="${id}" data-setting-default="false">
+    <input type="radio" id="filter-themes-unc[${id}]" class="inc-exc" name="filter-themes-${name}" value="${id}" data-setting-default="true">
+    <span class="label" data-label-for-radio="filter-themes-${name}">
+        <div class="flex">
+            <span data-i18n-key="theme-${name}">${Name}</span>
+            <span>&nbsp;</span>
+            <span class="theme ${name}"></span>
+        </div>
+    </span>
+</template>
+<template id="filter-owners-template">
+    <div class="hidden" data-reorder="${innerHTML}"></div>
+    <input type="radio" id="filter-owners-inc[${id}]" class="inc-exc" name="filter-owners-${id}" value="${innerHTML}" data-setting-default="true">
+    <input type="radio" id="filter-owners-exc[${id}]" class="inc-exc" name="filter-owners-${id}" value="${innerHTML}" data-setting-default="false">
+    <input type="radio" id="filter-owners-unc[${id}]" class="inc-exc" name="filter-owners-${id}" value="${innerHTML}" data-setting-default="false">
+    <span class="label" data-label-for-radio="filter-owners-${id}">
+        <div class="flex">
+            <span>${innerHTML}</span>
+            <span data-remove-holder="filter-owners-holder">&nbsp;|&nbsp;x</span>
+        </div>
+    </span>
+</template>
+
+
 <h2 data-i18n-key="settings">Settings</h2>
 
 <div class="p unauthenticated"
@@ -7,7 +34,7 @@
     Enter your geocaching.com credentials to be able to log labs and see your logged labs.
     See <a href="https://friendsoftheheron.github.io">friendsoftheheron.github.io</a> for more information.
 </div>
-<form method="post" action="javascript:void(0);" >
+<form method="post" action="javascript:void(0);">
 <div class="grid-auto-auto">
     <label for="username" class="colon" data-i18n-key="settings-username">Username</label>
     <div><input id="username" data-setting-default="" autocomplete="username" value=""></div>
@@ -54,8 +81,104 @@
         <label for="high-accuracy" class="small" data-i18n-key="settings-high-accuracy-explanation">May increase power consumption</label>
     </div>
 
-    <div class="debug "></div><div class="debug ">&nbsp;</div>
+    <!--
+        Filter part
+    -->
+    <div class="grid-col-1-3 filter">&nbsp;</div>
+    <h2 class="grid-col-1-3 filter" data-i18n-key="filter">Filter</h2>
 
+    <input type="checkbox" id="disable-filter-adventure" data-setting-default="" class="hidden">
+    <label for="disable-filter-adventure" class="colon filter" data-i18n-key="filter-adventure-name">Adventure name</label>
+    <div class="filter" data-label-for-unchecked="disable-filter-adventure">
+        <div class="flex">
+            <input id="filter-adventure-inc" data-setting-default="">
+            <div class="resizable"><input id="filter-adventure-exc" data-setting-default="" class="line-through"></div>
+        </div>
+    </div>
+<!--
+    <input type="checkbox" id="disable-filter-published-date" data-setting-default="true" class="hidden">
+    <label for="disable-filter-published-date" class="filter">Published</label>
+    <div class="filter" data-label-for-unchecked="disable-filter-published-date">
+        Published date (30 days)
+    </div>
+
+    <div class="filter"></div>
+    <div class="filter">Completion status</div>
+-->
+    <input type="checkbox" id="disable-filter-rating" data-setting-default="true" class="hidden">
+    <label for="disable-filter-rating" class="colon filter" data-i18n-key="filter-rating">Rating</label>
+    <div class="filter" data-label-for-unchecked="disable-filter-rating">
+        <div class="flex">
+            <span data-for-range="filter-rating-min" data-value-to-fixed="1">Min</span>
+            &nbsp;
+            <div class="dual-range">
+                <input type="range" id="filter-rating-min" class="min" min="1" max="5" step="0.1" data-setting-default="1" />
+                <input type="range" id="filter-rating-max" class="max" min="1" max="5" step="0.1" data-setting-default="5" />
+            </div>
+            &nbsp;
+            <span data-for-range="filter-rating-max" data-value-to-fixed="1">Max</span>
+        </div>
+    </div>
+
+    <input type="checkbox" id="disable-filter-time" data-setting-default="true" class="hidden">
+    <label for="disable-filter-time" class="filter colon">
+        <span data-i18n-key="filter-adventure-time">Time</span>
+        <span>&nbsp;</span>
+        (<span data-i18n-key="unit-minute-abbr">min</span>)
+    </label>
+    <div class="filter" data-label-for-unchecked="disable-filter-time">
+        <div class="flex">
+            <span data-for-range="filter-time-min" data-value-larger-than="true">Min</span>
+            &nbsp;
+            <div class="dual-range">
+                <input type="range" id="filter-time-min" class="min" min="0" max="181" data-setting-default="0" />
+                <input type="range" id="filter-time-max" class="max" min="0" max="181" data-setting-default="181" />
+            </div>
+            &nbsp;
+            <span data-for-range="filter-time-max" data-value-larger-than="true">Max</span>
+        </div>
+    </div>
+
+    <input type="checkbox" id="disable-filter-exclude-not-rated" data-setting-default="true" class="hidden">
+    <label for="disable-filter-exclude-not-rated" class="colon filter" data-i18n-key="filter-not-rated">Not rated</label>
+    <div class="filter" data-label-for-unchecked="disable-filter-exclude-not-rated">
+        <input type="checkbox" id="filter-exclude-not-rated-chk" data-setting-default="true">
+        <label for="filter-exclude-not-rated-chk" class="small" data-i18n-key="filter-exclude-not-not">Exclude unrated labs</label>
+    </div>
+
+    <input type="checkbox" id="disable-filter-themes" data-setting-default="true" class="hidden">
+    <label for="disable-filter-themes" class="colon filter" data-i18n-key="filter-themes">Themes</label>
+    <div class="filter" data-label-for-unchecked="disable-filter-themes">
+        <div
+                id="filter-themes-holder"
+                data-template-id="filter-themes-template"
+                data-i18n-reorder=""
+        >
+        </div>
+    </div>
+
+    <input type="checkbox" id="disable-filter-owners" data-setting-default="true" class="hidden">
+    <label for="disable-filter-owners" class="colon filter" data-i18n-key="filter-owners">Owners</label>
+    <div class="filter" data-label-for-unchecked="disable-filter-owners">
+        <div>
+            <input
+                    data-source-url="${data_url}?special=owners&id="
+                    data-target-select="owners-select"
+            >
+            <select
+                    id="owners-select"
+                    data-holder-id="filter-owners-holder"
+                    data-name-prefix="filter-owners-"
+            ></select>
+            <div
+                    id="filter-owners-holder"
+                    data-template-id="filter-owners-template"
+            >
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-col-1-3 debug">&nbsp;</div>
     <label class="colon debug" data-i18n-key="settings-debug">Debug stuff</label>
     <div class="debug">
         <!-- overview of unicode birds -->
@@ -83,16 +206,13 @@
         🏴󠁮󠁬󠁦󠁲󠁿 <!-- frysk -->
     </div>
 
-    <!-- https://moderncss.dev/pure-css-custom-styled-radio-buttons/#theme-variable-and-box-sizing-reset -->
-
     <div class="debug"></div>
     <div class="debug">
-        <input type="radio" />
-        <input type="radio" checked="checked" />
+        <input name="FlyingCircus" type="radio" />
+        <input name="FlyingCircus" type="radio" checked="checked" />
         <input type="checkbox">
         <input type="checkbox" checked="checked" />
     </div>
-
 
     <label class="debug" data-i18n-key="settings-clear-cache">Clear cache:</label>
     <div class="debug"><button id="clear-cache" data-i18n-key="settings-clear-cache">Clear cache</button></div>
@@ -110,7 +230,3 @@
     </div>
 </div>
 </form>
-
-<!--
-
- -->

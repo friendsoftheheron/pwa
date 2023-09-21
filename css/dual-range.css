@@ -1,0 +1,33 @@
+@import url('../css/vars.css');
+
+.dual-range {
+    position: relative;
+    border: 0.0625rem solid var(--dark-gray);
+    border-radius: 0.375rem;
+    background-size: 100% 1rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: gray;
+    height: 0.4375rem;
+    margin: 0.375rem 0;
+    width: 100%;
+
+}
+
+.dual-range input[type=range] {
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    position: absolute;
+    top: -0.375rem;
+    width: 100%; /* Specific width is required for Firefox. */
+    background: transparent; /* Otherwise white in Chrome */
+    overflow: visible;
+}
+
+.dual-range input[type=range]::-webkit-slider-thumb,
+.dual-range input[type=range]::-moz-range-thumb {
+    background-color: var(--accent-color);
+    height: 1rem;
+    width: 1rem;
+    border-radius: 1rem;
+    border: 0;
+}

@@ -464,7 +464,58 @@ const translate = (page = 1) => {
     return false;
 }
 
+const updateFilters = () => {
+    console.log('updateFilters()');
+    const filters = {};
+    Object
+        .keys(localStorage)
+        .filter(x => x.startsWith(st.prefix+'filter-'))
+        .forEach(x => {
+            const key = x.replace(st.prefix+'filter-', '')
+            console.log(
+                'x:', x,
+                'st:', localStorage[x],
+                'key:', key,
+                'dis:', st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-'),
+                'dv:', localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '', '').split('-').slice(0,-1).join('-'))
+            )
+            if (
+                localStorage.getItem(x) &&
+                !localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-'))
+            ) {
+                const match = key.match(/^(.*)\[(.*?)\]$/);
+                console.warn('value:', match, key);
+                if (match) {
+                    if (!filters[match[1]]) { filters[match[1]] = {}; }
+                    filters[match[1]][match[2]] = match[2]; //localStorage.getItem(x)
+                    console.warn(match[1], match[2], filters[match[1]][match[2]]);
+                } else {
+                    filters[key] = localStorage.getItem(x)
+                }
+            }
+            /* remove extremes from dual sliders */
+            Object
+                .keys(filters)
+                .forEach(key => {
+                    const elem = document.getElementById('filter-'+key);
+                    if (
+                        elem &&
+                        elem.parentNode.classList.contains('dual-range') &&
+                        elem.classList.contains(key.split('-').slice(-1)[0]) &&
+                        +filters[key] === +elem.getAttribute(key.split('-').slice(-1)[0])
 
+                    ) {
+                        delete filters[key];
+                    }
+                })
+            ;
+        })
+    ;
+    delete filters['themes-unc'];
+    delete filters['owners-unc'];
+    localStorage.setItem(config.filters_key, JSON.stringify(filters))
+    console.log(filters)
+}
 
 const init = () => {
     pp
@@ -477,13 +528,21 @@ const init = () => {
         fetch('./data/theme.json'),
     ])
     .then(([username, password, theme]) => {
-       theme.json().then(json => Labs.data_theme = json);
-       if (username && password) {
-           updateUser()
-               .then(res => console.debug("updateUser:", res))
-               .catch(err => console.error(err))
+        theme.json().then(json => Labs.data_theme = json);
+        if (username && password) {
+            updateUser()
+                .then(res => console.debug("updateUser:", res))
+                .catch(err => console.error(err))
+            ;
        }
     });
+
+    // Make sure there is a decent json string in the filter localstorage
+    try {
+        JSON.parse(localStorage.getItem(config.filters_key));
+    } catch(e) {
+        localStorage.setItem(config.filters_key, JSON.stringify({}));
+    }
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
@@ -500,22 +559,55 @@ const init = () => {
         });
     }
 
-    document.addEventListener('DOMContentLoaded', main);
+    document.addEventListener('DOMContentLoaded', waitFor);
 }
 
+const waitFor = () => {
+    if (Labs.data_theme.hasOwnProperty(0)) {
+        return main();
+    }
+    window.setTimeout(waitFor, 100);
+}
 
 const main = () => {
     addMessage('main()')
     addMessage(config.home_url);
     Promise
         .all([
-            st.fillSettingsDiv(),
+            st.getSetting('data-url'),
+            st.fillSettingsDiv([
+                {
+                    data: Object
+                        .values(Labs.data_theme)
+                        .filter(x => 0 !== x.id)
+                        .map(data => {
+                            return {
+                                id: data.id,
+                                isother: data.id < 999 ? 0 : 1,
+                                Name: data.name,
+                                name: data.name.toLowerCase()
+                            };
+                        }),
+                    holder: 'filter-themes-holder',
+                },
+                {
+                    data: Object
+                        .keys(localStorage)
+                        .filter(x => x.startsWith(st.prefix+'filter-owners-') && localStorage[x] && '' !== localStorage[x])
+                        .map(x => ({id: x.replace(/.*\[(.*?)\]$/, '$1'), 'innerHTML': localStorage[x]}))
+                        .sort((a,b) => a.innerHTML.localeCompare(b.innerHTML)),
+                    holder: 'filter-owners-holder',
+                }
+            ]),
             du.loadUrlToElem('labs', './html/labs.html'),
             du.loadUrlToElem('map', './html/map.html')
-        ]).then(() => {
+        ]).then((result) => {
             if (du.isOverflow('h1')) {
                 du.fitFont('h1', 0.95, 1);
             }
+            // Hack to put the data_url as a global variable
+            window.data_url = result[0] || config.data_url;
+
             Map.init();
             watchLocation();
             showMessage();
@@ -863,6 +955,18 @@ document.addEventListener('change', (e) => {
             }
             if (['high-accuracy', 'update-interval'].filter(x => changes.includes(x)).length) {
                 watchLocation();
+            }
+            if (['data-url'].filter(x => changes.includes(x)).length) {
+                st.getSetting('data-url').then(data_url => window.data_url = data_url || config.data_url);
+            }
+            console.log(changes);
+            if (
+                ['bit-eagle', ].filter(x => changes.includes(x)).length ||
+                changes.filter(x => x.startsWith('filter-') || x.startsWith('disable-filter-')).length
+            ) {
+                console.log('Filter changed')
+                updateFilters();
+                Labs.refresh().then();
             }
             document.getElementById(st.div).dataset.changes = JSON.stringify([]);
         }

@@ -329,6 +329,7 @@ export default class Labs {
             Labs
                 .getData({
                     block_size: block_size,
+                    filters: localStorage.getItem(config.filters_key),
                 })
                 .then(labs => {
                     localStorage.setItem(config.fetched_labs, JSON.stringify(labs));

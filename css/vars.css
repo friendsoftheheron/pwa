@@ -9,9 +9,16 @@
     --yellow: #E98300;
     --white: #f9fcff;
     --black: #00222d;
+    --light-gray: #dddedf;
     --gray: #c1c3c7;
+    --dark-gray: #a1a5ae;
+
+    --accent-color: var(--medium-blue);
+
 
     --max-width: 800px;
+
+
 
     --disabled-color: #AAA;
     --disabled-background: #F5F5F5;

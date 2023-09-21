@@ -1,11 +1,13 @@
 @import url('../css/vars.css');
+@import url('../css/vars.css');
+@import url('../css/dual-range.css');
 @import url('../css/ratings.css');
+@import url('../css/resize.css');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    accent-color: var(--medium-blue);
-
+    accent-color: var(--accent-color);
 }
 
 body {
@@ -61,7 +63,6 @@ h1 {
     font-size: 1.5rem;
     line-height: 1.7rem;
 }
-
 h2 {
     color: var(--orange);
     font-size: 1.2rem;
@@ -85,15 +86,13 @@ td,th {
 td {
     border-bottom: 1px solid var(--sky);
 }
-
 th {
     border-bottom: 1px solid var(--orange);
 }
 
-/* <!-- https://moderncss.dev/pure-css-custom-styled-radio-buttons/#theme-variable-and-box-sizing-reset --> */
-
-
 [id^="map-"],
+[data-label-for-radio],
+[data-label-for-unchecked],
 [href],
 label {
     cursor: pointer;
@@ -107,7 +106,6 @@ li {
 .table-bar { width: 100%; }
 .table-bar td { width: 1px; } /* min width, actually: this causes the width to fit the content */
 .table-bar td:last-child { width: 100%; } /* well, it's less than 100% in the end, but this still works for me */
-
 
 
 .background-sky { background-color: var(--sky); }
@@ -126,6 +124,7 @@ li {
 .clear { clear: both; display: block; }
 .colon:after { content: ':'; }
 .flex {	display: flex; }
+.line-through { text-decoration: line-through; }
 .relative { position: relative; }
 .w100 { width: 100% }
 .left { float: left; }
@@ -151,32 +150,39 @@ li {
     line-height: 0.924rem;
 }
 
+/* color out of the not empty, so it can be overwritten with a simple class */
+.label {
+    background-color: var(--dark-blue);
+    color: var(--white);
+}
 .label:not(:empty) {
     font-size: 0.84rem;
     line-height: 0.924rem;
-    background-color: var(--dark-blue);
     border-radius: 0.3rem;
     padding-left: 0.2rem;
     padding-right: 0.2rem;
     margin-top: 0.088rem;
     margin-bottom: 0.088rem;
-    color: var(--white);
 }
 
 .grid-auto-auto {
     display: grid;
-    grid-template-columns: auto auto ;
+    grid-template-columns: auto 1fr;
     grid-gap: 0.2rem;
 }
+.grid-col-1-3 {
+    grid-column: 1/3;
+}
 
-.grid-auto-auto div input:not([type="checkbox"]):not([type="radio"]) {
+.grid-auto-auto div input:not([type="checkbox"]):not([type="radio"]),
+.grid-auto-auto div select
+{
     width: 100%;
 }
 
 .select-or-input {
     display:flex;
 }
-
 .select-or-input select {
     width: 100%;
 }
@@ -191,11 +197,9 @@ li {
     width: 100%;
     display: inherit;
 }
-
 .select-or-other select:has(option[selected][value=""]) {
     width: auto;
 }
-
 .select-or-other select:has(option[selected][value=""]) ~ input {
 }
 
@@ -233,8 +237,6 @@ li {
     position: absolute;
     width: 110%;
 }
-
-/*  https://cssloaders.github.io/ */
 
 @keyframes animatedBackground {
     0% { background-position-x: 0 }
@@ -343,7 +345,6 @@ li {
     color: var(--medium-blue);
     list-style-type: none;
     margin-left: 0.0rem;
-
 }
 
 #leaflet,
@@ -894,6 +895,59 @@ input.details:checked ~ .lab .distance {
     margin-right: 1rem;
 }
 
+#owners-select:empty {
+    display:none;
+}
+
+#filter-owners-holder,
+#filter-themes-holder {
+    display: flex;
+    flex-wrap: wrap;
+}
+#filter-owners-holder:not(:empty) {
+    margin-top: 0.5rem;
+}
+
+input.inc-exc[type="radio"]:checked + * + * + .label { background-color: var(--green);}
+input.inc-exc[type="radio"]:checked + * + * + .label::before { content: '✔\fe0e'; }
+input.inc-exc[type="radio"]:checked + * + .label { background-color: var(--red); }
+input.inc-exc[type="radio"]:checked + * + .label::before { content: '✘'; }
+input.inc-exc[type="radio"] + .label {
+    background-color: var(--gray);
+    display: flex;
+    margin-right: 0.1rem;
+}
+input.inc-exc[type="radio"] + .label::before {
+    content: '✽';
+    margin-right: 0.1rem;
+}
+input.inc-exc[type="radio"] { display: none; }
+
+input[id^="disable-"]:checked + *,
+input[id^="disable-"]:checked + * + * {
+    filter: grayscale(1);
+    opacity: 0.4;
+}
+
+
+/* input[id^="disable-"] + * + * > * { min-height: 1.2rem; } */
+input[id^="disable-"]:checked + * + * > * {
+    max-height: 1.2rem;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 32rem) {
+    input[id^="disable-"] + .filter { grid-column: 1/3; }
+    input[id^="disable-"] + * + .filter { grid-column: 1/3; }
+    input[id^="disable-"]:checked + .filter { grid-column: 1/2; }
+    input[id^="disable-"]:checked + * + .filter { grid-column: 2/3; }
+}
+
+.label .theme {
+    background-color: var(--white);
+}
+
+
 .compass {
     background-image: url("../images/compass.png");
     background-size: cover;
@@ -1020,8 +1074,6 @@ label[for="debug"] {
 }
 
 
-
-
 #symbol-labs:checked ~ * #labs,
 #symbol-map:checked ~ * #map,
 #symbol-menu:checked ~ * #menu,
@@ -1040,8 +1092,6 @@ input.details:checked ~ .lab div.details,
 {
     display: block;
     visibility: visible;
-    height: auto;
-    width: auto;
 }
 
 #labs,
@@ -1085,4 +1135,3 @@ input[id^="themes-"],
     font-weight: normal;
     text-decoration-line: none;
 }
-

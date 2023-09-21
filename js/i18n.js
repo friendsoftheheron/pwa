@@ -95,6 +95,13 @@ export default class I18N {
         )
     }
 
+    static reorderElement = (elem) => {
+        Array
+            .from(elem.children)
+            .sort((a,b) => a.innerHTML.localeCompare(b.innerHTML))
+            .forEach(node => elem.append(node));
+    }
+
     static translateElement = (elem) => {
         const content = I18N.getContent(elem.dataset.i18nKey, elem);
         if (undefined === content) {
@@ -137,6 +144,13 @@ export default class I18N {
             !elem.lastChild.classList.contains('i18n-edit')
         ) {
             elem.appendChild(span);
+        }
+
+        while (elem && elem.dataset) {
+            if (undefined !== elem.dataset.i18nReorder) {
+                this.reorderElement(elem);
+            }
+            elem = elem.parentNode;
         }
     }
 

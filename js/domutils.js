@@ -1,4 +1,6 @@
 export default class DomUtils {
+    static timer = 0;
+
     static camelcaseify = (str) => str.replace(/-([a-z])/g, g => g[1].toUpperCase());
     static hash = (str) => Array.from(str).reduce((a, c) => ((a<<5) -a) + c.charCodeAt(0), 0);
     static renderTemplate = (template, obj) =>
@@ -86,7 +88,6 @@ export default class DomUtils {
                 .getComputedStyle(elem)
                 .getPropertyValue('overflow')
             elem.style.overflow = 'hidden';
-            //console.warn(elem, 'w', elem.clientWidth, elem.scrollWidth, 'h', elem.clientHeight, elem.scrollHeight);
             if (elem.clientWidth && elem.scrollWidth && elem.clientHeight && elem.scrollHeight &&
                 (elem.clientWidth < elem.scrollWidth || elem.clientHeight < elem.scrollHeight)
             ) {
@@ -119,15 +120,20 @@ export default class DomUtils {
     static getElementValue = (elem) => {
         elem = this.elemOrId(elem);
         if (!elem) return;
-        if (["radio", "checkbox"].includes(elem.type)) return elem.checked ? 'true' : '';
+        if (["radio", "checkbox"].includes(elem.type)) return elem.checked ? elem.value : '';
         return elem.value;
     }
 
     static setElementValue = (elem, value) => {
         elem = this.elemOrId(elem);
         if (!elem) return false;
-        if (["radio", "checkbox"].includes(elem.type)) return elem.checked = value
-        else return elem.value = value;
+        if (["radio", "checkbox"].includes(elem.type)) {
+            elem.checked = value;
+        } else {
+            elem.value = value;
+        }
+        this.dispatchEvent(elem, "change");
+        return value;
     }
 
     static setChecked = (elem, state = true) => {
@@ -242,24 +248,82 @@ export default class DomUtils {
         }
         return data;
     }
+
+    static onLabelForChecked = e => {
+        let target = e.target;
+        while (target && target.dataset) {
+            const label = target.dataset.labelForChecked;
+            if (label) {
+                DomUtils.setChecked(label, true);
+            }
+            target = target.parentNode;
+        }
+    }
+
+    static onLabelForUnchecked = e => {
+        let target = e.target;
+        while (target && target.dataset) {
+            const label = target.dataset.labelForUnchecked;
+            if (label) {
+                DomUtils.setChecked(label, false);
+            }
+            target = target.parentNode;
+        }
+    }
+
+    static onLabelForRadio = e => {
+        let target = e.target;
+        while (target && target.dataset) {
+            const label = target.dataset.labelForRadio;
+            if (label) {
+                const radios = document.getElementsByName(label);
+                let radio_id = -1;
+                radios.forEach((elem, i) => {
+                    if (elem.checked) { radio_id = i; }
+                })
+                DomUtils.setChecked(radios[(radio_id+1) % radios.length]);
+            }
+            target = target.parentNode;
+        }
+    }
 }
+
+document.addEventListener('mousedown', DomUtils.onLabelForChecked);
+document.addEventListener('touchstart', DomUtils.onLabelForChecked);
+document.addEventListener('mousedown', DomUtils.onLabelForUnchecked);
+document.addEventListener('touchstart', DomUtils.onLabelForUnchecked);
+document.addEventListener('click', DomUtils.onLabelForRadio);
 
 document.addEventListener('input', (e) => {
     if ('INPUT' === e.target.tagName && 'range' === e.target.type) {
         document
             .querySelectorAll('[data-for-range="'+e.target.id+'"')
             .forEach(elem => {
-                console.warn(elem)
+                let value = +e.target.value;
+
+                const larger_than =
+                    elem.dataset.valueLargerThan &&
+                    value === +e.target.getAttribute('max')
+                if (larger_than) {
+                    value -= e.target.getAttribute('step') || 1;
+                }
+                if ("valueToFixed" in elem.dataset) {
+                    value = value.toFixed(+elem.dataset.valueToFixed);
+                }
+                if (larger_than) {
+                    value = '>' + value;
+                }
+
                 if ("rangeAttr" in elem.dataset) {
-                    elem.setAttribute(elem.dataset.rangeAttr, e.target.value);
+                    elem.setAttribute(elem.dataset.rangeAttr, value.toString());
                 } else {
-                    elem.innerHTML = e.target.value;
+                    elem.innerHTML = value.toString();
                 }
                 if ("rangeEvent" in elem.dataset) {
                     DomUtils.dispatchEvent(elem, elem.dataset.rangeEvent);
                 }
             })
-        //console.warn('tag', e.target.tagName, e.target.type, e.target.dataset.forRange);
+        ;
     }
 });
 
@@ -278,5 +342,53 @@ document.addEventListener('dblclick', (e) => {
             });
         }
         target = target.parentNode;
+    }
+});
+
+document.addEventListener('input', (e) => {
+    if (e.target.dataset.sourceUrl) {
+        if (DomUtils.timer) {
+            window.clearTimeout(DomUtils.timer);
+        }
+        DomUtils.timer = window.setTimeout(
+            () => {
+                if ('' === e.target.value) {
+                    const holder = DomUtils.elemOrId(e.target.dataset.targetSelect)
+                    if (holder) { holder.innerHTML = ''; }
+                    return true;
+                }
+                DomUtils.timer = 0;
+                fetch(
+                    e.target.dataset.sourceUrl.replaceAll(
+                        /\$\{(.*?)\}/g,
+                        (x,y) => y.split('.').reduce((acc, x) => acc[x], window)
+                    ) + encodeURIComponent(e.target.value)
+                )
+                    .then(res => res.json())
+                    .then(json => {
+                        const holder = DomUtils.elemOrId(e.target.dataset.targetSelect)
+                        if (holder) {
+                            holder.innerHTML = '';
+                            json.forEach(x => {
+                                const node = document.createElement('option')
+                                node.text = x.username;
+                                node.value = x.id;
+                                holder.append(node);
+                            })
+                        }
+                    })
+                    .catch(err => console.error(err))
+            },
+            200
+        );
+    }
+});
+
+document.addEventListener('change', e => {
+    if (e.target.dataset.targetSelect) {
+        DomUtils.dispatchEvent(
+            DomUtils.elemOrId(e.target.dataset.targetSelect),
+            'change'
+        );
     }
 });

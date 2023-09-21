@@ -1,0 +1,43 @@
+@import url('../css/vars.css');
+
+/* Does not work on mobile */
+.resize-horizontal {
+    display: flex;
+}
+.resize-horizontal > * {
+    resize: horizontal;
+    min-width: 1rem;
+    overflow: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 90%;
+}
+.resize-horizontal > *:last-child {
+    min-width: 1px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    resize: none;
+    width: 10%;
+}
+
+/* Javascript solution instead */
+.resizable {
+    display:flex;
+}
+
+.resizable::before {
+    background-color: var(--medium-blue);
+    border: 1px solid var(--dark-blue);
+    border-radius: 1px;
+    width: 0.1rem;
+    content: '';
+}
+.resizable:hover::before {
+    background-color: var(--light-blue);
+    cursor: col-resize;
+}
+.resizable.dragging::before {
+    background-color: var(--orange);
+    border-color: var(--orange);
+    cursor: col-resize;
+}
