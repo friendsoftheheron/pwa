@@ -5,7 +5,7 @@ const assets = [
     './index.html',
     './favicon.ico',
     './css/ratings.css',
-    './resize.css',
+    './css/resize.css',
     './css/style.css',
     './css/vars.css',
     './data/theme.json',

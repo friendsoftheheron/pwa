@@ -34,7 +34,7 @@ export default class Settings {
         })
     })
 
-    static getSetting = (id) => new Promise((resolve, reject) => {
+    static getSetting = (id, resolve_to=null) => new Promise((resolve, reject) => {
         this.getItem(id)
             .then(value => resolve(value))
             .catch(() => {
@@ -44,7 +44,11 @@ export default class Settings {
                     return resolve(elem.dataset[du.camelcaseify(this.prefix + 'default')]);
                 }
                 console.warn('Setting element does exist: ' + id);
-                reject('Setting not found)');
+                if (null === resolve_to) {
+                    reject('Setting not found: ' + id);
+                } else {
+                    resolve(resolve_to);
+                }
             })
         ;
     })
@@ -72,7 +76,7 @@ export default class Settings {
         _holder.insertBefore(node, nodes.length ? nodes[0] : null);
 
         if (options.radio) {
-            du.onLabelForRadio({target: node.querySelector('[data-label-for-radio]')})
+            du.dispatchEvent(node.querySelector('[data-label-for-radio]'), 'click')
         }
     }
 

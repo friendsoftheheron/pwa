@@ -523,19 +523,19 @@ const init = () => {
         .catch(err => console.error(err))
     ;
     Promise.all([
-        st.getSetting('username'),
-        st.getSetting('password'),
+        st.getSetting('username', ''),
+        st.getSetting('password', ''),
         fetch('./data/theme.json'),
     ])
     .then(([username, password, theme]) => {
-        theme.json().then(json => Labs.data_theme = json);
+        theme.json().then(json => Labs.data_theme = json).catch(err => console.error(err));
         if (username && password) {
             updateUser()
                 .then(res => console.debug("updateUser:", res))
                 .catch(err => console.error(err))
             ;
        }
-    });
+    }).catch(err => { console.error(err); console.log(err); })
 
     // Make sure there is a decent json string in the filter localstorage
     try {
