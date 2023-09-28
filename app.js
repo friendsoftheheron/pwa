@@ -465,30 +465,20 @@ const translate = (page = 1) => {
 }
 
 const updateFilters = () => {
-    console.log('updateFilters()');
     const filters = {};
     Object
         .keys(localStorage)
         .filter(x => x.startsWith(st.prefix+'filter-'))
         .forEach(x => {
             const key = x.replace(st.prefix+'filter-', '')
-            console.log(
-                'x:', x,
-                'st:', localStorage[x],
-                'key:', key,
-                'dis:', st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-'),
-                'dv:', localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '', '').split('-').slice(0,-1).join('-'))
-            )
             if (
                 localStorage.getItem(x) &&
                 !localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-'))
             ) {
                 const match = key.match(/^(.*)\[(.*?)\]$/);
-                console.warn('value:', match, key);
                 if (match) {
                     if (!filters[match[1]]) { filters[match[1]] = {}; }
                     filters[match[1]][match[2]] = match[2]; //localStorage.getItem(x)
-                    console.warn(match[1], match[2], filters[match[1]][match[2]]);
                 } else {
                     filters[key] = localStorage.getItem(x)
                 }
@@ -539,7 +529,10 @@ const init = () => {
 
     // Make sure there is a decent json string in the filter localstorage
     try {
-        JSON.parse(localStorage.getItem(config.filters_key));
+        console.warn('filter', localStorage.getItem(config.filters_key))
+        if (!JSON.parse(localStorage.getItem(config.filters_key))) {
+            throw new Error('Filter is not set');
+        }
     } catch(e) {
         localStorage.setItem(config.filters_key, JSON.stringify({}));
     }
@@ -574,7 +567,7 @@ const main = () => {
     addMessage(config.home_url);
     Promise
         .all([
-            st.getSetting('data-url'),
+            st.getSetting('data-url', ''),
             st.fillSettingsDiv([
                 {
                     data: Object
@@ -960,10 +953,11 @@ document.addEventListener('change', (e) => {
                 st.getSetting('data-url').then(data_url => window.data_url = data_url || config.data_url);
             }
             console.log(changes);
-            if (
-                ['bit-eagle', ].filter(x => changes.includes(x)).length ||
-                changes.filter(x => x.startsWith('filter-') || x.startsWith('disable-filter-')).length
-            ) {
+            if (changes.filter(x =>
+                x.startsWith('bit-') ||
+                x.startsWith('filter-') ||
+                x.startsWith('disable-filter-')
+            ).length) {
                 console.log('Filter changed')
                 updateFilters();
                 Labs.refresh().then();

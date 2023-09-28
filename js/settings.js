@@ -109,9 +109,7 @@ export default class Settings {
         const template = du.elemOrId(holder.dataset.templateId);
         if (!template) { return reject('No holder: ' + data.holder); }
         holder.innerHTML='';
-        console.warn('fillTemplate', data.data);
         data.data.forEach(data => {
-            console.log('data', data);
             const node = document.createElement('span');
             node.innerHTML = du.renderTemplate(i18n.translateHtml(template.innerHTML), data);
             holder.append(node);
@@ -125,7 +123,7 @@ export default class Settings {
             .then(() => Promise.all(templates.map(t => this.fillTemplate(t))))
             .then(() => i18n.setLanguageSelector())
             .then(() => this.initialiseSettings())
-            .then(() => this.getSetting('language'))
+            .then(() => this.getSetting('language', 'en'))
             .then(locale => i18n.locale = locale)
             .then(res => resolve(res))
             .catch(err => reject(err))
@@ -151,7 +149,9 @@ export default class Settings {
                     this.getSetting(elem.id)
                         .then(value => this.setItem(elem.id, value))
                         .then(value => resolve(du.setElementValue(elem, value)))
+                        .catch(err => { console.error(err); resolve(); })
                     })
+
                 )
         )
     ;

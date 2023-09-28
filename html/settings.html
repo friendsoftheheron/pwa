@@ -109,14 +109,22 @@
     <label for="disable-filter-rating" class="colon filter" data-i18n-key="filter-rating">Rating</label>
     <div class="filter" data-label-for-unchecked="disable-filter-rating">
         <div class="flex">
-            <span data-for-range="filter-rating-min" data-value-to-fixed="1">Min</span>
+            <span
+                data-for-range="filter-rating-min"
+                data-label-for-range-decrease="filter-rating-min"
+                data-value-to-fixed="1"
+            >Min</span>
             &nbsp;
             <div class="dual-range">
                 <input type="range" id="filter-rating-min" class="min" min="1" max="5" step="0.1" data-setting-default="1" />
                 <input type="range" id="filter-rating-max" class="max" min="1" max="5" step="0.1" data-setting-default="5" />
             </div>
             &nbsp;
-            <span data-for-range="filter-rating-max" data-value-to-fixed="1">Max</span>
+            <span
+                data-for-range="filter-rating-max"
+                data-label-for-range-increase="filter-rating-max"
+                data-value-to-fixed="1"
+            >Max</span>
         </div>
     </div>
 
@@ -128,14 +136,22 @@
     </label>
     <div class="filter" data-label-for-unchecked="disable-filter-time">
         <div class="flex">
-            <span data-for-range="filter-time-min" data-value-larger-than="true">Min</span>
+            <span
+                data-label-for-range-decrease="filter-time-min"
+                data-for-range="filter-time-min"
+                data-value-larger-than="true"
+            >Min</span>
             &nbsp;
             <div class="dual-range">
                 <input type="range" id="filter-time-min" class="min" min="0" max="181" data-setting-default="0" />
                 <input type="range" id="filter-time-max" class="max" min="0" max="181" data-setting-default="181" />
             </div>
             &nbsp;
-            <span data-for-range="filter-time-max" data-value-larger-than="true">Max</span>
+            <span
+                data-label-for-range-increase="filter-time-max"
+                data-for-range="filter-time-max"
+                data-value-larger-than="true"
+            >Max</span>
         </div>
     </div>
 
@@ -191,7 +207,7 @@
         &#128039; <!-- 🐧 Pinguin -->
         &#128330; 🕊️ <!-- 🕊 🕊️ Dove of peace -->
         &#129411; <!-- 🦃 Turkey -->
-        &#129413; <!-- 🦅 Eagle -->
+        &#129413; 🦅 <!-- 🦅 🦅 Eagle -->
         &#129414; <!-- 🦆 Duck -->
         &#129417; <!-- 🦉 Owl -->
         &#129434; <!-- 🦚 Peacock -->

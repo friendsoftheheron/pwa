@@ -91,6 +91,8 @@ th {
 }
 
 [id^="map-"],
+[data-label-for-range-descrease],
+[data-label-for-range-increase],
 [data-label-for-radio],
 [data-label-for-unchecked],
 [href],
@@ -928,7 +930,6 @@ input[id^="disable-"]:checked + * + * {
     filter: grayscale(1);
     opacity: 0.4;
 }
-
 
 /* input[id^="disable-"] + * + * > * { min-height: 1.2rem; } */
 input[id^="disable-"]:checked + * + * > * {

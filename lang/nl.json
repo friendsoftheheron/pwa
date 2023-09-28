@@ -36,6 +36,7 @@
     "filter": "Filter",
     "filter-adventure-name": "Labnaam",
     "filter-adventure-time": "Tijd",
+    "filter-exclude-not-not": "Geen labs zonder waardering",
     "filter-not-rated": "Zonder beoordeeling",
     "filter-owners": "Eigenaren",
     "filter-rating": "Waardering",

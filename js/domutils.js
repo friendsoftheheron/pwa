@@ -270,29 +270,12 @@ export default class DomUtils {
             target = target.parentNode;
         }
     }
-
-    static onLabelForRadio = e => {
-        let target = e.target;
-        while (target && target.dataset) {
-            const label = target.dataset.labelForRadio;
-            if (label) {
-                const radios = document.getElementsByName(label);
-                let radio_id = -1;
-                radios.forEach((elem, i) => {
-                    if (elem.checked) { radio_id = i; }
-                })
-                DomUtils.setChecked(radios[(radio_id+1) % radios.length]);
-            }
-            target = target.parentNode;
-        }
-    }
 }
 
 document.addEventListener('mousedown', DomUtils.onLabelForChecked);
 document.addEventListener('touchstart', DomUtils.onLabelForChecked);
 document.addEventListener('mousedown', DomUtils.onLabelForUnchecked);
 document.addEventListener('touchstart', DomUtils.onLabelForUnchecked);
-document.addEventListener('click', DomUtils.onLabelForRadio);
 
 document.addEventListener('input', (e) => {
     if ('INPUT' === e.target.tagName && 'range' === e.target.type) {
@@ -324,6 +307,43 @@ document.addEventListener('input', (e) => {
                 }
             })
         ;
+    }
+});
+
+document.addEventListener('click', e => {
+    let target = e.target;
+    let label;
+    while (target && target.dataset) {
+        label = target.dataset.labelForRadio;
+        if (label) {
+            const radios = document.getElementsByName(label);
+            let radio_id = -1;
+            radios.forEach((elem, i) => {
+                if (elem.checked) { radio_id = i; }
+            })
+            DomUtils.setChecked(radios[(radio_id+1) % radios.length]);
+        }
+
+        label = target.dataset.labelForRangeDecrease;
+        if (label) {
+            const range = document.getElementById(label);
+            if (range) {
+                range.value = +range.value - (+range.getAttribute('step') || 1);
+                DomUtils.dispatchEvent(range, 'input');
+            }
+        }
+
+        label = target.dataset.labelForRangeIncrease;
+        if (label) {
+            console.warn('Label', label);
+            const range = document.getElementById(label);
+            if (range) {
+                range.value = +range.value + (+range.getAttribute('step') || 1);
+                DomUtils.dispatchEvent(range, 'input');
+            }
+        }
+
+        target = target.parentNode;
     }
 });
 
