@@ -178,7 +178,9 @@ export default class Labs {
     }
 
     static refresh = () => new Promise((resolve, reject) => {
+        const labs = this.labs = this.labs.filter(lab => lab.source.includes('id'));
         this.clear();
+        this.labs = labs;
         Promise
             .all([
                 this

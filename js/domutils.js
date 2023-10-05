@@ -138,7 +138,7 @@ export default class DomUtils {
 
     static setChecked = (elem, state = true) => {
         elem = this.elemOrId(elem);
-        if (elem) {
+        if (elem && elem.checked !== state) {
             elem.checked = state;
             this.dispatchEvent(elem, "change");
         }
