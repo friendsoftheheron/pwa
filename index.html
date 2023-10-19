@@ -27,6 +27,15 @@
     <meta name="apple-mobile-web-app-status-bar" content="#f15927" />
     <meta name="theme-color" content="#cdeaf1" />
 </head>
+<template id="update-start-template">
+    <div><span data-i18n-key="update-updating">Updating</span>: ${text}</div>
+    <div data-i18n-key="update-takes-time">This may take some time</div>
+    <div class="small" data-i18n-key="update-window-close">This window can be closed</div>
+</template>
+<template id="update-finish-template">
+    <div data-i18n-key="update-ready">Update ready</div>
+    <div>${text}</div>
+</template>
 <body>
 <input id="symbol-menu" class="hidden" type="checkbox" />
 <input id="symbol-labs" class="hidden" type="radio" name="top" />
@@ -35,6 +44,7 @@
 <input id="symbol-page" class="hidden" type="radio" name="top" />
 <input id="symbol-popup" class="hidden" type="checkbox" />
 <input id="authenticated" class="hidden" type="checkbox" />
+<input id="update" class="hidden" type="checkbox" />
 <input id="debug" class="hidden" data-setting-default="" type="checkbox" />
 <input id="bit-dodo" class="hidden" data-setting-default="" type="checkbox" />
 <input id="bit-dove" class="hidden" data-setting-default="true" type="checkbox" />

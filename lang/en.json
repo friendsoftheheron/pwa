@@ -40,6 +40,7 @@
     "filter-not-rated": "Not rated",
     "filter-owners": "Owners",
     "filter-rating": "Rating",
+    "filter-themes": "Themes",
     "friends": "Friends",
     "friends-chick": "Chick",
     "friends-crab": "Crab",
@@ -97,7 +98,7 @@
     "labs-update": "Update",
     "licence": "Licence",
     "map": "Map",
-    "menu": "Menu",
+    "menu": "Menu:",
     "messages": "Messages",
     "paypal-1-month": "1 month",
     "paypal-1-month-free": "1 month free!",
@@ -183,5 +184,9 @@
     "unit-week_p": {
         "one": "($)[] Week",
         "other": "($)[] Weeks"
-    }
+    },
+    "update-ready": "Update ready",
+    "update-takes-time": "This may take some time",
+    "update-updating": "Updating",
+    "update-window-close": "This window can be closed"
 }

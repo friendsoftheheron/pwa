@@ -1083,6 +1083,7 @@ label[for="debug"] {
 #symbol-settings:checked ~ * #settings,
 input.details:checked ~ .lab div.details,
 #authenticated:checked ~ * .authenticated,
+#update:checked ~ * .update,
 .unauthenticated,
 #bit-eagle:checked ~ * .filter,
 #bit-swan:checked ~ * .special,
@@ -1110,6 +1111,7 @@ input[id^="themes-"],
 .special,
 .tag,
 .translate,
+.update,
 .hidden {
     display: none;
     visibility: hidden;

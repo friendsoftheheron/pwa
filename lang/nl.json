@@ -40,6 +40,7 @@
     "filter-not-rated": "Zonder beoordeeling",
     "filter-owners": "Eigenaren",
     "filter-rating": "Waardering",
+    "filter-themes": "Thema's",
     "friends": "Vrienden",
     "friends-chick": "Kuiken",
     "friends-crab": "Krab",
@@ -174,5 +175,9 @@
     "unit-week_p": {
         "one": "($)[] Week ",
         "other": "($)[] Weken"
-    }
+    },
+    "update-ready": "Update klaar",
+    "update-takes-time": "Dit kan even duren",
+    "update-updating": "Updaten",
+    "update-window-close": "Dit venster kan gesloten worden"
 }

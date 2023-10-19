@@ -57,6 +57,7 @@ const updateUser = () => new Promise((resolve) => {
             config.translator = res.translator;
 	        config.translator_formatted = res.translator_formatted;
 	        du.setChecked('authenticated', res.authenticated);
+            du.setChecked('update', res.update);
 
             if (config.level & 1) {
                 document
@@ -464,6 +465,62 @@ const translate = (page = 1) => {
     return false;
 }
 
+const updateAdventure = (id) => {
+    const data = {
+        'special': 'update-adventure',
+        'latitude':  Map.map.getCenter().lat,
+        'longitude':  Map.map.getCenter().lng,
+    }
+    if (id.startsWith('special-update-')) {
+        data['id'] = id.slice('special-update-'.length);
+    }
+
+    const template = du.elemOrId('update-start-template');
+    if (template) {
+        du.setInnerHtml(
+            'popup-content',
+            template.innerHTML,
+            { 'text': data.hasOwnProperty('id') ? data.id : new Location(data) }
+        );
+        du.setChecked('symbol-popup');
+    }
+
+    Labs
+        .getData(data)
+        .then(res => new Promise((resolve, reject) => {
+            if ('error' in res) {
+                reject(res.error);
+            } else {
+                resolve(res);
+            }
+        }))
+        .then(json => {
+            console.log(json);
+            let text = '';
+            if (json.hasOwnProperty('err')) {
+                text = 'Error:' + json.err;
+            } else if (json.hasOwnProperty('Title')) {
+                text = 'Updated: ' + json.Title;
+            } else {
+                text = 'Updated: ' + json.all.length + '<br />' +
+                    'New: ' + json.new.length;
+            }
+
+            const template = du.elemOrId('update-finish-template');
+            if (template) {
+                du.setInnerHtml(
+                    'popup-content',
+                    template.innerHTML,
+                    {'text': json.hasOwnProperty('err') ? json.err : json.hasOwnProperty('Title') ? json.Title : json.new.length + ' / ' +  json.all.length }
+                );
+                du.setChecked('symbol-popup');
+            }
+            return changedPositionLarge()
+        })
+        .catch(err => console.error(err))
+    ;
+}
+
 const updateFilters = () => {
     const filters = {};
     Object
@@ -817,26 +874,7 @@ document.addEventListener('click', (e) => {
             'special-update' === target.id ||
             target.id.startsWith('special-update-')
         ) {
-            const data = {
-                'special': 'update-adventure',
-                'latitude':  Map.map.getCenter().lat,
-                'longitude':  Map.map.getCenter().lng,
-            }
-            if (target.id.startsWith('special-update-')) {
-                data['id'] = target.id.slice('special-update-'.length);
-            }
-            Labs
-                .getData(data)
-                .then(res => new Promise((resolve, reject) => {
-                    if ('error' in res) {
-                        reject(res.error);
-                    } else {
-                        resolve(res);
-                    }
-                }))
-                .then(res => changedPositionLarge())
-                .catch(err => console.error(err))
-            ;
+            updateAdventure(target.id);
         }
 
         if (target.classList.contains('log-button')) {
