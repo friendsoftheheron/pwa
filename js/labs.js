@@ -164,6 +164,7 @@ export default class Labs {
         this.removeLabs(labs, source);
         this.addLabs(labs, source);
         Map.updateLabs();
+        this.showLabs();
     }
 
     static clear = () => {
@@ -171,7 +172,7 @@ export default class Labs {
         const labs_holder = document.getElementById('labs-holder');
         if (!labs_holder) return false;
         Array
-            .from(labs_holder.children)
+            .from(labs_holder.childNodes)
             .forEach(x => x.remove())
         ;
         Map.clear();
@@ -185,14 +186,15 @@ export default class Labs {
             .all([
                 this
                     .getLabs()
-                    .then(() => Labs.showLabs()),
+                    //.then(() => Labs.showLabs()),
             ].concat(Map.position ? [
                 Map
                     .handleEndDrag()
-                    .then(() => Labs.showLabs())
+                    //.then(() => Labs.showLabs())
             ] : [])
         )
-            .then(res => resolve(res))
+            .then(() => Labs.showLabs())
+            //.then(res => resolve(res))
             .catch(err => reject(err))
     });
 
@@ -282,6 +284,8 @@ export default class Labs {
     }
 
     static showLabs = () => {
+        console.log('showLabs');
+        console.trace();
         if (null === this.labs) { return }
         this.processDistances();
         this.sortLabs()

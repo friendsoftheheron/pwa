@@ -223,11 +223,12 @@ export default class DomUtils {
 
     }
 
+
     static htmlFromArray = (data) => '' +
             '<table' + ('bar' in data[0] ? ' class="table-bar"' : '') + '>' +
             '<tr>' + Object.keys(data[0]).map((x) => `<th data-i18n-key="${('data-'+x).toLowerCase().replace(/(\s|_|-)+/g, '-')}">${DomUtils.htmlTitle(x)}</th>`).join('\n') + '</tr>' +
             data.map(x => '<tr>' + Object.values(x).map(
-                x => `<td${isNaN(x)?'':' style="text-align:right"'}>${x}</td>`
+                x => `<td${!isNaN(x)||x.startsWith('>>_')?' style="text-align:right"':''}>${isNaN(x)&&x.startsWith('>>_')?x.slice(3):x}</td>`
             ).join('') + '</tr>').join('') +
             '</table>'
         ;

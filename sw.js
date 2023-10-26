@@ -29,6 +29,7 @@ const assets = [
     './html/qr-code.html',
     './html/review.html',
     './html/settings.html',
+    './html/stats.html',
     './js/crypto.js',
     './js/domutils.js',
     './js/dual-range.js',

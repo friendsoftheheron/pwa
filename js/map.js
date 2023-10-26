@@ -159,7 +159,7 @@ export default class Map {
     static addLabs = () => {
         const template = document.getElementById('map_template');
         if (!template) {
-            console.error('Labs.updateLabs: map_template not found');
+            console.error('Map.addLabs: map_template not found');
             return
         }
         const ids = []

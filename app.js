@@ -12,6 +12,8 @@ console.log(config.name, config.version);
 
 const MESSAGES = [];
 let SW_REGISTRATION = null;
+let HREF_CURR = '';
+let HREF_PREV = '';
 
 const send_message_to_service_worker = (data) => new Promise((resolve) => {
     console.info('send_message', data);
@@ -528,6 +530,7 @@ const updateFilters = () => {
         .filter(x => x.startsWith(st.prefix+'filter-'))
         .forEach(x => {
             const key = x.replace(st.prefix+'filter-', '')
+            //console.log('key:', key, ' x:', x, ' local:', localStorage.getItem(x), localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-')));
             if (
                 localStorage.getItem(x) &&
                 !localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-'))
@@ -537,7 +540,7 @@ const updateFilters = () => {
                     if (!filters[match[1]]) { filters[match[1]] = {}; }
                     filters[match[1]][match[2]] = match[2]; //localStorage.getItem(x)
                 } else {
-                    filters[key] = localStorage.getItem(x)
+                    filters[key] = localStorage.getItem(x);
                 }
             }
             /* remove extremes from dual sliders */
@@ -674,7 +677,7 @@ const main = () => {
                     );
                 })
                 Labs.updateLabs(JSON.parse(labs), 'labs');
-                Labs.showLabs();
+                //Labs.showLabs();
             } else {
                 // Heron Island S23.44240 E151.91500
                 localStorage.setItem(config.fetched_latitude, config.start_latitude.toString());
@@ -715,6 +718,8 @@ document.addEventListener('click', (e) => {
         const href = target.getAttribute('href')
         if (href && href.startsWith('#')) {
             e.preventDefault();
+            HREF_PREV = HREF_CURR;
+            HREF_CURR = href;
             document.getElementById('symbol-menu').checked = false;
             switch(href.slice(1)) {
                 case 'close':
@@ -725,6 +730,7 @@ document.addEventListener('click', (e) => {
                     config.count_map = Object.keys(Map.map._layers).length;
                     // Extra data has been added, continue as with regular pages
                 case 'help':
+                case 'stats':
                     du
                         .loadUrlToElem('page', './html/'+href.slice(1)+'.html', config)
                         .then(() => du.setChecked('symbol-page'));
@@ -817,6 +823,7 @@ document.addEventListener('click', (e) => {
                                 ('data-'+page).toLowerCase().replace(/(\s|_|-)+/g, '-') +
                             '">' + du.htmlTitle(page) + '</h2>' +
                             du.htmlFromData(res)
+                            + ('json' === extension && HREF_PREV ? `<br /><a href="${HREF_PREV}">&lt;&lt;&lt;</a>` : '')
                         ))
                         .then(() => du.setChecked('symbol-page'))
                         .catch(err => console.error(err))
@@ -1047,7 +1054,7 @@ document.addEventListener('change', (e) => {
             }
             break;
         case 'symbol-labs':
-            changedPositionSmall().catch(err=>console.error(err));
+            //changedPositionSmall().catch(err=>console.error(err));
             break;
         case 'notification-distance':
             enableNotifications(e)
