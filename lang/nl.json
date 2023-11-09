@@ -20,6 +20,7 @@
     "data-stars": "Sterren",
     "data-theme": "Thema's",
     "data-themes": "Thema's",
+    "data-time": "Tijd",
     "data-time-min": "Tijd (min)",
     "data-times": "Tijden",
     "data-total": "Totaal",
@@ -184,7 +185,7 @@
         "other": "($)[] Weken"
     },
     "update-ready": "Update klaar",
-    "update-takes-time": "Dit kan even duren",
+    "update-takes-time": "Dit kan even duren.",
     "update-updating": "Updaten",
-    "update-window-close": "Dit venster kan gesloten worden"
+    "update-window-close": "Dit venster kan gesloten worden."
 }

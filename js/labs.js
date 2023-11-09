@@ -285,7 +285,6 @@ export default class Labs {
 
     static showLabs = () => {
         console.log('showLabs');
-        console.trace();
         if (null === this.labs) { return }
         this.processDistances();
         this.sortLabs()

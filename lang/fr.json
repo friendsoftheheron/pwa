@@ -7,14 +7,19 @@
     "about-testing-purposes": "À des fins d'(*)[essai] (*)[uniquement!]",
     "about-translator": "Traducteur",
     "button-cancel": "Annulation",
+    "button-post": "Poste",
     "data-bar": "Barre",
     "data-founds": "Trouvé",
     "data-month": "Mois",
     "data-name": "Thèmes",
     "data-num": "Num",
+    "data-star": "Étoile",
     "data-stars": "Étoiles",
     "data-theme": "Thèmes",
     "data-themes": "Thèmes",
+    "data-time": "Temps",
+    "data-time-min": "Temps (min)",
+    "data-times": "Temps",
     "data-total": "Total",
     "data-year": "An",
     "datetime-month-abbr-01": "janv.",
@@ -144,5 +149,9 @@
     "unit-week_p": {
         "one": "($)[] Semaine",
         "other": "($)[] Semaines"
-    }
+    },
+    "update-ready": "Mise à jour prête",
+    "update-takes-time": "Cela peut prendre un certain temps.",
+    "update-updating": "Actualisation",
+    "update-window-close": "Cette fenêtre peut être fermée."
 }

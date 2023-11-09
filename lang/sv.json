@@ -10,14 +10,19 @@
     "about-tool": "Ett verktyg för att logga flera Adventure Lab<sup>®</sup>s under en vandring/tur.\r\nFör att inte missa något när du besöker ett äventyr.",
     "about-translator": "Översättare",
     "button-cancel": "Avbryt",
+    "button-post": "Posten",
     "data-bar": "Bar",
     "data-founds": "Hittad",
     "data-month": "Månad",
     "data-name": "Teman",
     "data-num": "Num",
+    "data-star": "Stjärna",
     "data-stars": "Stjärnor",
     "data-theme": "Teman",
     "data-themes": "Teman",
+    "data-time": "Tid",
+    "data-time-min": "Tid (min)",
+    "data-times": "Tider",
     "data-total": "Totalt",
     "data-year": "År",
     "datetime-month-abbr-01": "jan",
@@ -167,5 +172,9 @@
     "unit-week_p": {
         "one": "($)[] Vecka",
         "other": "($)[] Veckor"
-    }
+    },
+    "update-ready": "Uppdatering klar",
+    "update-takes-time": "Det kan ta lite tid.",
+    "update-updating": "Uppdatering",
+    "update-window-close": "Detta fönster kan stängas."
 }

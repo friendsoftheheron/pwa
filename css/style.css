@@ -10,6 +10,11 @@
     accent-color: var(--accent-color);
 }
 
+.table-navigation {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 body {
     background: var(--sky);
     color: var(--black);

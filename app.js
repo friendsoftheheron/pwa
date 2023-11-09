@@ -412,6 +412,50 @@ const postReview = () => {
     })
 }
 
+const showJsonNavigation = () => {
+    const tables = document.getElementsByClassName('table-from-array');
+    const page = tables.length ? +tables[0].dataset.pgc_num || 0 : 0;
+    const pages = tables.length ? +tables[0].dataset.pgt_num || 0 : 0;
+    return (HREF_PREV ? `<a href="${HREF_PREV}"><b>⏎</b></a>` : '') +
+        (pages > 1 && page > 0 ? ' &nbsp ' + [...Array(pages).keys()].map(
+            x => x+1 === page ? `${x+1}` : `<a href="${HREF_CURR}?page=${x+1}">${x+1}</a>`
+        ).join(' ') : '')
+}
+
+const showHref = (href) => {
+    const [page, extension] = HREF_CURR.slice(1).split('.');
+    const data = Object.fromEntries(new URLSearchParams(href.split('?').splice(1).join('?')));
+    console.debug(page, extension, data);
+    let key = 'html';
+    switch (extension) {
+        case 'json':
+            key = 'special';
+            break;
+        default:
+            key = 'html';
+            break
+    }
+    data[key] = page;
+    Labs
+        .getData(data)
+        .then(res => du.setInnerHtml(
+            'page',
+            '<h2 data-i18n-key="' +
+                ('data-'+page).toLowerCase().replace(/(\s|_|-)+/g, '-') +
+            '">' + du.htmlTitle(page) + '</h2>' +
+            (('json' === extension) ? '<div class="table-navigation"></div>' : '') +
+            du.htmlFromData(res) +
+            (('json' === extension) ? '<div class="table-navigation"></div>' : '')
+        ))
+        .then(() => Array
+            .from(document.getElementsByClassName('table-navigation'))
+            .forEach(elem => elem.innerHTML = showJsonNavigation(href))
+        )
+        .then(() => du.setChecked('symbol-page'))
+        .catch(err => console.error(err))
+    return false;
+}
+
 const rateAdventure = (data=null) => {
     if (null === data) {
         data = {
@@ -718,10 +762,15 @@ document.addEventListener('click', (e) => {
         const href = target.getAttribute('href')
         if (href && href.startsWith('#')) {
             e.preventDefault();
-            HREF_PREV = HREF_CURR;
-            HREF_CURR = href;
+            if (href.startsWith('#id-')) {
+                Labs.openLab(href.slice(4));
+                return;
+            }
+
+            HREF_PREV = HREF_CURR === href.split('?', 1)[0] ? HREF_PREV : HREF_CURR;
+            HREF_CURR = href.split('?', 1)[0];
             document.getElementById('symbol-menu').checked = false;
-            switch(href.slice(1)) {
+            switch(HREF_CURR.slice(1)) {
                 case 'close':
                     // Used by leaflet
                     return true;
@@ -804,30 +853,7 @@ document.addEventListener('click', (e) => {
                     ;
                     return false;
                 default:
-                    const [page, extension] = href.slice(1).split('.');
-                    console.debug(page, extension);
-                    let key = 'html';
-                    switch (extension) {
-                        case 'json':
-                            key = 'special';
-                            break;
-                        default:
-                            key = 'html';
-                            break
-                    }
-                    Labs
-                        .getData({[key]: page})
-                        .then(res => du.setInnerHtml(
-                            'page',
-                            '<h2 data-i18n-key="' +
-                                ('data-'+page).toLowerCase().replace(/(\s|_|-)+/g, '-') +
-                            '">' + du.htmlTitle(page) + '</h2>' +
-                            du.htmlFromData(res)
-                            + ('json' === extension && HREF_PREV ? `<br /><a href="${HREF_PREV}">&lt;&lt;&lt;</a>` : '')
-                        ))
-                        .then(() => du.setChecked('symbol-page'))
-                        .catch(err => console.error(err))
-                    return false;
+                    return showHref(href);
             }
         }
 

@@ -20,6 +20,7 @@
     "data-stars": "Stars",
     "data-theme": "Themes",
     "data-themes": "Themes",
+    "data-time": "Time",
     "data-time-min": "Time (min)",
     "data-times": "Times",
     "data-total": "Total",
@@ -195,7 +196,7 @@
         "other": "($)[] Weeks"
     },
     "update-ready": "Update ready",
-    "update-takes-time": "This may take some time",
+    "update-takes-time": "This may take some time.",
     "update-updating": "Updating",
-    "update-window-close": "This window can be closed"
+    "update-window-close": "This window can be closed."
 }

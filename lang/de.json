@@ -10,14 +10,19 @@
     "about-tool": "Ein Werkzeug zur Aufzeichnung mehrerer Adventure Lab<sup>®</sup>s während einer Wanderung/Fahrt.\r\nWährend eines Abenteuers nicht einen Punkt von einem anderen zu verpassen.",
     "about-translator": "Übersetzer",
     "button-cancel": "Abbrechen",
+    "button-post": "Beitrag",
     "data-bar": "Bar",
     "data-founds": "Gefunden",
     "data-month": "Monat",
     "data-name": "Themen",
     "data-num": "Num",
+    "data-star": "Stern",
     "data-stars": "Sterne",
     "data-theme": "Themen",
     "data-themes": "Themen",
+    "data-time": "Zeit",
+    "data-time-min": "Zeit (min)",
+    "data-times": "Zeiten",
     "data-total": "Gesamt",
     "data-year": "Jahr",
     "datetime-month-abbr-01": "Jan",
@@ -167,5 +172,9 @@
     "unit-week_p": {
         "one": "($)[] Woche",
         "other": "($)[] Wochen"
-    }
+    },
+    "update-ready": "Update bereit",
+    "update-takes-time": "Das kann einige Zeit dauern.",
+    "update-updating": "Aktualisieren",
+    "update-window-close": "Dieses Fenster kann geschlossen werden."
 }
