@@ -728,6 +728,13 @@ input.details:checked ~ .lab .image {
 .icon.label { -webkit-mask-image: url("../images/svg/ph/regular/tag.svg");}
 .icon.timer { -webkit-mask-image: url("../images/svg/ph/regular/timer.svg");}
 
+[id^="country-"]:checked + .country {
+    display: grid;
+    text-align: right;
+    visibility: visible;
+    margin-bottom: 0.3rem;
+    margin-top: -0.1rem;
+}
 
 [id^="themes-"]:checked + * .themes-holder {
     margin-left: auto;
@@ -735,7 +742,6 @@ input.details:checked ~ .lab .image {
     grid-column: 1/5;
     grid-row: 2/3;
 }
-
 
 .lab .themes .tag {
     font-size: 0.84rem;
@@ -745,7 +751,8 @@ input.details:checked ~ .lab .image {
 }
 
 .lab .owner,
-.lab .location {
+.lab .location,
+.lab .country {
     font-size: 0.84rem;
     line-height: 0.924rem;
     margin-top: 0.1rem;
@@ -757,7 +764,9 @@ input.details:checked ~ .lab .image {
     margin-right: auto;
     padding-left: 0.3rem;
 }
-.lab .location {
+.lab .location,
+.lab .flag,
+.lab .country {
     margin-left: auto;
     padding-right: 0.1rem;
 }
@@ -1110,8 +1119,10 @@ input.details:checked ~ .lab div.details,
 #labs-holder:not(:empty) ~ *,
 input.details ~ .lab div.details,
 input[id^="themes-"],
+input[id^="country-"],
 .authenticated,
 #authenticated:checked ~ * .unauthenticated,
+.country,
 .debug,
 .filter,
 .special,

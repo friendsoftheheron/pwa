@@ -8,10 +8,15 @@
         </label>
         <label for="details-${id}" class="adventure">${adventure}</label>
         <div class="details blur">
-            <label for="details-${id}" class="flex">
+            <label for="country-${id}" class="flex">
                 <div class="owner">The Pythons</div>
-                <div class="location">${position}</div>
+                <div>
+                <span class="location">${position}</span>
+                <span class="flag">${flag}</span>
+                </div>
             </label>
+            <input id="country-${id}" type="checkbox" />
+            <label for="country-${id}" class="country">{$country}</label>
             <input id="themes-${id}" type="checkbox" />
             <label for="themes-${id}" class="properties">
                 <div>

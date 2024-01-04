@@ -381,6 +381,8 @@ export default class Labs {
         }
         du.setInnerHtmlByQuery('.description', lab.description.trim().replace('\n', '<br />'), elem);
         du.setInnerHtmlByQuery('.challenge', lab.question, elem);
+        du.setInnerHtmlByQuery('.country', lab.country, elem);
+        du.setInnerHtmlByQuery('.flag', lab.flag, elem);
         du.setInnerHtmlByQuery('.journal', lab.journal, elem);
         du.setInnerHtmlByQuery('.median-time-to-complete', lab.median_time_to_complete, elem);
         du.setInnerHtmlByQuery('.owner', lab.owner, elem);
