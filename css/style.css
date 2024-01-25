@@ -728,12 +728,11 @@ input.details:checked ~ .lab .image {
 .icon.label { -webkit-mask-image: url("../images/svg/ph/regular/tag.svg");}
 .icon.timer { -webkit-mask-image: url("../images/svg/ph/regular/timer.svg");}
 
-[id^="country-"]:checked + .country {
+
+input.details:checked ~ .lab [id^="country-"]:checked + .country {
     display: grid;
     text-align: right;
     visibility: visible;
-    margin-bottom: 0.3rem;
-    margin-top: -0.1rem;
 }
 
 [id^="themes-"]:checked + * .themes-holder {
@@ -752,10 +751,10 @@ input.details:checked ~ .lab .image {
 
 .lab .owner,
 .lab .location,
-.lab .country {
+.lab .country,
+.lab .flag {
     font-size: 0.84rem;
     line-height: 0.924rem;
-    margin-top: 0.1rem;
     color: var(--dark-blue);
 }
 .lab .owner {
@@ -1096,6 +1095,7 @@ label[for="debug"] {
 #symbol-popup:checked ~ * #popup,
 #symbol-settings:checked ~ * #settings,
 input.details:checked ~ .lab div.details,
+input.details:checked ~ .lab .flag,
 #authenticated:checked ~ * .authenticated,
 #update:checked ~ * .update,
 .unauthenticated,
@@ -1125,6 +1125,7 @@ input[id^="country-"],
 .country,
 .debug,
 .filter,
+.flag,
 .special,
 .tag,
 .translate,

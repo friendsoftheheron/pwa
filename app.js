@@ -514,8 +514,8 @@ const translate = (page = 1) => {
 const updateAdventure = (id) => {
     const data = {
         'special': 'update-adventure',
-        'latitude':  Map.map.getCenter().lat,
-        'longitude':  Map.map.getCenter().lng,
+        'latitude':  Map.map.getCenter().lat || localStorage.getItem('current_latitude'),
+        'longitude':  Map.map.getCenter().lng || localStorage.getItem('current_longitude'),
     }
     if (id.startsWith('special-update-')) {
         data['id'] = id.slice('special-update-'.length);
