@@ -9,6 +9,7 @@ import st from './settings.js'
 export default class Map {
     static map = null;
     static marker = null;
+    static active = null;
     static position = null;
     static zoom = null;
     static block_size = null;
@@ -29,6 +30,16 @@ export default class Map {
     static init = () => {
         this.map = L.map('leaflet').fitWorld();
         this.marker = L.marker([0, 0]).addTo(this.map);
+        this.active = L.marker([
+            0.0],
+            {
+                icon: L.icon({
+                    iconUrl: 'images/marker.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 29],
+                }),
+            }
+        );
         const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'

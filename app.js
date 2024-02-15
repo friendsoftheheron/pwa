@@ -353,7 +353,6 @@ const logLab = (id) => {
                     if (res.hasOwnProperty('rating')) {
                         rateAdventure(res);
                     }
-                    console.warn(res);
                     break;
                 case 2:
                     color = 'orange';
@@ -633,7 +632,6 @@ const init = () => {
 
     // Make sure there is a decent json string in the filter localstorage
     try {
-        console.warn('filter', localStorage.getItem(config.filters_key))
         if (!JSON.parse(localStorage.getItem(config.filters_key))) {
             throw new Error('Filter is not set');
         }
@@ -1048,6 +1046,18 @@ document.addEventListener('change', (e) => {
                 .getDetail(e.target.id.slice(8)) // Remove the first 8 characters
                 .then(lab => Labs.showDetail(lab))
             ;
+        }
+        if (e.target.checked) {
+            const active = Labs.labs.filter(l => l.id === e.target.id.slice(8));
+            if (active.length) {
+                Map.active.setLatLng([
+                    active[0].location_latitude,
+                    active[0].location_longitude
+                ]);
+                Map.map.addLayer(Map.active);
+            }
+        } else {
+            Map.map.removeLayer(Map.active);
         }
     }
 
