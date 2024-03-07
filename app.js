@@ -336,6 +336,13 @@ const logLab = (id) => {
                     color = 'yellow';
                     const html = '' +
                         (res.JournalImageUrl ? '<img src="' + res.JournalImageUrl + '" />' : '') +
+                        (res.JournalVideoYouTubeId ?
+                            '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' +
+                            res.JournalVideoYouTubeId +
+                            '"></iframe></div>' +
+                            '<div style="width:1000px;"></div>' : // Force video width to maxWidth
+                            ''
+                        ) +
                         (res.JournalMessage ? res.JournalMessage.replace('\n', '<br />') : '') +
                         '';
                     du.setInnerHtml(

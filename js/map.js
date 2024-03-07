@@ -48,33 +48,40 @@ export default class Map {
 
         L.Control.Center = L.Control.extend({
             onAdd: function(map) {
-                this.center_img = L.DomUtil.create('img');
-                this.center_img.setAttribute('id', 'center_img');
-                this.center_img.src = './images/center.png';
+                this.center_div = L.DomUtil.create('div');
+                this.center_div.setAttribute('id', 'center_div');
+                this.center_div.src = './images/center.png';
 
-                L.DomEvent.on(this.center_img, 'dblclick', (e) => {
+                L.DomEvent.on(this.center_div, 'dblclick', (e) => {
                     L.DomEvent.stopPropagation(e);
                 });
 
-                L.DomEvent.on(this.center_img, 'click', (e) => {
+                L.DomEvent.on(this.center_div, 'click', (e) => {
                     Map.centerMap();
+                    this.center_div.classList.add('clicked');
                     if (Map.down_timer) {
                         window.clearTimeout(Map.down_timer)
+                        this.center_div.classList.remove('clicked');
                         Map.down_timer = false;
                         du.setElementValue(
                             'center_position',
                             !du.getElementValue('center_position')
                         );
+                        console.log('center_position', du.getElementValue('center_position'));
+
                     } else {
                         Map.down_timer = window.setTimeout(
-                            () => { Map.down_timer = false; },
-                            this.down_timeout
+                            () => {
+                                this.center_div.classList.remove('clicked');
+                                Map.down_timer = false;
+                            },
+                            Map.down_timeout
                         );
                     }
                     return false;
                 });
 
-                return this.center_img;
+                return this.center_div;
             },
 
             onRemove: function(map) {

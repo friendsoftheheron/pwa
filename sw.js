@@ -13,6 +13,8 @@ const assets = [
     './images/balloon.png',
     './images/balloon-cloud.png',
     './images/center.png',
+    './images/center_ck.png',
+    './images/center_cl.png',
     './images/compass.png',
     './images/desert.png',
     './images/needle.png',

@@ -364,12 +364,23 @@ li {
     background-color: var(--sky);
 }
 
-#center_position ~ * #center_img {
+#center_position ~ * #center_div {
     opacity: 0.8;
     width: 2.5rem;
+    height: 2.5rem;
+    background-image: url("../images/center.png");
+    background-size: cover;
 }
-#center_position:checked ~ * #center_img {
+
+#center_position ~ * #center_div.clicked,
+#center_position:checked ~ * #center_div.clicked {
+    background-image: url("../images/center_cl.png");
+}
+
+#center_position:checked ~ * #center_div
+{
     animation: rotate 15s linear infinite;
+    background-image: url("../images/center_ck.png");
 }
 @keyframes rotate {
     0% {  transform: rotate(0deg); }
@@ -459,6 +470,7 @@ div.friends-desc {
     grid-column: 2 / 4;
     font-size: 0.84rem;
     line-height: 0.924rem;
+    margin-top: -0.3rem;
     overflow: hidden;
 }
 
@@ -552,6 +564,24 @@ div.friends-desc {
 
 input.details:checked ~ .lab {
     height: auto;
+}
+
+.video:not(:empty) {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
+.video iframe,
+.video object,
+.video embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
 
 [data-distance] .answer input,
@@ -842,15 +872,20 @@ input.details:checked ~ .border-yellow .title::before {
     color: var(--dark-blue);
 }
 
-.answer + .journal{
+.answer + .journal {
     margin-top: 0.3rem;
     margin-bottom: 2rem;
+    padding-bottom: 0.3rem;
 }
 
 .journal img {
     background-image: url("../images/balloon.png");
     background-size: cover;
     height: auto;
+    width: calc(100% - 0.2rem);
+}
+
+.journal .video {
     width: calc(100% - 0.2rem);
 }
 

@@ -390,7 +390,15 @@ export default class Labs {
         du.setInnerHtmlByQuery('.ratings-average', lab.ratings_average, elem);
         du.setInnerHtmlByQuery('.ratings-total-count', lab.ratings_total_count, elem);
         du.setInnerHtmlByQuery('.themes', lab.theme_formatted, elem);
-
+        if ('' !== lab.description_video_you_tube_id) {
+            du.setInnerHtmlByQuery(
+                '.video',
+                '<iframe src="https://www.youtube-nocookie.com/embed/' +
+                lab.description_video_you_tube_id +
+                '"></iframe></div>',
+                elem
+            );
+        }
         if (lab.journal) {
             elem.querySelector('.journal').classList.remove('hidden');
         }
