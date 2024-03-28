@@ -411,7 +411,15 @@ export default class Labs {
             select && lab.choices.split('\n').forEach(x => {
                 option = document.createElement('option');
                 option.textContent = x;
-                option.value = x.replace(/\s/g, '').toLowerCase();
+                option.value = x
+                    .replace(/\s/g, '')
+                    .toLowerCase()
+                    .replace('–', '-') // U+2013
+                    .replace('’', "'") // U+2019
+                    .replace('“', '"') // U+201C
+                    .replace('”', '"') // U+201D
+                    //.replace('„', '"') // U+201E The Yanks probably don't recognise these as double quotes
+                ;
                 option.selected = option.value === lab.completion_code;
                 select.appendChild(option);
             })
