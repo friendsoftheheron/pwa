@@ -446,9 +446,10 @@ const showHref = (href) => {
         .getData(data)
         .then(res => du.setInnerHtml(
             'page',
+            '<input id="page-checkbox" class="hidden" type="checkbox" />' +
             '<h2 data-i18n-key="' +
                 ('data-'+page).toLowerCase().replace(/(\s|_|-)+/g, '-') +
-            '">' + du.htmlTitle(page) + '</h2>' +
+            '">' +  du.htmlTitle(page) + '</h2>' +
             (('json' === extension) ? '<div class="table-navigation"></div>' : '') +
             du.htmlFromData(res) +
             (('json' === extension) ? '<div class="table-navigation"></div>' : '')

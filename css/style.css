@@ -546,10 +546,32 @@ div.friends-desc {
     background-color: var(--medium-blue);
     border: 1px solid var(--dark-blue);
     border-radius: 3px;
+    height: 1rem;
+    display: block;
 }
 .bar.max {
     background-color: var(--orange);
-    border: 1px solid var(--orange);
+    border: 1px solid var(--dark-orange);
+}
+.bar.active {
+    background-color: var(--medium-blue);
+    position:relative;
+    z-index: 20;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    border-right-width: 0px;
+}
+.bar.max.active {
+    background-color: var(--orange);
+}
+.bar.active+.bar {
+    background-color: var(--light-blue);
+    margin-top: -1rem;
+    position:relative;
+    z-index: 10
+}
+.bar.active+.bar.max {
+    background-color: var(--light-orange);
 }
 
 .lab {
@@ -1132,8 +1154,10 @@ label[for="debug"] {
 input.details:checked ~ .lab div.details,
 input.details:checked ~ .lab .flag,
 #authenticated:checked ~ * .authenticated,
-#update:checked ~ * .update,
 .unauthenticated,
+#update:checked ~ * .update,
+#page-checkbox:checked ~* .page-checked,
+.page-unchecked,
 #bit-eagle:checked ~ * .filter,
 #bit-swan:checked ~ * .special,
 #debug:checked ~ * .debug,
@@ -1157,6 +1181,8 @@ input[id^="themes-"],
 input[id^="country-"],
 .authenticated,
 #authenticated:checked ~ * .unauthenticated,
+.page-checked,
+#page-checkbox:checked ~ * .page-unchecked,
 .country,
 .debug,
 .filter,

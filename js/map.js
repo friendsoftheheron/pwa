@@ -26,17 +26,31 @@ export default class Map {
         red: 3,
     }
 
-
     static init = () => {
         this.map = L.map('leaflet').fitWorld();
-        this.marker = L.marker([0, 0]).addTo(this.map);
-        this.active = L.marker([
-            0.0],
+        this.marker = L.marker(
+            [0, 0],
             {
                 icon: L.icon({
-                    iconUrl: 'images/marker.png',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 29],
+                    iconUrl: 'images/svg/marker-blue.svg',
+                    shadowUrl: 'images/svg/marker-shadow.png',
+                    iconSize: [25, 41],
+                    shadowSize: [41, 41],
+                    iconAnchor: [12, 41],
+                    shadowAnchor: [13, 41],
+                }),
+            }
+        ).addTo(this.map);
+        this.active = L.marker(
+            [0.0],
+            {
+                icon: L.icon({
+                    iconUrl: 'images/svg/marker-orange.svg',
+                    shadowUrl: 'images/svg/marker-shadow.png',
+                    iconSize: [25, 41],
+                    shadowSize: [41, 41],
+                    iconAnchor: [12, 41],
+                    shadowAnchor: [13, 41],
                 }),
             }
         );
