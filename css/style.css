@@ -1020,7 +1020,7 @@ input[id^="disable-"]:checked + * + * > * {
 
 
 .compass {
-    background-image: url("../images/compass.png");
+    background-image: url("../images/svg/compass.svg");
     background-size: cover;
     width: 3rem;
     height: 3rem;
@@ -1033,7 +1033,7 @@ input[id^="disable-"]:checked + * + * > * {
 }
 .compass::before {
     content: "";
-    background-image: url("../images/needle.png");
+    background-image: url("../images/svg/needle.svg");
     background-size: cover;
     width: 100%;
     height: 100%;

@@ -30,7 +30,18 @@ export default class Labs {
                     if ('r' === p[0]) {
                         p[0] = 'referrer';
                     }
-                    if (acc.hasOwnProperty(decodeURIComponent(p[0]))) {
+                    // Only override block_size if its already given
+                    if ('block_size' === p[0]) {
+                        if (
+                            acc.hasOwnProperty('block_size') &&
+                            !acc.hasOwnProperty('special')
+                        ) {
+                            acc.block_size = +p[1];
+                        }
+                    } else if (
+                        ('special' === p[0]) &&
+                        acc.hasOwnProperty(decodeURIComponent(p[0]))
+                    ) {
                         acc[decodeURIComponent(p[0])] += ';' + decodeURIComponent(p[1])
                     } else {
                         acc[decodeURIComponent(p[0])] = decodeURIComponent(p[1])

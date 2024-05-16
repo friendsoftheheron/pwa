@@ -1,0 +1,120 @@
+<svg viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="stroke-linecap: round;">
+<style>
+	text {
+		fill:#f9fcff;
+		font-family: "Noto Sans", Arial, Helvetica, sans-serif;
+		font-size: 6px;
+		font-weight: bold;
+		stroke-width: 0;
+		text-anchor: middle;
+	}
+	use {
+		stroke: #99d3df;
+	}
+	.small {
+		fill: #99d3df;
+		font-size: 3.5px;
+	}
+	.orange {
+	  fill:#f15927;
+	  stroke:#f15927;
+}
+	.white {
+		fill:#f9fcff;
+		stroke:#f9fcff;
+	}
+</style>
+
+<circle r="24" cx="24" cy="24" fill="#00334e" />
+ 
+<g id="thick"><line  x1="24" y1="1" x2="24" y2="5" /></g>
+<g id="thin"><line  x1="24" y1="1" x2="24" y2="3" stroke="#00708e" stroke-width="0.5" /></g>
+
+ 
+<text x="24" y="11" class="orange">N</text>
+<text x="37" y="24" transform="rotate(90 37 24)">E</text>	
+<text x="24" y="37" transform="rotate(180 24 37)">Z</text>	
+<text x="11" y="24" transform="rotate(270 11 24)">W</text>
+
+<text x="34" y="14" class="small" transform="rotate(45 34 14)">NE</text>	
+<text x="34" y="34" class="small" transform="rotate(135 34 34)">SE</text>	
+<text x="14" y="34" class="small" transform="rotate(225 14 34)">SW</text>	
+<text x="14" y="14" class="small" transform="rotate(315 14 14)">NW</text>	
+
+	
+<use href="#thick" class="orange" transform="rotate(0, 24, 24)" />	
+<use href="#thick" class="white" transform="rotate(270, 24, 24)" />	
+<use href="#thick" class="white" transform="rotate(90, 24, 24)" />	
+<use href="#thick" class="white" transform="rotate(180, 24, 24)" />	
+
+<use href="#thick" transform="rotate(45, 24, 24)" />	
+<use href="#thick" transform="rotate(135, 24, 24)" />	
+<use href="#thick" transform="rotate(225, 24, 24)" />	
+<use href="#thick" transform="rotate(315, 24, 24)" />	
+
+
+<use href="#thin" transform="rotate(5, 24, 24)" />	
+<use href="#thin" transform="rotate(10, 24, 24)" />	
+<use href="#thin" transform="rotate(15, 24, 24)" />	
+<use href="#thin" transform="rotate(20, 24, 24)" />	
+<use href="#thin" transform="rotate(25, 24, 24)" />	
+<use href="#thin" transform="rotate(30, 24, 24)" />	
+<use href="#thin" transform="rotate(35, 24, 24)" />	
+<use href="#thin" transform="rotate(40, 24, 24)" />	
+<use href="#thin" transform="rotate(50, 24, 24)" />	
+<use href="#thin" transform="rotate(55, 24, 24)" />	
+<use href="#thin" transform="rotate(60, 24, 24)" />	
+<use href="#thin" transform="rotate(65, 24, 24)" />	
+<use href="#thin" transform="rotate(70, 24, 24)" />	
+<use href="#thin" transform="rotate(75, 24, 24)" />	
+<use href="#thin" transform="rotate(80, 24, 24)" />	
+<use href="#thin" transform="rotate(85, 24, 24)" />	
+<use href="#thin" transform="rotate(95, 24, 24)" />	
+<use href="#thin" transform="rotate(100, 24, 24)" />	
+<use href="#thin" transform="rotate(105, 24, 24)" />	
+<use href="#thin" transform="rotate(110, 24, 24)" />	
+<use href="#thin" transform="rotate(115, 24, 24)" />	
+<use href="#thin" transform="rotate(120, 24, 24)" />	
+<use href="#thin" transform="rotate(125, 24, 24)" />	
+<use href="#thin" transform="rotate(130, 24, 24)" />	
+<use href="#thin" transform="rotate(140, 24, 24)" />	
+<use href="#thin" transform="rotate(145, 24, 24)" />	
+<use href="#thin" transform="rotate(150, 24, 24)" />	
+<use href="#thin" transform="rotate(155, 24, 24)" />	
+<use href="#thin" transform="rotate(160, 24, 24)" />	
+<use href="#thin" transform="rotate(165, 24, 24)" />	
+<use href="#thin" transform="rotate(170, 24, 24)" />	
+<use href="#thin" transform="rotate(175, 24, 24)" />	
+<use href="#thin" transform="rotate(185, 24, 24)" />	
+<use href="#thin" transform="rotate(190, 24, 24)" />	
+<use href="#thin" transform="rotate(195, 24, 24)" />	
+<use href="#thin" transform="rotate(200, 24, 24)" />	
+<use href="#thin" transform="rotate(205, 24, 24)" />	
+<use href="#thin" transform="rotate(210, 24, 24)" />	
+<use href="#thin" transform="rotate(215, 24, 24)" />	
+<use href="#thin" transform="rotate(220, 24, 24)" />	
+<use href="#thin" transform="rotate(230, 24, 24)" />	
+<use href="#thin" transform="rotate(235, 24, 24)" />	
+<use href="#thin" transform="rotate(240, 24, 24)" />	
+<use href="#thin" transform="rotate(245, 24, 24)" />	
+<use href="#thin" transform="rotate(250, 24, 24)" />	
+<use href="#thin" transform="rotate(255, 24, 24)" />	
+<use href="#thin" transform="rotate(260, 24, 24)" />	
+<use href="#thin" transform="rotate(265, 24, 24)" />	
+<use href="#thin" transform="rotate(275, 24, 24)" />	
+<use href="#thin" transform="rotate(280, 24, 24)" />	
+<use href="#thin" transform="rotate(285, 24, 24)" />	
+<use href="#thin" transform="rotate(290, 24, 24)" />	
+<use href="#thin" transform="rotate(295, 24, 24)" />	
+<use href="#thin" transform="rotate(300, 24, 24)" />	
+<use href="#thin" transform="rotate(305, 24, 24)" />	
+<use href="#thin" transform="rotate(310, 24, 24)" />	
+<use href="#thin" transform="rotate(320, 24, 24)" />	
+<use href="#thin" transform="rotate(325, 24, 24)" />	
+<use href="#thin" transform="rotate(330, 24, 24)" />	
+<use href="#thin" transform="rotate(335, 24, 24)" />	
+<use href="#thin" transform="rotate(340, 24, 24)" />	
+<use href="#thin" transform="rotate(345, 24, 24)" />	
+<use href="#thin" transform="rotate(350, 24, 24)" />	
+<use href="#thin" transform="rotate(355, 24, 24)" />	
+</svg>

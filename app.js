@@ -737,13 +737,13 @@ const main = () => {
             const hash = location.hash
             if (hash) {
                 if (hash.startsWith('#id-')) {
-                    Labs.openLab(hash.slice(4))
-                    return
+                    Labs.openLab(hash.slice(4));
+                    return;
                 }
                 const elem = document.getElementById('hash');
                 elem.setAttribute('href', hash)
                 du.dispatchEvent(elem, 'click');
-                return
+                return;
             }
             Promise.all([
                 st.getSetting('username'),
