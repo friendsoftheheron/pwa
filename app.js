@@ -336,6 +336,13 @@ const logLab = (id) => {
                     color = 'yellow';
                     const html = '' +
                         (res.JournalImageUrl ? '<img src="' + res.JournalImageUrl + '" />' : '') +
+                        (res.JournalVideoYouTubeId ?
+                            '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' +
+                            res.JournalVideoYouTubeId +
+                            '"></iframe></div>' +
+                            '<div style="width:1000px;"></div>' : // Force video width to maxWidth
+                            ''
+                        ) +
                         (res.JournalMessage ? res.JournalMessage.replace('\n', '<br />') : '') +
                         '';
                     du.setInnerHtml(
@@ -439,9 +446,10 @@ const showHref = (href) => {
         .getData(data)
         .then(res => du.setInnerHtml(
             'page',
+            '<input id="page-checkbox" class="hidden" type="checkbox" />' +
             '<h2 data-i18n-key="' +
                 ('data-'+page).toLowerCase().replace(/(\s|_|-)+/g, '-') +
-            '">' + du.htmlTitle(page) + '</h2>' +
+            '">' +  du.htmlTitle(page) + '</h2>' +
             (('json' === extension) ? '<div class="table-navigation"></div>' : '') +
             du.htmlFromData(res) +
             (('json' === extension) ? '<div class="table-navigation"></div>' : '')
@@ -729,13 +737,13 @@ const main = () => {
             const hash = location.hash
             if (hash) {
                 if (hash.startsWith('#id-')) {
-                    Labs.openLab(hash.slice(4))
-                    return
+                    Labs.openLab(hash.slice(4));
+                    return;
                 }
                 const elem = document.getElementById('hash');
                 elem.setAttribute('href', hash)
                 du.dispatchEvent(elem, 'click');
-                return
+                return;
             }
             Promise.all([
                 st.getSetting('username'),

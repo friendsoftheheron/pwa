@@ -228,7 +228,13 @@ export default class DomUtils {
                 'class="table-from-array' + ('bar' in data[0] ? ' table-bar' : '') + '"' +
                 Object.keys(data[0]).filter(k=>'!'===k[0]).map(k=>` data-${k.slice(1)}="${data[0][k]}"`).join('') +
             '>' +
-            '<tr>' + Object.keys(data[0]).filter(x=>'!'!==x[0]).map((x) => `<th data-i18n-key="${('data-'+x).toLowerCase().replace(/(\s|_|-)+/g, '-')}">${DomUtils.htmlTitle(x)}</th>`).join('\n') + '</tr>' +
+            '<tr>' +
+                Object
+                    .keys(data[0])
+                    .filter(x=>'!'!==x[0])
+                    .map(x => `<th data-i18n-key="${('data-'+x).toLowerCase().replace(/(\s|_|-)+/g, '-')}">${DomUtils.htmlTitle(x)}</th>`)
+                    .join('\n') +
+            '</tr>' +
             data.map(x => '<tr>' + Object.keys(x).filter(k=>'!'!==k[0]).map(k=>x[k]).map(
                 x => `<td${!isNaN(x)||x.startsWith('>>_')?' style="text-align:right"':''}>${isNaN(x)&&x.startsWith('>>_')?x.slice(3):x}</td>`
             ).join('') + '</tr>').join('') +

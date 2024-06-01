@@ -30,7 +30,18 @@ export default class Labs {
                     if ('r' === p[0]) {
                         p[0] = 'referrer';
                     }
-                    if (acc.hasOwnProperty(decodeURIComponent(p[0]))) {
+                    // Only override block_size if its already given
+                    if ('block_size' === p[0]) {
+                        if (
+                            acc.hasOwnProperty('block_size') &&
+                            !acc.hasOwnProperty('special')
+                        ) {
+                            acc.block_size = +p[1];
+                        }
+                    } else if (
+                        ('special' === p[0]) &&
+                        acc.hasOwnProperty(decodeURIComponent(p[0]))
+                    ) {
                         acc[decodeURIComponent(p[0])] += ';' + decodeURIComponent(p[1])
                     } else {
                         acc[decodeURIComponent(p[0])] = decodeURIComponent(p[1])
@@ -390,7 +401,15 @@ export default class Labs {
         du.setInnerHtmlByQuery('.ratings-average', lab.ratings_average, elem);
         du.setInnerHtmlByQuery('.ratings-total-count', lab.ratings_total_count, elem);
         du.setInnerHtmlByQuery('.themes', lab.theme_formatted, elem);
-
+        if ('' !== lab.description_video_you_tube_id) {
+            du.setInnerHtmlByQuery(
+                '.video',
+                '<iframe src="https://www.youtube-nocookie.com/embed/' +
+                lab.description_video_you_tube_id +
+                '"></iframe></div>',
+                elem
+            );
+        }
         if (lab.journal) {
             elem.querySelector('.journal').classList.remove('hidden');
         }
@@ -403,7 +422,15 @@ export default class Labs {
             select && lab.choices.split('\n').forEach(x => {
                 option = document.createElement('option');
                 option.textContent = x;
-                option.value = x.replace(/\s/g, '').toLowerCase();
+                option.value = x
+                    .replace(/\s/g, '')
+                    .toLowerCase()
+                    .replace('–', '-') // U+2013
+                    .replace('’', "'") // U+2019
+                    .replace('“', '"') // U+201C
+                    .replace('”', '"') // U+201D
+                    //.replace('„', '"') // U+201E The Yanks probably don't recognise these as double quotes
+                ;
                 option.selected = option.value === lab.completion_code;
                 select.appendChild(option);
             })

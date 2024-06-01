@@ -1,5 +1,7 @@
 :root {
     --orange: #f15927;
+    --light-orange: #f69879;
+    --dark-orange: #903517;
     --sky: #cdeaf1;
     --light-blue: #99d3df;
     --medium-blue: #00708e;
@@ -15,10 +17,7 @@
 
     --accent-color: var(--medium-blue);
 
-
     --max-width: 800px;
-
-
 
     --disabled-color: #AAA;
     --disabled-background: #F5F5F5;
