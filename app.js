@@ -57,8 +57,8 @@ const updateUser = () => new Promise((resolve) => {
             config.level = res.membership_level;
             config.level_formatted = res.level_formatted;
             config.translator = res.translator;
-	        config.translator_formatted = res.translator_formatted;
-	        du.setChecked('authenticated', res.authenticated);
+            config.translator_formatted = res.translator_formatted;
+            du.setChecked('authenticated', res.authenticated);
             du.setChecked('update', res.update);
 
             if (config.level & 1) {
@@ -199,7 +199,7 @@ const changedPosition = (position, type='?') => {
         Location.formatBearing(position.coords.heading || 0)
     );
     du.setInnerHtml('timestamp', Location.formatTimestamp(position.timestamp));
-	    
+        
     du.setInnerHtml(
         'compass-style',
         `.compass{transform: rotate(-${position.coords.heading||0}deg);}`
@@ -810,13 +810,13 @@ document.addEventListener('click', (e) => {
                         .then(([friends, referrers]) => {
                             du.setInnerHtml('friends-container', friends);
                             du.setSelectOptions(
-								'friend-username-select', 
-								[
-									{' ': i18n.translations['friends-select-user'] || 'Select user'},
-									...referrers,
-									{'': (i18n.translations['friends-select-user-other'] || 'Other') + ':'}
-								]
-							);
+                                'friend-username-select', 
+                                [
+                                    {' ': i18n.translations['friends-select-user'] || 'Select user'},
+                                    ...referrers,
+                                    {'': (i18n.translations['friends-select-user-other'] || 'Other') + ':'}
+                                ]
+                            );
                             du.dispatchEvent('friend-username-select', 'change');
                             du.setChecked('symbol-page');
                         });
@@ -922,16 +922,14 @@ document.addEventListener('click', (e) => {
         ) {
             return updateAdventure(target.id);
         }
-
         if (
-			(target.classList.contains('log-button')) && (
-				target.parentElement.getElementsByTagName('input').value ||
-				target.parentElement.getElementsByTagName('select').value
-			)
-		) {
-			return logLab(target.dataset.id);
-        }
-
+            (target.classList.contains('log-button')) && (
+                target.parentElement.getElementsByTagName('input')[0].value ||
+                target.parentElement.getElementsByTagName('select')[0].value
+            )
+        ) {
+            return logLab(target.dataset.id);
+        } 
         switch(target.id) {
             case 'give-friend':
                 Labs
