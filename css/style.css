@@ -1,5 +1,4 @@
 @import url('../css/vars.css');
-@import url('../css/vars.css');
 @import url('../css/dual-range.css');
 @import url('../css/ratings.css');
 @import url('../css/resize.css');
@@ -116,7 +115,7 @@ li {
 
 
 .background-sky { background-color: var(--sky); }
-.border-green {	border-color: var(--green); }
+.border-green {    border-color: var(--green); }
 .border-red { border-color: var(--red); }
 .border-yellow { border-color: var(--yellow); }
 .border-sky { border-color: var(--sky); }
@@ -130,7 +129,7 @@ li {
 .blur { filter: blur(0.25rem); }
 .clear { clear: both; display: block; }
 .colon:after { content: ':'; }
-.flex {	display: flex; }
+.flex {    display: flex; }
 .line-through { text-decoration: line-through; }
 .relative { position: relative; }
 .w100 { width: 100% }
@@ -546,8 +545,11 @@ div.friends-desc {
     background-color: var(--medium-blue);
     border: 1px solid var(--dark-blue);
     border-radius: 3px;
-    height: 1rem;
     display: block;
+    height: 1rem;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    position:relative;
 }
 .bar.max {
     background-color: var(--orange);
@@ -555,18 +557,20 @@ div.friends-desc {
 }
 .bar.active {
     background-color: var(--medium-blue);
-    position:relative;
+    height: calc(1rem - 2px);
     z-index: 20;
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
-    border-right-width: 0px;
+    border-bottom-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
 }
 .bar.max.active {
     background-color: var(--orange);
 }
 .bar.active+.bar {
     background-color: var(--light-blue);
-    margin-top: -1rem;
+    margin-top: calc(+1px - 1.1rem);
     position:relative;
     z-index: 10
 }
@@ -1127,14 +1131,19 @@ label[for="debug"] {
 #symbol-map:checked ~ * label[for="symbol-map"],
 #symbol-settings:checked ~ * label[for="symbol-settings"],
 #translate:checked ~ * label[for="translate"],
+#bit-bat:checked ~ * label[for="bit-bat"],
+#bit-bee:checked ~ * label[for="bit-bee"],
+#bit-butterfly:checked ~ * label[for="bit-butterfly"],
 #bit-dodo:checked ~ * label[for="bit-dodo"],
 #bit-dove:checked ~ * label[for="bit-dove"],
+#bit-dragon:checked ~ * label[for="bit-dragon"],
 #bit-eagle:checked ~ * label[for="bit-eagle"],
 #bit-flamingo:checked ~ * label[for="bit-flamingo"],
 #bit-goose:checked ~ * label[for="bit-goose"],
 #bit-owl:checked ~ * label[for="bit-owl"],
 #bit-parrot:checked ~ * label[for="bit-parrot"],
 #bit-peacock:checked ~ * label[for="bit-peacock"],
+#bit-phoenix:checked ~ * label[for="bit-phoenix"],
 #bit-rooster:checked ~ * label[for="bit-rooster"],
 #bit-swan:checked ~ * label[for="bit-swan"],
 #bit-turkey:checked ~ * label[for="bit-turkey"],

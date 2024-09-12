@@ -809,7 +809,14 @@ document.addEventListener('click', (e) => {
                         ])
                         .then(([friends, referrers]) => {
                             du.setInnerHtml('friends-container', friends);
-                            du.setSelectOptions('friend-username-select',  [...referrers,{'': 'Other:'}]);
+                            du.setSelectOptions(
+								'friend-username-select', 
+								[
+									{' ': i18n.translations['friends-select-user'] || 'Select user'},
+									...referrers,
+									{'': (i18n.translations['friends-select-user-other'] || 'Other') + ':'}
+								]
+							);
                             du.dispatchEvent('friend-username-select', 'change');
                             du.setChecked('symbol-page');
                         });
@@ -913,11 +920,16 @@ document.addEventListener('click', (e) => {
             'special-update' === target.id ||
             target.id.startsWith('special-update-')
         ) {
-            updateAdventure(target.id);
+            return updateAdventure(target.id);
         }
 
-        if (target.classList.contains('log-button')) {
-            logLab(target.dataset.id);
+        if (
+			(target.classList.contains('log-button')) && (
+				target.parentElement.getElementsByTagName('input').value ||
+				target.parentElement.getElementsByTagName('select').value
+			)
+		) {
+			return logLab(target.dataset.id);
         }
 
         switch(target.id) {
