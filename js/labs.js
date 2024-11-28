@@ -426,7 +426,9 @@ export default class Labs {
                     .replace(/\s/g, '')
                     .toLowerCase()
                     .replace('–', '-') // U+2013
+                    .replace('‘', "'") // U+2018
                     .replace('’', "'") // U+2019
+                    //.replace('‛', "'") // U+201B Nope, not the 9 quotation mark
                     .replace('“', '"') // U+201C
                     .replace('”', '"') // U+201D
                     //.replace('„', '"') // U+201E The Yanks probably don't recognise these as double quotes
