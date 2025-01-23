@@ -333,6 +333,11 @@ const logLab = (id) => {
             switch (res.Result) {
                 case 0:
                 case 3:
+                    const geocache = document.querySelector('[href="#id-'+res.id+'"]');
+                    if (geocache) {
+                        geocache.parentElement.classList.add('logged')
+                    }
+
                     color = 'yellow';
                     const html = '' +
                         (res.JournalImageUrl ? '<img src="' + res.JournalImageUrl + '" />' : '') +

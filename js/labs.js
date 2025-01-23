@@ -127,6 +127,10 @@ export default class Labs {
     }
 
     static checkLabs = (labs, source) => {
+		if (! labs instanceof Array) { 
+			console.warning('checkLabs', labs, source);
+			return; 
+		}
         document.dispatchEvent(
             new MessageEvent(
                 'message',
@@ -190,7 +194,7 @@ export default class Labs {
     }
 
     static refresh = () => new Promise((resolve, reject) => {
-        const labs = this.labs = this.labs.filter(lab => lab.source.includes('id'));
+        const labs = this.labs && this.labs.filter(lab => lab.source.includes('id'));
         this.clear();
         this.labs = labs;
         Promise
@@ -457,6 +461,11 @@ export default class Labs {
                     );
                 }
                 this.showDetail(lab);
+                const no_labs = document.getElementById('details-no-labs');
+                if (no_labs) {
+                    no_labs.nextElementSibling.remove();
+                    no_labs.remove();
+                }
                 du.setChecked('symbol-labs');
                 const elem = document.getElementById('details-'+id);
                 if (elem) {
@@ -471,7 +480,7 @@ export default class Labs {
     static logLab = (id, code) => new Promise((resolve, reject) => {
         Labs
             .getData({id: id, code: code})
-            .then(x => resolve(x))
+            .then(x => resolve({ ...x, ...{'id': id}}))
             .catch(err => reject(err))
     })
 }

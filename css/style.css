@@ -353,6 +353,13 @@ li {
     margin-left: 0.0rem;
 }
 
+.plain a { text-decoration: none; }
+.plain a:link { color: var(--black); }
+.plain a:visited { color: var(--dark-blue); }
+.plain a:hover { color: var(--orange); }
+.plain a:active { color: var(--light-blue); }
+
+
 #leaflet,
 #map {
     position: absolute;
@@ -705,6 +712,7 @@ input.details:checked ~ .lab .image {
 }
 
 .border-green .title::before,
+.border-orange .title::before,
 .border-red .title::before,
 .border-yellow .title::before {
     position: absolute;
@@ -715,6 +723,10 @@ input.details:checked ~ .lab .image {
 .border-green .title::before{
     color: var(--green);
     content: '✔\fe0e'; /* convert to character for iOS */
+}
+.border-orange .title::before{
+    color: var(--orange);
+    content: '⌘';
 }
 .border-red .title::before{
     color: var(--red);
@@ -748,7 +760,8 @@ input.details:checked ~ .lab .image {
     content: '⇆'
 }
 
-.lab .adventure {
+.lab .adventure,
+.lab .stages {
     font-size: 0.84rem;
     line-height: 0.924rem;
     white-space: nowrap;
@@ -827,10 +840,12 @@ input.details:checked ~ .lab [id^="country-"]:checked + .country {
 }
 
 input.details:checked ~ .lab .title,
-input.details:checked ~ .lab .adventure {
+input.details:checked ~ .lab .adventure,
+input.details:checked ~ .lab .stages {
     padding-right: 0.8rem;
 }
 input.details:checked ~ .border-green .title::before,
+input.details:checked ~ .border-orange .title::before,
 input.details:checked ~ .border-red .title::before,
 input.details:checked ~ .border-yellow .title::before {
     position: absolute;
@@ -858,7 +873,6 @@ input.details:checked ~ .border-yellow .title::before {
     grid-column: 4/5;
 }
 
-
 .lab .description {
     display: block;
     font-size: 0.84rem;
@@ -868,6 +882,38 @@ input.details:checked ~ .border-yellow .title::before {
     margin-bottom: 0.5rem;
     position: relative;
 }
+
+
+.lab .description ul {
+	margin-left: -0.5rem;
+	padding-top: 0.3rem;
+}
+.lab .description li {
+	padding-left: 0.2rem;
+}
+
+/* No support for marker content on safari
+.lab .description li::marker {
+    color: var(--red);
+	content: '✘';
+}
+.lab .description li.logged::marker {
+    color: var(--green);
+	content: '✔\fe0e';
+}
+*/
+.lab .description li {
+    list-style-type: none;
+    margin-left: 1rem;
+}
+.lab .description li::before {
+	content: '✘';
+    margin-right: 0.2rem;
+}
+.lab .description li.logged::before {
+	content: '✔\fe0e';
+}
+
 
 .lab .challenge {
     display: block;
@@ -1172,6 +1218,7 @@ input.details:checked ~ .lab .flag,
 #debug:checked ~ * .debug,
 #translate:checked ~ * .translate,
 [id^="themes-"]:checked + * .tag,
+.border-orange.lab .stages,
 .block
 {
     display: block;
@@ -1192,6 +1239,10 @@ input[id^="country-"],
 #authenticated:checked ~ * .unauthenticated,
 .page-checked,
 #page-checkbox:checked ~ * .page-unchecked,
+.border-orange .adventure,
+.border-orange .answer,
+.border-orange .challenge,
+.lab .stages,
 .country,
 .debug,
 .filter,

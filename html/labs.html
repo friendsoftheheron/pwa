@@ -6,9 +6,10 @@
         <label for="details-${id}">
             <div for="details-${id}" class="title dark-blue"><span class="${linear_class}">${_nr}</span>) ${title}</div>
         </label>
-        <div class="flex">
-            <label for="details-${id}" class="adventure">${adventure}</label>
-            <label for="country-${id}" class="flex right">
+        <div class="flex plain">
+           <a href="#id-${adventure_id}" class="adventure">${adventure}</a>
+           <label for="details-${id}" class="stages">${stages} <span data-i18n-key="labs-stages">locations</label>
+           <label for="country-${id}" class="flex right">
                 <input id="country-${id}" type="checkbox" />
                 <div class="country">{$country}</div>
                 <div class="flag"></div>

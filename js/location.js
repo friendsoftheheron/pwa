@@ -1,6 +1,7 @@
 export default class Location {
     constructor(latitude = null, longitude = null) {
         if (null === latitude) {
+            // Howland Island
             this._latitude = 0.806667;
             this._longitude = -176.616389;
         }
