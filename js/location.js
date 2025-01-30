@@ -45,8 +45,14 @@ export default class Location {
     }
 
     toString(decimals = 3) {
-        return (this.latitude < 0 ? 'S' : 'N') + this._f2dmm(this.latitude, decimals) +
-            ' ' + (this.longitude < 0 ? 'W' : 'E') + this._f2dmm(this.longitude, decimals);
+        return (
+            (this.latitude >= -90) && (this.latitude <= 90) &&
+            (this.longitude >= -360) && (this.longitude <= 360)
+        ) ? (
+            (this.latitude < 0 ? 'S' : 'N') + this._f2dmm(this.latitude, decimals) +
+            ' ' +
+            (this.longitude < 0 ? 'W' : 'E') + this._f2dmm(this.longitude, decimals)
+        ) : '- -';
     }
 
     // https://www.movable-type.co.uk/scripts/latlong.html
