@@ -908,7 +908,8 @@ input.details:checked ~ .border-yellow .title::before {
 }
 .lab .description li::before {
 	content: '✘';
-    margin-right: 0.2rem;
+    display: inline-block;
+    width: 1rem;
 }
 .lab .description li.logged::before {
 	content: '✔\fe0e';

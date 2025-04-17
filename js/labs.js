@@ -430,6 +430,7 @@ export default class Labs {
                     .replace(/\s/g, '')
                     .toLowerCase()
                     .replace('–', '-') // U+2013
+                    .replace('—', '-') // U+2014
                     .replace('‘', "'") // U+2018
                     .replace('’', "'") // U+2019
                     //.replace('‛', "'") // U+201B Nope, not the 9 quotation mark

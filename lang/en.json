@@ -111,7 +111,6 @@
     "help-map-move": "When moving over a significant distance, new adventures are loaded.",
     "help-map-zoom": "Moving and zooming the map also does load other adventures.",
     "help-notification-click": "Clicking on the notification will open the corresponding lab.",
-    "help-notification-disrance": "(/)[Notif. dist.] is the distance from the geofence\r\nat which a notification will be triggered.\r\nWhen set to 0, no notifications will be given.",
     "help-notification-distance": "(/)[Notif. dist.] is the distance from the geofence at which a notification will be triggered.",
     "help-notification-open": "Due to limitations of progressive web apps,\r\nnotifications will only be shown when the app is open.",
     "help-tips": "Tips",
