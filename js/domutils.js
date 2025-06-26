@@ -223,6 +223,27 @@ export default class DomUtils {
     }
 
 
+    static tdFromValue = (x) => {
+        let style = ''
+        if (isNaN(x)) {
+            if (x.startsWith('<<_')) {
+                style = 'left'
+            } else if (x.startsWith('><_')) {
+                style = 'center';
+            } else if (x.startsWith('<>_')) {
+                style = 'justify';
+            } else if (x.startsWith('>>_')) {
+                style = 'right';
+            }
+            if (style) {
+                x = x.slice(3);
+            }
+        } else { // Number, align right
+            style = 'right';
+        }
+        return `<td${(style ? ' style="text-align:' + style + '"' : '')}>${x}</td>`
+    }
+
     static htmlFromArray = (data) => '' +
             '<table '+
                 'class="table-from-array' + ('bar' in data[0] ? ' table-bar' : '') + '"' +
@@ -236,13 +257,13 @@ export default class DomUtils {
                     .join('\n') +
             '</tr>' +
             data.map(x => '<tr>' + Object.keys(x).filter(k=>'!'!==k[0]).map(k=>x[k]).map(
-                x => `<td${!isNaN(x)||x.startsWith('>>_')?' style="text-align:right"':''}>${isNaN(x)&&x.startsWith('>>_')?x.slice(3):x}</td>`
+                x => DomUtils.tdFromValue(x)
             ).join('') + '</tr>').join('') +
             '</table>';
         ;
     static htmlFromObject = (data) => '' +
             '<table>' +
-            Object.keys(data).map((x) => `<tr><th>${DomUtils.htmlTitle(x)}</th><td${isNaN(data[x])?'':' style="text-align:right"'}>${data[x]}</td></tr>`).join('\n') +
+            Object.keys(data).map((x) => `<tr><th>${DomUtils.htmlTitle(x)}</th>${DomUtils.tdFromValue(data[x])}</tr>`).join('\n') +
             '</table>'
         ;
 
