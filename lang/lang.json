@@ -1,4 +1,9 @@
 {
+    "cs": {
+        "flag": "🇨🇿",
+        "language": "Čeština",
+        "locale": "cs"
+    },
     "de": {
         "flag": "🇩🇪",
         "language": "Deutsch",
@@ -18,6 +23,11 @@
         "flag": "🇳🇱",
         "language": "Nederlands",
         "locale": "nl"
+    },
+    "pt": {
+        "flag": "🇵🇹",
+        "language": "Português",
+        "locale": "pt"
     },
     "sv": {
         "flag": "🇸🇪",

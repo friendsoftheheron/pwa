@@ -14,6 +14,8 @@ const MESSAGES = [];
 let SW_REGISTRATION = null;
 let HREF_CURR = '';
 let HREF_PREV = '';
+let ID_CURR = '';
+let ID_PREV = '';
 
 const send_message_to_service_worker = (data) => new Promise((resolve) => {
     console.info('send_message', data);
@@ -424,19 +426,37 @@ const postReview = () => {
 }
 
 const showJsonNavigation = () => {
+    const range = (start, stop, step) => 
+        Array.from({ length: Math.ceil((stop - start) / step) }, (_, i) => start + i * step);
     const tables = document.getElementsByClassName('table-from-array');
     const page = tables.length ? +tables[0].dataset.pgc_num || 0 : 0;
     const pages = tables.length ? +tables[0].dataset.pgt_num || 0 : 0;
-    return (HREF_PREV ? `<a href="${HREF_PREV}"><b>⏎</b></a>` : '') +
-        (pages > 1 && page > 0 ? ' &nbsp ' + [...Array(pages).keys()].map(
-            x => x+1 === page ? `${x+1}` : `<a href="${HREF_CURR}?page=${x+1}">${x+1}</a>`
-        ).join(' ') : '')
+  
+    let delta = 4;
+    const factor = 10;
+    const p = [1, pages];
+    let step = 1;
+
+    while (step < pages) {
+        p.push(...range(page, Math.min(pages, page+Math.max(0,delta)*step), +step));
+        p.push(...range(page, Math.max(1,     page-Math.max(0, delta)*step), -step));
+        step *= factor;
+        delta--;
+    }
+    return (HREF_PREV ? `<a href="${HREF_PREV}${ID_PREV ? '?id='+ID_PREV : ''}"><b>⏎</b></a>` : '') +
+        (pages > 1 && page > 0 ? ' &nbsp ' + p
+            .filter((v, i, a) => a.indexOf(v) === i)
+            .sort((a, b) => a - b)
+            .map(x => x === page ? `${x}` : `<a href="${HREF_CURR}?page=${x}${ID_CURR ? '&id='+ID_CURR : ''}">${x}</a>`)
+            .join(' ') : '')
+        ;
 }
 
 const showHref = (href) => {
     const [page, extension] = HREF_CURR.slice(1).split('.');
     const data = Object.fromEntries(new URLSearchParams(href.split('?').splice(1).join('?')));
     console.debug(page, extension, data);
+
     let key = 'html';
     switch (extension) {
         case 'json':
@@ -779,7 +799,10 @@ document.addEventListener('click', (e) => {
             }
 
             HREF_PREV = HREF_CURR === href.split('?', 1)[0] ? HREF_PREV : HREF_CURR;
+            ID_PREV   = HREF_CURR === href.split('?', 1)[0] ? ID_PREV   : ID_CURR;
             HREF_CURR = href.split('?', 1)[0];
+            ID_CURR   = Object.fromEntries(new URLSearchParams(href.split('?').splice(1).join('?'))).id;
+          
             document.getElementById('symbol-menu').checked = false;
             switch(HREF_CURR.slice(1)) {
                 case 'close':
