@@ -60,6 +60,10 @@
 <input id="bit-rooster" class="hidden" data-setting-default="true" type="checkbox" />
 <input id="bit-swan" class="hidden" data-setting-default="" type="checkbox" />
 <input id="bit-turkey" class="hidden" data-setting-default="true" type="checkbox" />
+<input id="color-dark" class="hidden" data-setting-default="" type="radio" name="color-scheme" value="dark" />
+<input id="color-darkplus" class="hidden" data-setting-default="" type="radio" name="color-scheme" value="darkplus" />
+<input id="color-light" class="hidden" data-setting-default="" type="radio" name="color-scheme" value="light" />
+<input id="color-lightplus" class="hidden" data-setting-default="" type="radio" name="color-scheme" value="lightplus" />
 <input id="translate" class="hidden" data-setting-default="" type="checkbox" />
 <header>
     <div id="menu" class="popup">Menu (loading)</div>
@@ -82,11 +86,17 @@
 </main>
 <footer>
     <div id="location" class="left">Getting Location</div>
-    <div id="timestamp">??:??:??</div>
-    <div style="float:right; margin-right:4%;">
-        <label for="debug" class="hidden">🐞</label>
-        <label for="translate" class="hidden">🐠</label>
+    <div style="float:right; margin-left: auto; white-space: nowrap; ">
+        <label
+            for="debug" class="hidden">🐞</label><label
+            for="translate" class="hidden">🐠</label>
+        <label
+            for="color-lightplus" class="theme sunhorizon debug inline-block"></label><label
+            for="color-light" class="theme sun">️</label><label
+            for="color-dark" class="theme moon"></label><label
+            for="color-darkplus" class="theme moonstars debug inline-block"></label>&nbsp;
     </div>
+    <div id="timestamp">??:??:??</div>
 </footer>
 <script type="module" src="app.js"></script>
 </body>

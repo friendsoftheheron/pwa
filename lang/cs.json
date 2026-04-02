@@ -97,6 +97,8 @@
     "paypal-period": "Trvání",
     "paypal-price": "Cena",
     "qr": "QR kód",
+    "quit": "Ukončit",
+    "scan-qr": "Naskenujte QR",
     "settings": "Settings",
     "settings-block-size": "Velikost bloku",
     "settings-debug": "Ladění",

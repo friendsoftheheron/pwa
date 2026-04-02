@@ -1,24 +1,24 @@
-import config from './js/config.js';
-import du from './js/domutils.js';
-import i18n from './js/i18n.js';
-import Labs from './js/labs.js';
-import Location from './js/location.js';
-import Map from './js/map.js';
-import QrCode from './js/qr-code.js';
-import st from './js/settings.js';
-import pp from './js/paypal.js';
+import config from "./js/config.js";
+import du from "./js/domutils.js";
+import i18n from "./js/i18n.js";
+import Labs from "./js/labs.js";
+import Location from "./js/location.js";
+import Map from "./js/map.js";
+import QrCode from "./js/qr-code.js";
+import st from "./js/settings.js";
+import pp from "./js/paypal.js";
 
 console.log(config.name, config.version);
 
 const MESSAGES = [];
 let SW_REGISTRATION = null;
-let HREF_CURR = '';
-let HREF_PREV = '';
-let ID_CURR = '';
-let ID_PREV = '';
+let HREF_CURR = "";
+let HREF_PREV = "";
+let ID_CURR = "";
+let ID_PREV = "";
 
 const send_message_to_service_worker = (data) => new Promise((resolve) => {
-    console.info('send_message', data);
+    console.info("send_message", data);
     navigator.serviceWorker.ready.then((reg) => {
         reg.active.postMessage(data);
         return resolve(reg);
@@ -26,7 +26,7 @@ const send_message_to_service_worker = (data) => new Promise((resolve) => {
 });
 
 function addMessage(message) {
-    du.setInnerHtml('messages', message)
+    du.setInnerHtml("messages", message)
     MESSAGES.unshift({
         timestamp: Date.now(),
         text: message,
@@ -37,14 +37,13 @@ function addMessage(message) {
 }
 
 function showMessages() {
-    const html = '<div style="display: grid; grid-template-columns: auto auto; grid-gap: 0.2rem;">'+
+    const html = "<div style=\"display: grid; grid-template-columns: auto auto; grid-gap: 0.2rem;\">"+
         MESSAGES
             .map(m => `<div>${Location.formatTimestamp(m.timestamp)}</div><div>${m.text}</div>`)
-            //.map(m => `<div>${m.timestamp}</div><div>${m.text}</div>`)
-            .join('') +
-        '</div>'
-    du.setInnerHtml('page', html);
-    du.setChecked('symbol-page');
+            .join("") +
+        "</div>"
+    du.setInnerHtml("page", html);
+    du.setChecked("symbol-page");
 }
 
 
@@ -60,39 +59,39 @@ const updateUser = () => new Promise((resolve) => {
             config.level_formatted = res.level_formatted;
             config.translator = res.translator;
             config.translator_formatted = res.translator_formatted;
-            du.setChecked('authenticated', res.authenticated);
-            du.setChecked('update', res.update);
+            du.setChecked("authenticated", res.authenticated);
+            du.setChecked("update", res.update);
 
             if (config.level & 1) {
                 document
-                    .querySelectorAll('[for="debug"]')
-                    .forEach(elem => elem.classList.remove('hidden'))
+                    .querySelectorAll("[for=\"debug\"]")
+                    .forEach(elem => elem.classList.remove("hidden"))
                 ;
             } else {
                 document
-                    .querySelectorAll('[for="debug"]')
-                    .forEach(elem => elem.classList.add('hidden'))
+                    .querySelectorAll("[for=\"debug\"]")
+                    .forEach(elem => elem.classList.add("hidden"))
                 ;
-                du.setChecked('debug', false);
+                du.setChecked("debug", false);
             }
-            du.setInnerHtml('friends-formatted', config.level_formatted);
-            Array.from(document.querySelectorAll('input[id^="bit-"]'))
+            du.setInnerHtml("friends-formatted", config.level_formatted);
+            Array.from(document.querySelectorAll("input[id^=\"bit-\"]"))
                 .filter(elem => !config.level_formatted.match(/bit-\w*/g).includes(elem.id))
                 .forEach(elem => elem.checked = false)
             ;
             if (config.translator.length) {
                 document
-                    .querySelectorAll('[for="translate"]')
-                    .forEach(elem => elem.classList.remove('hidden'))
+                    .querySelectorAll("[for=\"translate\"]")
+                    .forEach(elem => elem.classList.remove("hidden"))
                 ;
                 st
-                    .getSetting('data-url').then(data_url => {
+                    .getSetting("data-url").then(data_url => {
                         data_url ||= config.data_url;
-                        data_url += data_url.includes('?') ? '&' : '?';
-                        i18n.supported_url = data_url + 'special=language';
-                        i18n.translations_url = data_url + 'special=language&id=@@';
+                        data_url += data_url.includes("?") ? "&" : "?";
+                        i18n.supported_url = data_url + "special=language";
+                        i18n.translations_url = data_url + "special=language&id=@@";
                     })
-                    .then(() => st.getSetting('language'))
+                    .then(() => st.getSetting("language"))
                     .then((locale) => {
                         i18n._supported_locales = null;
                         i18n
@@ -103,17 +102,17 @@ const updateUser = () => new Promise((resolve) => {
                     .then(() => i18n.setTranslations())
             } else {
                 document
-                    .querySelectorAll('[for="translate"]')
-                    .forEach(elem => elem.classList.add('hidden'))
+                    .querySelectorAll("[for=\"translate\"]")
+                    .forEach(elem => elem.classList.add("hidden"))
                 ;
                 i18n.supported_url = i18n._supported_url;
                 i18n.translations_url = i18n._translations_url;
-                du.setChecked('translate', false);
+                du.setChecked("translate", false);
             }
 
             if (Date.parse(res.last_logs_update) < new Date().setDate(new Date().getDate()-1)) {
                 Labs.getData({
-                    special: 'update-logs',
+                    special: "update-logs",
                 }).catch(err => console.error(err));
             }
             return resolve(res)
@@ -121,7 +120,7 @@ const updateUser = () => new Promise((resolve) => {
 })
 
 const sentNotification = (title, payload) => {
-    if(SW_REGISTRATION && 'showNotification' in SW_REGISTRATION) {
+    if(SW_REGISTRATION && "showNotification" in SW_REGISTRATION) {
         return SW_REGISTRATION.showNotification(title, payload);
     }
     return  new Notification(title, payload);
@@ -131,8 +130,8 @@ const notify = (distance) => {
         .labs
         .filter(lab =>
             lab.distance < distance &&
-            lab.color !== 'yellow' &&
-            'undefined' === typeof lab.notified
+            lab.color !== "yellow" &&
+            "undefined" === typeof lab.notified
         )
         .forEach(lab => {
             lab.notified = true;
@@ -141,9 +140,9 @@ const notify = (distance) => {
                 .then(l => sentNotification(
                     lab.title,
                     {
-                        badge: './images/badge.png', body: l.question,
+                        badge: "./images/badge.png", body: l.question,
                         data: l,
-                        icon: './images/icons/icon-512-512.png',
+                        icon: "./images/icons/icon-512-512.png",
                         image: l.key_image_url,
                         tag: l.id,
                         vibrate: [100, 200, 100, 100, 200, 100,100, 200, 100, 100, 200, 100,],
@@ -158,27 +157,27 @@ const changedPositionLarge = () => new Promise((resolve, reject) => {
         localStorage.getItem(config.current_latitude),
         localStorage.getItem(config.current_longitude)
     )
-    addMessage('changedPositionLarge: '+ current_position);
+    addMessage("changedPositionLarge: "+ current_position);
     Labs
         .getLabs()
         .then(() => Labs.showLabs())
         .catch(err => reject(err))
     ;
-    ['latitude', 'longitude', 'timestamp'].forEach(key => {
+    ["latitude", "longitude", "timestamp"].forEach(key => {
         localStorage.setItem(
-            config['fetched_'+key],
-            localStorage.getItem(config['current_'+key])
+            config["fetched_"+key],
+            localStorage.getItem(config["current_"+key])
         );
     })
 });
 
 const changedPositionSmall = () => new Promise((resolve) => {
     Labs.showLabs(Labs.sortLabs());
-    st.getSetting('notification-distance').then(notification_distance => {
+    st.getSetting("notification-distance").then(notification_distance => {
         if (
             0 !== +notification_distance &&
-            'Notification' in window &&
-            'granted' === Notification.permission
+            "Notification" in window &&
+            "granted" === Notification.permission
         ) {
             notify(+notification_distance);
         }
@@ -186,8 +185,8 @@ const changedPositionSmall = () => new Promise((resolve) => {
     return resolve(Labs.labs);
 })
 
-const changedPosition = (position, type='?') => {
-    addMessage('changedPosition ' + type);
+const changedPosition = (position, type="?") => {
+    addMessage("changedPosition " + type);
     localStorage.setItem(config.current_latitude, position.coords.latitude);
     localStorage.setItem(config.current_longitude, position.coords.longitude);
     localStorage.setItem(config.current_heading, position.coords.heading);
@@ -196,14 +195,14 @@ const changedPosition = (position, type='?') => {
     //config.current_heading = position.coords.heading || 0;
     //config.current_heading = Math.floor(Math.random() * 360);
     du.setInnerHtml(
-        'location',
-        new Location(position.coords) + ' &nbsp; ' +
+        "location",
+        new Location(position.coords) + " &nbsp; " +
         Location.formatBearing(position.coords.heading || 0)
     );
-    du.setInnerHtml('timestamp', Location.formatTimestamp(position.timestamp));
+    du.setInnerHtml("timestamp", Location.formatTimestamp(position.timestamp));
         
     du.setInnerHtml(
-        'compass-style',
+        "compass-style",
         `.compass{transform: rotate(-${position.coords.heading||0}deg);}`
     );
 
@@ -217,7 +216,7 @@ const changedPosition = (position, type='?') => {
         localStorage.getItem(config.fetched_longitude)
     );
     addMessage(`FDistance: ${Location.formatDistance(fetch_position.distance(current_location))}`)
-    st.getSetting('block-size').then(block_size => {
+    st.getSetting("block-size").then(block_size => {
         if (Math.abs(block_size) * 250 < fetch_position.distance(current_location)) {
             return changedPositionLarge(position.coords);
         } else {
@@ -232,7 +231,7 @@ const watchLocation = (() => {
     return () => {
         if (!navigator.geolocation) {
             du.setInnerHtml(
-                'location',
+                "location",
                 "Browser doesn't support the Geolocation API"
             );
             return;
@@ -246,28 +245,28 @@ const watchLocation = (() => {
             interval_id = 0;
         }
         Promise.all([
-            st.getSetting('update-interval'),
-            st.getSetting('high-accuracy'),
+            st.getSetting("update-interval"),
+            st.getSetting("high-accuracy"),
         ]).then(([update_interval, high_accuracy]) => {
             if (0 === +update_interval) {
                 watch_id = window.navigator.geolocation.watchPosition(
                     changedPosition,
-                    (error) => du.setInnerHtml('location', error.message),
+                    (error) => du.setInnerHtml("location", error.message),
                     {enableHighAccuracy: high_accuracy},
                 );
-                addMessage('watchPosition: ' + watch_id);
+                addMessage("watchPosition: " + watch_id);
             } else if (0 < update_interval) {
                 interval_id = window.setInterval(
                     () => {
                         window.navigator.geolocation.getCurrentPosition(
-                            (position) => changedPosition(position, 'interval'),
-                            (error) => du.setInnerHtml('location', error.message),
+                            (position) => changedPosition(position, "interval"),
+                            (error) => du.setInnerHtml("location", error.message),
                             {enableHighAccuracy: high_accuracy},
                         )
                     },
                     update_interval * 1000
                 );
-                addMessage('setInterval: ' + interval_id);
+                addMessage("setInterval: " + interval_id);
             } else {
                 changedPosition(
                     {
@@ -281,7 +280,7 @@ const watchLocation = (() => {
                             16 * 3600000 + 18 * 60000 + 3 * 1000
                             // 1.61803398875
                     },
-                    'D'
+                    "D"
                 )
             }
         })
@@ -289,96 +288,96 @@ const watchLocation = (() => {
 })()
 
 const enableNotifications = () => {
-    if ('Notification' in window) {
-        if (Notification.permission !== 'granted') {
+    if ("Notification" in window) {
+        if (Notification.permission !== "granted") {
             Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('The user accepted');
+                if (permission === "granted") {
+                    console.log("The user accepted");
                 }
             });
         } else {
-            console.log('Permission already granted');
+            console.log("Permission already granted");
         }
     }
 }
 
 const showMessage = () => {
     du
-        .loadUrlToElem('popup-content', './html/message.html')
+        .loadUrlToElem("popup-content", "./html/message.html")
         .then(html => {
             const html_hash = du.hash(html);
             console.log(html_hash, html);
             if (+localStorage.getItem(config.message_hash) !== html_hash) {
-                du.setChecked('symbol-popup')
+                du.setChecked("symbol-popup")
             }
             localStorage.setItem(config.message_hash, html_hash);
         })
         // Not really an error if at this moment there is no message
-        .catch(err => console.debug('No message:', err))
+        .catch(err => console.debug("No message:", err))
     ;
 }
 
 const logLab = (id) => {
     const elem = document
-        .getElementById('id'+id)
-        .getElementsByClassName('lab')[0];
-    elem.parentNode.classList.add('wait');
+        .getElementById("id"+id)
+        .getElementsByClassName("lab")[0];
+    elem.parentNode.classList.add("wait");
 
     Labs.
         logLab(
             id,
-            elem.querySelector('.answer').querySelector('select').value ||
-            elem.querySelector('.answer').querySelector('input').value
+            elem.querySelector(".answer").querySelector("select").value ||
+            elem.querySelector(".answer").querySelector("input").value
         )
         .then(res => {
             let color;
             switch (res.Result) {
                 case 0:
                 case 3:
-                    const geocache = document.querySelector('[href="#id-'+res.id+'"]');
+                    const geocache = document.querySelector("[href=\"#id-"+res.id+"\"]");
                     if (geocache) {
-                        geocache.parentElement.classList.add('logged')
+                        geocache.parentElement.classList.add("logged")
                     }
 
-                    color = 'yellow';
-                    const html = '' +
-                        (res.JournalImageUrl ? '<img src="' + res.JournalImageUrl + '" />' : '') +
+                    color = "yellow";
+                    const html = "" +
+                        (res.JournalImageUrl ? "<img src=\"" + res.JournalImageUrl + "\" />" : "") +
                         (res.JournalVideoYouTubeId ?
-                            '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' +
+                            "<div class=\"video\"><iframe src=\"https://www.youtube-nocookie.com/embed/" +
                             res.JournalVideoYouTubeId +
-                            '"></iframe></div>' +
-                            '<div style="width:1000px;"></div>' : // Force video width to maxWidth
-                            ''
+                            "\"></iframe></div>" +
+                            "<div style=\"width:1000px;\"></div>" : // Force video width to maxWidth
+                            ""
                         ) +
-                        (res.JournalMessage ? res.JournalMessage.replace('\n', '<br />') : '') +
-                        '';
+                        (res.JournalMessage ? res.JournalMessage.replace("\n", "<br />") : "") +
+                        "";
                     du.setInnerHtml(
-                        'popup-content',
-                        '<div class="journal">' + html + '</div>'
+                        "popup-content",
+                        "<div class=\"journal\">" + html + "</div>"
                     );
                     const journal = document.getElementById(
-                        'journal-' + elem.parentNode.id.slice(2)
+                        "journal-" + elem.parentNode.id.slice(2)
                     );
                     if (journal) {
                         journal.innerHTML = html;
-                        journal.classList.remove('hidden');
+                        journal.classList.remove("hidden");
                     }
-                    du.setChecked('symbol-popup');
-                    if (res.hasOwnProperty('rating')) {
+                    du.setChecked("symbol-popup");
+                    if (res.hasOwnProperty("rating")) {
                         rateAdventure(res);
                     }
                     break;
                 case 2:
-                    color = 'orange';
+                    color = "orange";
                     break;
                 default:
                     console.log(res);
-                    color = 'red';
+                    color = "red";
             }
-            elem.parentNode.classList.remove('wait');
-            st.getSetting('hide-logged').then(hide_logged => {
+            elem.parentNode.classList.remove("wait");
+            st.getSetting("hide-logged").then(hide_logged => {
                 const id = elem.parentNode.id.slice(2)
-                if (hide_logged && 'yellow' === color) {
+                if (hide_logged && "yellow" === color) {
                     Labs.labs = Labs.labs.filter(lab => lab.id !== id)
                     const circle = Map.id2layer(id);
                     if (circle) {
@@ -407,19 +406,19 @@ const logLab = (id) => {
 
 const postReview = () => {
     Promise.all([
-        du.getElementValue('adventure_id'),
-        du.getRadioValue('rating'),
-        du.getElementValue('review'),
+        du.getElementValue("adventure_id"),
+        du.getRadioValue("rating"),
+        du.getElementValue("review"),
     ]).then(([adventure_id, rating, review,]) => {
-        document.getElementById('post-review').disabled=true;
+        document.getElementById("post-review").disabled=true;
         Labs.getData({
-            'id': adventure_id,
-            'block_size': rating,
-            'code': review,
-            'special': 'ratings',
+            "id": adventure_id,
+            "block_size": rating,
+            "code": review,
+            "special": "ratings",
         }).then(res => {
-            document.getElementById('post-review').disabled=false;
-            du.dispatchEvent(du.elemOrId('cancel'), 'click');
+            document.getElementById("post-review").disabled=false;
+            du.dispatchEvent(du.elemOrId("cancel"), "click");
             console.debug(res);
         })
     })
@@ -428,7 +427,7 @@ const postReview = () => {
 const showJsonNavigation = () => {
     const range = (start, stop, step) => 
         Array.from({ length: Math.ceil((stop - start) / step) }, (_, i) => start + i * step);
-    const tables = document.getElementsByClassName('table-from-array');
+    const tables = document.getElementsByClassName("table-from-array");
     const page = tables.length ? +tables[0].dataset.pgc_num || 0 : 0;
     const pages = tables.length ? +tables[0].dataset.pgt_num || 0 : 0;
   
@@ -443,47 +442,47 @@ const showJsonNavigation = () => {
         step *= factor;
         delta--;
     }
-    return (HREF_PREV ? `<a href="${HREF_PREV}${ID_PREV ? '?id='+ID_PREV : ''}"><b>⏎</b></a>` : '') +
-        (pages > 1 && page > 0 ? ' &nbsp ' + p
+    return (HREF_PREV ? `<a href="${HREF_PREV}${ID_PREV ? "?id="+ID_PREV : ""}"><b>⏎</b></a>` : "") +
+        (pages > 1 && page > 0 ? " &nbsp " + p
             .filter((v, i, a) => a.indexOf(v) === i)
             .sort((a, b) => a - b)
-            .map(x => x === page ? `${x}` : `<a href="${HREF_CURR}?page=${x}${ID_CURR ? '&id='+ID_CURR : ''}">${x}</a>`)
-            .join(' ') : '')
+            .map(x => x === page ? `${x}` : `<a href="${HREF_CURR}?page=${x}${ID_CURR ? "&id="+ID_CURR : ""}">${x}</a>`)
+            .join(" ") : "")
         ;
 }
 
 const showHref = (href) => {
-    const [page, extension] = HREF_CURR.slice(1).split('.');
-    const data = Object.fromEntries(new URLSearchParams(href.split('?').splice(1).join('?')));
+    const [page, extension] = HREF_CURR.slice(1).split(".");
+    const data = Object.fromEntries(new URLSearchParams(href.split("?").splice(1).join("?")));
     console.debug(page, extension, data);
 
-    let key = 'html';
+    let key = "html";
     switch (extension) {
-        case 'json':
-            key = 'special';
+        case "json":
+            key = "special";
             break;
         default:
-            key = 'html';
+            key = "html";
             break
     }
     data[key] = page;
     Labs
         .getData(data)
         .then(res => du.setInnerHtml(
-            'page',
-            '<input id="page-checkbox" class="hidden" type="checkbox" />' +
-            '<h2 data-i18n-key="' +
-                ('data-'+page).toLowerCase().replace(/(\s|_|-)+/g, '-') +
-            '">' +  du.htmlTitle(page) + '</h2>' +
-            (('json' === extension) ? '<div class="table-navigation"></div>' : '') +
+            "page",
+            "<input id=\"page-checkbox\" class=\"hidden\" type=\"checkbox\" />" +
+            "<h2 data-i18n-key=\"" +
+                ("data-"+page).toLowerCase().replace(/(\s|_|-)+/g, "-") +
+            "\">" +  du.htmlTitle(page) + "</h2>" +
+            (("json" === extension) ? "<div class=\"table-navigation\"></div>" : "") +
             du.htmlFromData(res) +
-            (('json' === extension) ? '<div class="table-navigation"></div>' : '')
+            (("json" === extension) ? "<div class=\"table-navigation\"></div>" : "")
         ))
         .then(() => Array
-            .from(document.getElementsByClassName('table-navigation'))
+            .from(document.getElementsByClassName("table-navigation"))
             .forEach(elem => elem.innerHTML = showJsonNavigation(href))
         )
-        .then(() => du.setChecked('symbol-page'))
+        .then(() => du.setChecked("symbol-page"))
         .catch(err => console.error(err))
     return false;
 }
@@ -492,51 +491,145 @@ const rateAdventure = (data=null) => {
     if (null === data) {
         data = {
             rating: Math.floor(Math.random()*10+1)/2,
-            adventure_id: '',
+            adventure_id: "",
         }
     }
     data.rating = (Math.round(data.rating * 2) / 2).toFixed(1);
     du
-        .loadUrlToElem('page', './html/review.html')
+        .loadUrlToElem("page", "./html/review.html")
         .then(() => {
-            du.setRadioValue('rating', data.rating);
-            du.setElementValue('adventure_id', data.adventure_id);
-            du.setChecked('symbol-page');
+            du.setRadioValue("rating", data.rating);
+            du.setElementValue("adventure_id", data.adventure_id);
+            du.setChecked("symbol-page");
         });
     return false
+}
+const startCam = (video) => {
+    console.log("startCam()", video);
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({video:  {facingMode: {ideal: "environment" }}})
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error("Something went wrong!", error);
+            });
+    } else {
+        console.log("Browser doesn't support getUserMedia");
+    }
+};
+
+const stopCam = (video) => {
+    console.log("stopCam()", video);
+    const stream = video.srcObject;
+    if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+    }
+    video.srcObject = null;
+};
+
+const scanQR = () => {
+    du
+        .loadUrlToElem("page", "./html/scan.html")
+        .then(() => {
+            du.setChecked("symbol-page");
+            const video = document.getElementById("scan-video");
+            const result = document.getElementById("scan-result");
+            if (!video) { console.error("No video"); }
+            if (!result) { console.error("No result"); }
+
+            const observer = new MutationObserver((mutations, observer) => {
+                mutations.forEach((mutation) => {
+                    if (Array.from(mutation.removedNodes).includes(video)) {
+                        stopCam(video)
+                        observer.disconnect();
+                    }
+                });
+            });
+            observer.observe(
+                document.getElementById("page"),
+                {
+                    childList: true,
+                    subtree: true,
+                },
+            );
+
+            const video_interval = window.setInterval((() => {
+                if (!video.checkVisibility()) {
+                    stopCam(video);
+                    window.clearInterval(video_interval);
+                }
+            }), 300);
+
+            startCam(video);
+
+            if (undefined === window.BarcodeDetector) {
+                result.textContent = "Browser doesn't support BarcodeDetector";
+                result.classList.add("warning");
+                return;
+            }
+            const detector = new BarcodeDetector({formats: ["qr_code"]});
+            const barcode_interval = window.setInterval(() => {
+                detector
+                    .detect(video)
+                    .then(barcodes => {
+                        if (barcodes.length > 0) {
+                            result.textContent = barcodes[0].rawValue + "\n";
+
+                            const match = barcodes[0]
+                                .rawValue
+                                .match(/https:\/\/labs.geocaching.com\/goto\/([0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12})/i);
+                            if (match) {
+                                result.textContent = match[1];
+                                result.classList.remove("warning");
+                                stopCam(video);
+                                video.classList.add("wait");
+                                clearInterval(barcode_interval);
+                                Labs.openLab(match[1]);
+                            }
+                        }
+                    })
+                    .catch((err) => {
+                        result.textContent += err;
+                        result.classList.add("warning");
+                    })
+                ;
+            }, 1000);
+        });
 }
 
 const translate = (page = 1) => {
     Promise.all([
         Labs.getData({
-            special: 'language',
+            special: "language",
             id: i18n.locale,
             block_size: page || 1,
         }),
-        du.loadUrlToElem('page', './html/translate.html'),
+        du.loadUrlToElem("page", "./html/translate.html"),
     ]).then(([json, html]) => {
         console.debug(html);
-        const template = du.elemOrId('translation-template');
-        const holder = du.elemOrId('translation-holder');
+        const template = du.elemOrId("translation-template");
+        const holder = du.elemOrId("translation-holder");
 
-        holder.innerHtml = '';
+        holder.innerHtml = "";
         json.labels.forEach(key => {
-            const node = document.createElement('div');
+            const node = document.createElement("div");
             node.innerHTML = template.innerHTML;
-            const span = node.getElementsByTagName('span')[0];
+            const span = node.getElementsByTagName("span")[0];
             span.innerHTML = key;
-            const edit = node.getElementsByTagName('span')[1];
+            const edit = node.getElementsByTagName("span")[1];
             edit.dataset.i18nKey = key;
             holder.append(node);
         });
         i18n.translate();
-        du.setChecked('symbol-page');
+        du.setChecked("symbol-page");
         Array
-            .from(document.getElementsByClassName('pagination'))
+            .from(document.getElementsByClassName("pagination"))
             .forEach(elem => {
-                elem.innerHTML = '';
+                elem.innerHTML = "";
                 Array.from(Array(+json.pages)).forEach((_, p) => {
-                    elem.innerHTML += ` <span data-page="${p + 1}" ${p + 1 === json.page ? 'class="orange"' : 'href="#translate"'}>${p + 1}</span>`;
+                    elem.innerHTML += ` <span data-page="${p + 1}" ${p + 1 === json.page ? "class=\"orange\"" : "href=\"#translate\""}>${p+1}</span>`;
                 })
             });
     });
@@ -545,28 +638,28 @@ const translate = (page = 1) => {
 
 const updateAdventure = (id) => {
     const data = {
-        'special': 'update-adventure',
-        'latitude':  Map.map.getCenter().lat || localStorage.getItem('current_latitude'),
-        'longitude':  Map.map.getCenter().lng || localStorage.getItem('current_longitude'),
+        "special": "update-adventure",
+        "latitude":  Map.map.getCenter().lat || localStorage.getItem("current_latitude"),
+        "longitude":  Map.map.getCenter().lng || localStorage.getItem("current_longitude"),
     }
-    if (id.startsWith('special-update-')) {
-        data['id'] = id.slice('special-update-'.length);
+    if (id.startsWith("special-update-")) {
+        data["id"] = id.slice("special-update-".length);
     }
 
-    const template = du.elemOrId('update-start-template');
+    const template = du.elemOrId("update-start-template");
     if (template) {
         du.setInnerHtml(
-            'popup-content',
+            "popup-content",
             template.innerHTML,
-            { 'text': data.hasOwnProperty('id') ? data.id : new Location(data) }
+            { "text": data.hasOwnProperty("id") ? data.id : new Location(data) }
         );
-        du.setChecked('symbol-popup');
+        du.setChecked("symbol-popup");
     }
 
     Labs
         .getData(data)
         .then(res => new Promise((resolve, reject) => {
-            if ('error' in res) {
+            if ("error" in res) {
                 reject(res.error);
             } else {
                 resolve(res);
@@ -574,24 +667,24 @@ const updateAdventure = (id) => {
         }))
         .then(json => {
             console.log(json);
-            let text = '';
-            if (json.hasOwnProperty('err')) {
-                text = 'Error:' + json.err;
-            } else if (json.hasOwnProperty('Title')) {
-                text = 'Updated: ' + json.Title;
+            let text = "";
+            if (json.hasOwnProperty("err")) {
+                text = "Error:" + json.err;
+            } else if (json.hasOwnProperty("Title")) {
+                text = "Updated: " + json.Title;
             } else {
-                text = 'Updated: ' + json.all.length + '<br />' +
-                    'New: ' + json.new.length;
+                text = "Updated: " + json.all.length + "<br />" +
+                    "New: " + json.new.length;
             }
 
-            const template = du.elemOrId('update-finish-template');
+            const template = du.elemOrId("update-finish-template");
             if (template) {
                 du.setInnerHtml(
-                    'popup-content',
+                    "popup-content",
                     template.innerHTML,
-                    {'text': json.hasOwnProperty('err') ? json.err : json.hasOwnProperty('Title') ? json.Title : json.new.length + ' / ' +  json.all.length }
+                    {"text": json.hasOwnProperty("err") ? json.err : json.hasOwnProperty("Title") ? json.Title : json.new.length + " / " +  json.all.length }
                 );
-                du.setChecked('symbol-popup');
+                du.setChecked("symbol-popup");
             }
             return changedPositionLarge()
         })
@@ -603,13 +696,13 @@ const updateFilters = () => {
     const filters = {};
     Object
         .keys(localStorage)
-        .filter(x => x.startsWith(st.prefix+'filter-'))
+        .filter(x => x.startsWith(st.prefix+"filter-"))
         .forEach(x => {
-            const key = x.replace(st.prefix+'filter-', '')
-            //console.log('key:', key, ' x:', x, ' local:', localStorage.getItem(x), localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-')));
+            const key = x.replace(st.prefix+"filter-", "")
+            //console.log("key:", key, " x:", x, " local:", localStorage.getItem(x), localStorage.getItem(st.prefix+"disable-filter-"+key.replace(/\[.*?\]$/, "").split("-").slice(0,-1).join("-")));
             if (
                 localStorage.getItem(x) &&
-                !localStorage.getItem(st.prefix+'disable-filter-'+key.replace(/\[.*?\]$/, '').split('-').slice(0,-1).join('-'))
+                !localStorage.getItem(st.prefix+"disable-filter-"+key.replace(/\[.*?\]$/, "").split("-").slice(0,-1).join("-"))
             ) {
                 const match = key.match(/^(.*)\[(.*?)\]$/);
                 if (match) {
@@ -623,12 +716,12 @@ const updateFilters = () => {
             Object
                 .keys(filters)
                 .forEach(key => {
-                    const elem = document.getElementById('filter-'+key);
+                    const elem = document.getElementById("filter-"+key);
                     if (
                         elem &&
-                        elem.parentNode.classList.contains('dual-range') &&
-                        elem.classList.contains(key.split('-').slice(-1)[0]) &&
-                        +filters[key] === +elem.getAttribute(key.split('-').slice(-1)[0])
+                        elem.parentNode.classList.contains("dual-range") &&
+                        elem.classList.contains(key.split("-").slice(-1)[0]) &&
+                        +filters[key] === +elem.getAttribute(key.split("-").slice(-1)[0])
 
                     ) {
                         delete filters[key];
@@ -637,8 +730,8 @@ const updateFilters = () => {
             ;
         })
     ;
-    delete filters['themes-unc'];
-    delete filters['owners-unc'];
+    delete filters["themes-unc"];
+    delete filters["owners-unc"];
     localStorage.setItem(config.filters_key, JSON.stringify(filters))
     console.log(filters)
 }
@@ -649,9 +742,9 @@ const init = () => {
         .catch(err => console.error(err))
     ;
     Promise.all([
-        st.getSetting('username', ''),
-        st.getSetting('password', ''),
-        fetch('./data/theme.json'),
+        st.getSetting("username", ""),
+        st.getSetting("password", ""),
+        fetch("./data/theme.json"),
     ])
     .then(([username, password, theme]) => {
         theme.json().then(json => Labs.data_theme = json).catch(err => console.error(err));
@@ -666,28 +759,28 @@ const init = () => {
     // Make sure there is a decent json string in the filter localstorage
     try {
         if (!JSON.parse(localStorage.getItem(config.filters_key))) {
-            throw new Error('Filter is not set');
+            throw new Error("Filter is not set");
         }
     } catch(e) {
         localStorage.setItem(config.filters_key, JSON.stringify({}));
     }
 
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
             navigator.serviceWorker
-                .register('./sw.js', {type: 'module'})
+                .register("./sw.js", {type: "module"})
                 .then(reg => SW_REGISTRATION = reg)
-                .catch(err => console.error('service worker not registered', err))
+                .catch(err => console.error("service worker not registered", err))
         })
-        navigator.serviceWorker.addEventListener('message', (e) => {
+        navigator.serviceWorker.addEventListener("message", (e) => {
              addMessage(e.data);
-            if (e.data.startsWith('id-')) {
+            if (e.data.startsWith("id-")) {
                 Labs.openLab(e.data.slice(3))
             }
         });
     }
 
-    document.addEventListener('DOMContentLoaded', waitFor);
+    document.addEventListener("DOMContentLoaded", waitFor);
 }
 
 const waitFor = () => {
@@ -698,11 +791,11 @@ const waitFor = () => {
 }
 
 const main = () => {
-    addMessage('main()')
+    addMessage("main()")
     addMessage(config.home_url);
     Promise
         .all([
-            st.getSetting('data-url', ''),
+            st.getSetting("data-url", ""),
             st.fillSettingsDiv([
                 {
                     data: Object
@@ -716,22 +809,22 @@ const main = () => {
                                 name: data.name.toLowerCase()
                             };
                         }),
-                    holder: 'filter-themes-holder',
+                    holder: "filter-themes-holder",
                 },
                 {
                     data: Object
                         .keys(localStorage)
-                        .filter(x => x.startsWith(st.prefix+'filter-owners-') && localStorage[x] && '' !== localStorage[x])
-                        .map(x => ({id: x.replace(/.*\[(.*?)\]$/, '$1'), 'innerHTML': localStorage[x]}))
+                        .filter(x => x.startsWith(st.prefix+"filter-owners-") && localStorage[x] && "" !== localStorage[x])
+                        .map(x => ({id: x.replace(/.*\[(.*?)\]$/, "$1"), "innerHTML": localStorage[x]}))
                         .sort((a,b) => a.innerHTML.localeCompare(b.innerHTML)),
-                    holder: 'filter-owners-holder',
+                    holder: "filter-owners-holder",
                 }
             ]),
-            du.loadUrlToElem('labs', './html/labs.html'),
-            du.loadUrlToElem('map', './html/map.html')
+            du.loadUrlToElem("labs", "./html/labs.html"),
+            du.loadUrlToElem("map", "./html/map.html")
         ]).then((result) => {
-            if (du.isOverflow('h1')) {
-                du.fitFont('h1', 0.95, 1);
+            if (du.isOverflow("h1")) {
+                du.fitFont("h1", 0.95, 1);
             }
             // Hack to put the data_url as a global variable
             window.data_url = result[0] || config.data_url;
@@ -745,13 +838,13 @@ const main = () => {
                 localStorage.getItem(config.fetched_longitude) &&
                 localStorage.getItem(config.fetched_labs);
             if (labs) {
-                ['latitude', 'longitude', 'timestamp'].forEach(key => {
+                ["latitude", "longitude", "timestamp"].forEach(key => {
                     localStorage.setItem(
-                        config['current_'+key],
-                        localStorage.getItem(config['fetched_'+key])
+                        config["current_"+key],
+                        localStorage.getItem(config["fetched_"+key])
                     );
                 })
-                Labs.updateLabs(JSON.parse(labs), 'labs');
+                Labs.updateLabs(JSON.parse(labs), "labs");
                 //Labs.showLabs();
             } else {
                 // Heron Island S23.44240 E151.91500
@@ -761,134 +854,144 @@ const main = () => {
 
             const hash = location.hash
             if (hash) {
-                if (hash.startsWith('#id-')) {
+                if (hash.startsWith("#id-")) {
                     Labs.openLab(hash.slice(4));
                     return;
                 }
-                const elem = document.getElementById('hash');
-                elem.setAttribute('href', hash)
-                du.dispatchEvent(elem, 'click');
+                const elem = document.getElementById("hash");
+                elem.setAttribute("href", hash)
+                du.dispatchEvent(elem, "click");
                 return;
             }
             Promise.all([
-                st.getSetting('username'),
-                st.getSetting('primary-page'),
+                st.getSetting("username"),
+                st.getSetting("primary-page"),
             ]).then(([username, primary_page]) => {
                 if (username) {
-                    du.setChecked('symbol-' + primary_page);
+                    du.setChecked("symbol-" + primary_page);
                 } else {
-                    du.setChecked('symbol-settings');
+                    du.setChecked("symbol-settings");
                 }
             })
         });
-    du.loadUrlToElem('menu', './html/menu.html').catch(err => console.error(err));
+    du
+        .loadUrlToElem("menu", "./html/menu.html")
+        .then(html => {
+            if (undefined === window.BarcodeDetector) {
+                document.querySelector("li[href=\"#scan\"]").remove();
+            }
+        })
+        .catch(err => console.error(err));
 }
 
-document.addEventListener('click', (e) => {
+document.addEventListener("click", (e) => {
     let popup_close = true;
     let target = e.target;
     while(target) {
-        popup_close &&= !target.classList.contains('do-not-close');
+        popup_close &&= !target.classList.contains("do-not-close");
         // Menu and hash pages
-        const href = target.getAttribute('href')
-        if (href && href.startsWith('#')) {
+        const href = target.getAttribute("href")
+        if (href && href.startsWith("#")) {
             e.preventDefault();
-            if (href.startsWith('#id-')) {
+            if (href.startsWith("#id-")) {
                 Labs.openLab(href.slice(4));
                 return;
             }
 
-            HREF_PREV = HREF_CURR === href.split('?', 1)[0] ? HREF_PREV : HREF_CURR;
-            ID_PREV   = HREF_CURR === href.split('?', 1)[0] ? ID_PREV   : ID_CURR;
-            HREF_CURR = href.split('?', 1)[0];
-            ID_CURR   = Object.fromEntries(new URLSearchParams(href.split('?').splice(1).join('?'))).id;
+            HREF_PREV = HREF_CURR === href.split("?", 1)[0] ? HREF_PREV : HREF_CURR;
+            ID_PREV   = HREF_CURR === href.split("?", 1)[0] ? ID_PREV   : ID_CURR;
+            HREF_CURR = href.split("?", 1)[0];
+            ID_CURR   = Object.fromEntries(new URLSearchParams(href.split("?").splice(1).join("?"))).id;
           
-            document.getElementById('symbol-menu').checked = false;
+            document.getElementById("symbol-menu").checked = false;
             switch(HREF_CURR.slice(1)) {
-                case 'close':
+                case "close":
                     // Used by leaflet
                     return true;
-                case 'about':
+                case "about":
                     config.count_labs = Labs.labs.length;
                     config.count_map = Object.keys(Map.map._layers).length;
                     // Extra data has been added, continue as with regular pages
-                case 'help':
-                case 'stats':
+                case "help":
+                case "stats":
                     du
-                        .loadUrlToElem('page', './html/'+href.slice(1)+'.html', config)
-                        .then(() => du.setChecked('symbol-page'));
+                        .loadUrlToElem("page", "./html/"+href.slice(1)+".html", config)
+                        .then(() => du.setChecked("symbol-page"));
                     return false;
-                case 'donate':
-                    if (du.getElementValue('authenticated')) {
+                case "donate":
+                    if (du.getElementValue("authenticated")) {
                         pp.page()
                     } else {
                         du
-                            .loadUrlToElem('page', 'html/donate.html')
-                            .then(() => du.setChecked('symbol-page'))
+                            .loadUrlToElem("page", "html/donate.html")
+                            .then(() => du.setChecked("symbol-page"))
                         ;
                     }
                     return false;
-                case 'friends':
+                case "friends":
                     Promise
                         .all([
-                            Labs.getData({'html': 'friends'}),
-                            Labs.getData({'special': 'referrer'}),
-                            du.loadUrlToElem('page', './html/friends.html'),
+                            Labs.getData({"html": "friends"}),
+                            Labs.getData({"special": "referrer"}),
+                            du.loadUrlToElem("page", "./html/friends.html"),
                         ])
                         .then(([friends, referrers]) => {
-                            du.setInnerHtml('friends-container', friends);
+                            du.setInnerHtml("friends-container", friends);
                             du.setSelectOptions(
-                                'friend-username-select', 
+                                "friend-username-select",
                                 [
-                                    {' ': i18n.translations['friends-select-user'] || 'Select user'},
+                                    {" ": i18n.translations["friends-select-user"] || "Select user"},
                                     ...referrers,
-                                    {'': (i18n.translations['friends-select-user-other'] || 'Other') + ':'}
+                                    {"": (i18n.translations["friends-select-user-other"] || "Other") + ":"}
                                 ]
                             );
-                            du.dispatchEvent('friend-username-select', 'change');
-                            du.setChecked('symbol-page');
+                            du.dispatchEvent("friend-username-select", "change");
+                            du.setChecked("symbol-page");
                         });
                     return false;
-                case 'labs':
-                    du.setChecked('symbol-labs');
+                case "labs":
+                    du.setChecked("symbol-labs");
                     return false;
-                case 'rate': {
+                case "rate": {
                     return rateAdventure();
                 }
-                case 'licence': {
+                case "scan": {
+                    return scanQR();
+                }
+                case "licence": {
                     du
-                        .loadUrl('./LICENCE')
+                        .loadUrl("./LICENCE")
                         .then(txt => {
-                            du.setInnerHtml('page', txt.replaceAll('\n', '<br />\n'));
-                            du.setChecked('symbol-page');
+                            du.setInnerHtml("page", txt.replaceAll("\n", "<br />\n"));
+                            du.setChecked("symbol-page");
                         });
                     return false
                 }
-                case 'map': {
-                    du.setChecked('symbol-map');
+                case "map": {
+                    du.setChecked("symbol-map");
                     return false;
                 }
-                case 'messages':
+                case "messages":
                     showMessages();
                     return false;
-                case 'settings':
+                case "settings":
                 {
-                    du.setChecked('symbol-settings');
+                    du.setChecked("symbol-settings");
                     return false;
                 }
-                case 'translate':
+                case "translate":
                     return translate(+target.dataset.page);
-                case 'qr':
+                case "qr":
                     du
-                        .loadUrlToElem('popup-content', './html/qr-code.html')
+                        .loadUrlToElem("popup-content", "./html/qr-code.html")
                         .then(() => QrCode.show())
                         .then(() => {
-                            const elem = document.getElementById('qr-url')
+                            const elem = document.getElementById("qr-url")
                             if (elem) {
                                 elem.innerHTML = QrCode.qrcode._options.data;
                                 elem.href = QrCode.qrcode._options.data;
                             }
-                            du.setChecked('symbol-popup')
+                            du.setChecked("symbol-popup")
                         })
                         .catch(err => console.error(err))
                     ;
@@ -900,19 +1003,19 @@ document.addEventListener('click', (e) => {
 
         // Make radio buttons toggleable
         if (
-            'radio' === target.getAttribute('type') &&
-            !['top', 'friends-period'].includes(target.name)
+            "radio" === target.getAttribute("type") &&
+            !["top", "friends-period"].includes(target.name)
         ) {
             if (target.dataset._checked) {
-                target.dataset._checked = '';
+                target.dataset._checked = "";
                 du.setChecked(target, false);
             } else {
-                target.dataset._checked = 'on'
+                target.dataset._checked = "on"
                 document.getElementsByName(target.name)
                     .forEach(elem => {
                         if (elem !== e.target && elem.dataset._checked) {
-                            elem.dataset._checked = '';
-                            du.dispatchEvent(elem, 'change')
+                            elem.dataset._checked = "";
+                            du.dispatchEvent(elem, "change")
                         }
                     })
                 ;
@@ -921,9 +1024,9 @@ document.addEventListener('click', (e) => {
 
         // Friend bits
         if (target.dataset.friendBits) {
-            const bits = document.getElementById('friend-bits')
+            const bits = document.getElementById("friend-bits")
             if (bits)
-                if (du.getElementValue(target.getAttribute('for'))) {
+                if (du.getElementValue(target.getAttribute("for"))) {
                     bits.value |= target.dataset.friendBits;
                 } else {
                     bits.value &= ~target.dataset.friendBits;
@@ -932,72 +1035,72 @@ document.addEventListener('click', (e) => {
         }
 
 
-        if (target.id.startsWith('symbol-')) {
+        if (target.id.startsWith("symbol-")) {
             // Handled by the change listener
             // Don't close the popups
             return false;
         }
 
         // Map
-        if (target.id.startsWith('map-')) {
+        if (target.id.startsWith("map-")) {
             return Labs.openLab(target.id.slice(4));
         }
 
         // Update
         if (
-            'special-update' === target.id ||
-            target.id.startsWith('special-update-')
+            "special-update" === target.id ||
+            target.id.startsWith("special-update-")
         ) {
             return updateAdventure(target.id);
         }
         if (
-            (target.classList.contains('log-button')) && (
-                target.parentElement.getElementsByTagName('input')[0].value ||
-                target.parentElement.getElementsByTagName('select')[0].value
+            (target.classList.contains("log-button")) && (
+                target.parentElement.getElementsByTagName("input")[0].value ||
+                target.parentElement.getElementsByTagName("select")[0].value
             )
         ) {
             return logLab(target.dataset.id);
         } 
         switch(target.id) {
-            case 'give-friend':
+            case "give-friend":
                 Labs
                     .getData({
-                        'special': 'give-friend',
-                        'id': pp.friendsBits() + ':::' +
+                        "special": "give-friend",
+                        "id": pp.friendsBits() + ":::" +
                             (
-                                document.getElementById('friend-username-select').value ||
-                                document.getElementById('friend-username-input').value
+                                document.getElementById("friend-username-select").value ||
+                                document.getElementById("friend-username-input").value
                             ) +
-                            ':::' + document.getElementById('friend-duration').value * 7,
+                            ":::" + document.getElementById("friend-duration").value * 7,
                     })
                     .then(res => {
                         du.setInnerHtml(
-                            'popup-content',
+                            "popup-content",
                             i18n.translateHtml(
                                 `<span data-i18n-key="${res.label}">${res.message}</span>`
                             )
                         );
-                        du.setChecked('symbol-popup')
+                        du.setChecked("symbol-popup")
                     })
                 return false;
-            case 'cancel':
-            case 'save-and-exit':
-                st.getSetting('primary-page').then(primary_page => {
-                    du.setChecked('symbol-' + primary_page)
+            case "cancel":
+            case "save-and-exit":
+                st.getSetting("primary-page").then(primary_page => {
+                    du.setChecked("symbol-" + primary_page)
                 });
                 return false;
-            case 'post-review':
+            case "post-review":
                 return postReview();
-            case 'restore-default-settings':
+            case "restore-default-settings":
                 st.clearSettings();
                 return false;
-            case 'translate-save':
+            case "translate-save":
                 e.preventDefault();
                 Promise.all(
                     Array.from(
                         target
                             .parentNode
-                            .getElementsByTagName('textarea')
+                            .getElementsByTagName("textarea")
                     )
                         .filter(textarea =>
                             undefined !== textarea.dataset.content &&
@@ -1006,8 +1109,8 @@ document.addEventListener('click', (e) => {
                         .map(textarea => new Promise((resolve, reject) => {
                             Labs
                                 .getData({
-                                    special: 'language',
-                                    id: textarea.dataset.label + '|' + textarea.dataset.locale,
+                                    special: "language",
+                                    id: textarea.dataset.label + "|" + textarea.dataset.locale,
                                     code: textarea.value,
                                 })
                                 .then(res => resolve(res))
@@ -1017,17 +1120,17 @@ document.addEventListener('click', (e) => {
                     res
                         .filter(res => res.locale === i18n.locale)
                         .forEach(res => i18n.setTranslation(res.label, res.content));
-                    du.setChecked('symbol-popup', false)
+                    du.setChecked("symbol-popup", false)
                 });
 
                 return false;
             // Debug stuff
-            case 'reload-labs':
+            case "reload-labs":
                 changedPositionLarge().then();
                 return false
-            case 'clear-cache':
+            case "clear-cache":
                 send_message_to_service_worker({
-                    type: 'action',
+                    type: "action",
                     text: target.id,
                 }).then()
                 return false;
@@ -1037,43 +1140,43 @@ document.addEventListener('click', (e) => {
         }
     }
     //This closes the popups very fanatic
-    popup_close && du.setChecked('symbol-popup', false);
-    du.setChecked('symbol-menu', false);
+    popup_close && du.setChecked("symbol-popup", false);
+    du.setChecked("symbol-menu", false);
     return true;
 });
 
-document.addEventListener('change', (e) => {
+document.addEventListener("change", (e) => {
     if (
-        'select' === e.target.tagName.toLowerCase() &&
-        e.target.parentElement.classList.contains('select-or-input')
+        "select" === e.target.tagName.toLowerCase() &&
+        e.target.parentElement.classList.contains("select-or-input")
     ) {
         e.target.parentElement.dataset.value = e.target.value;
     }
 
-    if ('top' === e.target.name) {
-        if ('symbol-settings' === e.target.id) {
+    if ("top" === e.target.name) {
+        if ("symbol-settings" === e.target.id) {
             document.getElementById(st.div).dataset.changes = JSON.stringify([]);
         } else {
             const changes = JSON.parse(document.getElementById(st.div).dataset.changes);
-            if (['username', 'password'].filter(x => changes.includes(x)).length) {
+            if (["username", "password"].filter(x => changes.includes(x)).length) {
                 updateUser().catch(err => console.error(err));
             }
-            if (['username', 'password', 'block-size', 'hide-logged'].filter(x => changes.includes(x)).length) {
+            if (["username", "password", "block-size", "hide-logged"].filter(x => changes.includes(x)).length) {
                 Labs.refresh().then();
             }
-            if (['high-accuracy', 'update-interval'].filter(x => changes.includes(x)).length) {
+            if (["high-accuracy", "update-interval"].filter(x => changes.includes(x)).length) {
                 watchLocation();
             }
-            if (['data-url'].filter(x => changes.includes(x)).length) {
-                st.getSetting('data-url').then(data_url => window.data_url = data_url || config.data_url);
+            if (["data-url"].filter(x => changes.includes(x)).length) {
+                st.getSetting("data-url").then(data_url => window.data_url = data_url || config.data_url);
             }
             console.log(changes);
             if (changes.filter(x =>
-                x.startsWith('bit-') ||
-                x.startsWith('filter-') ||
-                x.startsWith('disable-filter-')
+                x.startsWith("bit-") ||
+                x.startsWith("filter-") ||
+                x.startsWith("disable-filter-")
             ).length) {
-                console.log('Filter changed')
+                console.log("Filter changed")
                 updateFilters();
                 Labs.refresh().then();
             }
@@ -1081,12 +1184,12 @@ document.addEventListener('change', (e) => {
         }
     }
 
-    if (e.target.id.startsWith('details-')) {
+    if (e.target.id.startsWith("details-")) {
         if (document
-            .getElementById('id'+e.target.id.slice(8))
-            .getElementsByClassName('details')[1]
+            .getElementById("id"+e.target.id.slice(8))
+            .getElementsByClassName("details")[1]
             .classList
-            .contains('blur')
+            .contains("blur")
         ) {
             Labs
                 .getDetail(e.target.id.slice(8)) // Remove the first 8 characters
@@ -1108,96 +1211,96 @@ document.addEventListener('change', (e) => {
     }
 
     if (
-        e.target.classList.contains('friend-selector') ||
-        'friends-period' === e.target.name
+        e.target.classList.contains("friend-selector") ||
+        "friends-period" === e.target.name
     ) {
-        const period = document.querySelector( 'input[name="friends-period"]:checked');
+        const period = document.querySelector( "input[name=\"friends-period\"]:checked");
         du.setInnerHtml(
-            'friends-price',
+            "friends-price",
             (pp.friendsPrice() * (period ? period.value : 11)/100).toFixed(2)
         );
-        const bits_elem = document.getElementById('friends-bits')
+        const bits_elem = document.getElementById("friends-bits")
         if (bits_elem) { bits_elem.value = pp.friendsBits(); }
     }
 
     switch(e.target.id) {
-        case 'friends-bits':
-            Array.from(document.getElementsByClassName('friend-selector')).forEach(x => {
+        case "friends-bits":
+            Array.from(document.getElementsByClassName("friend-selector")).forEach(x => {
                 x.checked = +x.value === (
                     // + to convert to int
                     (+x.dataset.bitValue) &
-                    (+document.getElementById('friends-bits').value)
+                    (+document.getElementById("friends-bits").value)
                 );
             })
             break;
-        case 'symbol-map':
+        case "symbol-map":
             if (e.target.checked) {
                 Map.center();
             }
             break;
-        case 'symbol-labs':
+        case "symbol-labs":
             //changedPositionSmall().catch(err=>console.error(err));
             break;
-        case 'notification-distance':
+        case "notification-distance":
             enableNotifications(e)
             break;
         default:
-            //console.log('change event not handled:', e.target.id);
+            //console.log("change event not handled:", e.target.id);
             return true;
     }
 });
 
-document.addEventListener('message', (e) => {
-    console.log('Message', e.data);
+document.addEventListener("message", (e) => {
+    console.log("Message", e.data);
     addMessage(e.data)
 });
 
-document.addEventListener('translate', (e) => {
+document.addEventListener("translate", (e) => {
     if (!config.translator) { return false; }
-    st.getSetting('language').then(locale => {
+    st.getSetting("language").then(locale => {
         console.debug(locale);
         Labs
             .getData({
-                'special': 'language',
-                'id': e.target.dataset.i18nKey + '|' +
-                    config.translator.map(x => x.split(':')[0]).join('|')
+                "special": "language",
+                "id": e.target.dataset.i18nKey + "|" +
+                    config.translator.map(x => x.split(":")[0]).join("|")
             }).then(json =>
             du.loadUrlToElem(
-                'popup-content',
-                './html/i18n.html',
-                {'label': json[0].label}
+                "popup-content",
+                "./html/i18n.html",
+                {"label": json[0].label}
             ).then(() => i18n.supported_locales)
                 .then (supported_locales =>
             {
-                const template = du.elemOrId('i18n-template');
-                const holder = du.elemOrId('i18n-holder');
+                const template = du.elemOrId("i18n-template");
+                const holder = du.elemOrId("i18n-holder");
                 json.forEach(data => {
-                    ['flag', 'language'].forEach(
-                        x => data[x] = supported_locales[data.locale.split(':')[0]]
-                            ? supported_locales[data.locale.split(':')[0]][x]
+                    ["flag", "language"].forEach(
+                        x => data[x] = supported_locales[data.locale.split(":")[0]]
+                            ? supported_locales[data.locale.split(":")[0]][x]
                             : data.locale
                     );
-                    const label = data['label'];
-                    const content = data['content'];
+                    const label = data["label"];
+                    const content = data["content"];
                     let options; // Initialisation is redundant
-                    if (data.label.endsWith('_p')) {
+                    if (data.label.endsWith("_p")) {
                         // TODO: Handle cardinal / ordinal
-                        options =  new Intl.PluralRules('en').resolvedOptions().pluralCategories;
+                        options =  new Intl.PluralRules("en").resolvedOptions().pluralCategories;
                     } else {
-                        options = [''];
+                        options = [""];
                     }
                     options.forEach(option => {
                         if (option) {
-                            data['label'] = label + '__' + option
+                            data["label"] = label + "__" + option
                         }
-                        data['option'] = option;
-                        data['content'] = typeof content === 'string' ? content : content[option] || '';
-                        const node = document.createElement('div');
+                        data["option"] = option;
+                        data["content"] = typeof content === "string" ? content : content[option] || "";
+                        const node = document.createElement("div");
                         node.innerHTML = du.renderTemplate(i18n.translateHtml(template.innerHTML), data);
-                        const textarea  = node.getElementsByTagName('textarea')[0];
-                        textarea.style.width = (Math.min(config.max_width,  window.innerWidth ) * .7) + 'px';
-                        if (config.translator.includes(data['locale'])) {
-                            ['content', 'label', 'locale'].forEach(x => {
+                        const textarea  = node.getElementsByTagName("textarea")[0];
+                        textarea.style.width = (Math.min(config.max_width,  window.innerWidth ) * .7) + "px";
+                        if (config.translator.includes(data["locale"])) {
+                            ["content", "label", "locale"].forEach(x => {
                                 textarea.dataset[x] = data[x];
                             });
                         } else {
@@ -1206,10 +1309,10 @@ document.addEventListener('translate', (e) => {
                         holder.append(node);
                         })
                 })
-                du.setChecked('symbol-popup');
+                du.setChecked("symbol-popup");
             })
         );
     });
 });
 
-init()
+init();

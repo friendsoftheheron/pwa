@@ -1,30 +1,30 @@
-import cr from './crypto.js';
-import du from './domutils.js';
-import i18n from './i18n.js';
+import cr from "./crypto.js";
+import du from "./domutils.js";
+import i18n from "./i18n.js";
 // We need the listeners of the modules below
-import dr from './dual-range.js';
-import rs from './resize.js';
+import dr from "./dual-range.js";
+import rs from "./resize.js";
 import DomUtils from "./domutils.js";
 
 
 export default class Settings {
 
-    static prefix = 'setting-'
-    static div = 'settings'
-    static url = './html/settings.html'
-    static encrypt_field_start = 'password'
+    static prefix = "setting-"
+    static div = "settings"
+    static url = "./html/settings.html"
+    static encrypt_field_start = "password"
 
     static getItem = (id) => new Promise((resolve, reject) => {
         const value = localStorage.getItem(this.prefix + id);
         if (null === value) {
-            return reject('item not found: ' + id)
+            return reject("item not found: " + id)
         }
         cr.decrypt(value)
             .then(plain => resolve(plain))
             .catch(() => resolve(value))
     })
 
-    static setItem = (id ='', value='') => new Promise((resolve) => {
+    static setItem = (id ="", value="") => new Promise((resolve) => {
         cr.encrypt(value).then(cypher => {
             localStorage.setItem(
                 this.prefix + id,
@@ -38,14 +38,14 @@ export default class Settings {
         this.getItem(id)
             .then(value => resolve(value))
             .catch(() => {
-                console.warn('Setting does not exist: ' + id);
+                console.warn("Setting does not exist: " + id);
                 const elem = document.getElementById(id);
                 if (null !== elem) {
-                    return resolve(elem.dataset[du.camelcaseify(this.prefix + 'default')]);
+                    return resolve(elem.dataset[du.camelcaseify(this.prefix + "default")]);
                 }
-                console.warn('Setting element does exist: ' + id);
+                console.warn("Setting element does exist: " + id);
                 if (null === resolve_to) {
-                    reject('Setting not found: ' + id);
+                    reject("Setting not found: " + id);
                 } else {
                     resolve(resolve_to);
                 }
@@ -61,13 +61,13 @@ export default class Settings {
         const _holder = du.elemOrId(holder);
         const _template = du.elemOrId(_holder.dataset.templateId);
 
-        console.log('addTemplate', data.id)
-        if (_holder.querySelector('input[type="radio"][name="'+(data.namePrefix||'')+data.id+'"]')) {
-            console.warn('Id already exists:', data.id);
+        console.log("addTemplate", data.id)
+        if (_holder.querySelector("input[type=\"radio\"][name=\""+(data.namePrefix||"")+data.id+"\"]")) {
+            console.warn("Id already exists:", data.id);
             return false;
         }
 
-        const node = document.createElement('span');
+        const node = document.createElement("span");
         node.innerHTML = du.renderTemplate(i18n.translateHtml(_template.innerHTML), data);
 
         const nodes = Array
@@ -76,7 +76,7 @@ export default class Settings {
         _holder.insertBefore(node, nodes.length ? nodes[0] : null);
 
         if (options.radio) {
-            du.dispatchEvent(node.querySelector('[data-label-for-radio]'), 'click')
+            du.dispatchEvent(node.querySelector("[data-label-for-radio]"), "click")
         }
     }
 
@@ -88,10 +88,10 @@ export default class Settings {
             elem = elem.parentNode;
         }
         if (!elem) {
-            console.warn('Holder not found:', holder_id);
+            console.warn("Holder not found:", holder_id);
             return false;
         }
-        node.querySelectorAll('input[type="radio"]').forEach(radio=> {
+        node.querySelectorAll("input[type=\"radio\"]").forEach(radio=> {
             // Very short timeout to prevent the radio click to reenter the local storage
             window.setTimeout(
                 () => localStorage.removeItem(this.prefix+radio.id),
@@ -105,12 +105,12 @@ export default class Settings {
 
     static fillTemplate = (data) => new Promise((resolve, reject) => {
         const holder = du.elemOrId(data.holder);
-        if (!holder) { return reject('No holder: ' + data.holder); }
+        if (!holder) { return reject("No holder: " + data.holder); }
         const template = du.elemOrId(holder.dataset.templateId);
-        if (!template) { return reject('No holder: ' + data.holder); }
-        holder.innerHTML='';
+        if (!template) { return reject("No holder: " + data.holder); }
+        holder.innerHTML="";
         data.data.forEach(data => {
-            const node = document.createElement('span');
+            const node = document.createElement("span");
             node.innerHTML = du.renderTemplate(i18n.translateHtml(template.innerHTML), data);
             holder.append(node);
         });
@@ -123,7 +123,7 @@ export default class Settings {
             .then(() => Promise.all(templates.map(t => this.fillTemplate(t))))
             .then(() => i18n.setLanguageSelector())
             .then(() => this.initialiseSettings())
-            .then(() => this.getSetting('language', 'en'))
+            .then(() => this.getSetting("language", "en"))
             .then(locale => i18n.locale = locale)
             .then(res => resolve(res))
             .catch(err => reject(err))
@@ -132,18 +132,18 @@ export default class Settings {
 
     static clearSettings = () => {
         Array.from(document
-            .querySelectorAll('[data-' + this.prefix + 'default]')
+            .querySelectorAll("[data-" + this.prefix + "default]")
         )
             .forEach(elem => {
                 localStorage.removeItem(this.prefix + elem.id);
-                du.setElementValue(elem, elem.dataset[du.camelcaseify(this.prefix + 'default')]);
+                du.setElementValue(elem, elem.dataset[du.camelcaseify(this.prefix + "default")]);
             })
     }
 
     static initialiseSettings = () =>
         Promise.all(
             Array.from(document
-                .querySelectorAll('[data-' + this.prefix + 'default]')
+                .querySelectorAll("[data-" + this.prefix + "default]")
             )
                 .map(elem => new Promise((resolve) => {
                     this.getSetting(elem.id)
@@ -157,9 +157,9 @@ export default class Settings {
     ;
 }
 
-document.addEventListener('change', (e) => {
-    if (e.target.hasAttribute('data-'+Settings.prefix+'default')) {
-        const name = 'INPUT' === e.target.tagName && 'radio' === e.target.getAttribute('type') && e.target.getAttribute('name');
+document.addEventListener("change", (e) => {
+    if (e.target.hasAttribute("data-"+Settings.prefix+"default")) {
+        const name = "INPUT" === e.target.tagName && "radio" === e.target.getAttribute("type") && e.target.getAttribute("name");
         if (name) {
             document.getElementsByName(name).forEach(elem => Settings.updateSetting(elem).then());
         } else { Settings.updateSetting(e.target).then(); }
@@ -178,15 +178,15 @@ document.addEventListener('change', (e) => {
             .changes = JSON.stringify(changes)
     }
 
-    if ('owners-select' === e.target.id) {
+    if ("owners-select" === e.target.id) {
         const option = e.target.querySelector(`[value="${e.target.value}"]`)
         if (option) {
             Settings.addTemplate(
                 e.target.dataset.holderId,
                 {
-                    'id': e.target.value,
-                    'innerHTML': option.innerHTML,
-                    'namePrefix': e.target.dataset.namePrefix,
+                    "id": e.target.value,
+                    "innerHTML": option.innerHTML,
+                    "namePrefix": e.target.dataset.namePrefix,
                 },
                 {
                     radio: true,
@@ -196,6 +196,6 @@ document.addEventListener('change', (e) => {
     }
 });
 
-document.addEventListener('click', e=> {
+document.addEventListener("click", e=> {
     if (e.target.dataset.removeHolder) { Settings.removeTemplate(e.target); }
 });

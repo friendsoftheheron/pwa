@@ -1,60 +1,61 @@
-import config from './js/config.js'
+import config from "./js/config.js"
 
 const assets = [
-    './app.js',
-    './index.html',
-    './favicon.ico',
-    './css/ratings.css',
-    './css/resize.css',
-    './css/style.css',
-    './css/vars.css',
-    './data/theme.json',
-    './images/badge.png',
-    './images/balloon.png',
-    './images/balloon-cloud.png',
-    './images/center.png',
-    './images/center_ck.png',
-    './images/center_cl.png',
-    './images/desert.png',
-    './images/launch.png',
-    './images/qr-code.svg',
-    './images/svg/compass.svg',
-    './images/svg/marker-blue.svg',
-    './images/svg/marker-orange.svg',
-    './images/svg/marker-shadow.png.svg',
-    './images/svg/needle.svg',
-    './html/about.html',
-    './html/donate.html',
-    './html/friends.html',
-    './html/help.html',
-    './html/labs.html',
-    './html/map.html',
-    './html/menu.html',
-    './html/paypal.html',
-    './html/qr-code.html',
-    './html/review.html',
-    './html/settings.html',
-    './html/stats.html',
-    './js/crypto.js',
-    './js/domutils.js',
-    './js/dual-range.js',
-    './js/geocaching.js',
-    './js/i18n.js',
-    './js/labs.js',
-    './js/location.js',
-    './js/map.js',
-    './js/paypal.js',
-    './js/qr-code.js',
-    './js/settings.js',
+    "./app.js",
+    "./index.html",
+    "./favicon.ico",
+    "./css/ratings.css",
+    "./css/resize.css",
+    "./css/style.css",
+    "./css/vars.css",
+    "./data/theme.json",
+    "./images/badge.png",
+    "./images/balloon.png",
+    "./images/balloon-cloud.png",
+    "./images/center.png",
+    "./images/center_ck.png",
+    "./images/center_cl.png",
+    "./images/desert.png",
+    "./images/launch.png",
+    "./images/qr-code.svg",
+    "./images/svg/compass.svg",
+    "./images/svg/marker-blue.svg",
+    "./images/svg/marker-orange.svg",
+    "./images/svg/marker-shadow.png.svg",
+    "./images/svg/needle.svg",
+    "./html/about.html",
+    "./html/donate.html",
+    "./html/friends.html",
+    "./html/help.html",
+    "./html/labs.html",
+    "./html/map.html",
+    "./html/menu.html",
+    "./html/paypal.html",
+    "./html/qr-code.html",
+    "./html/review.html",
+    "./html/scan.html",
+    "./html/settings.html",
+    "./html/stats.html",
+    "./js/crypto.js",
+    "./js/domutils.js",
+    "./js/dual-range.js",
+    "./js/geocaching.js",
+    "./js/i18n.js",
+    "./js/labs.js",
+    "./js/location.js",
+    "./js/map.js",
+    "./js/paypal.js",
+    "./js/qr-code.js",
+    "./js/settings.js",
 ];
 
-self.addEventListener('install', e => {
-    console.log('sw:install');
+self.addEventListener("install", e => {
+    console.log("sw:install");
     caches.keys().then(function(names) {
         names
             .filter((x) => x.startsWith(config.name_reduced) && x !== config.cache_name)
             .forEach((name) => {
-                console.info('sw:caches delete', name)
+                console.info("sw:caches delete", name)
                 caches.delete(name).catch(err => console.log(err));
             });
     });
@@ -65,22 +66,22 @@ self.addEventListener('install', e => {
     );
 });
 
-self.addEventListener('activate', event => {
-    console.log('sw:activate');
+self.addEventListener("activate", event => {
+    console.log("sw:activate");
     event.waitUntil(self.clients.claim().catch(err => console.log(err)));
 });
 
-self.addEventListener('fetch', e => {
+self.addEventListener("fetch", e => {
     return e.respondWith(
         caches.match(e.request).then((res) => {
             return res || fetch(e.request).then((res) => {
-                console.info('sw:fetched', e.request);
+                console.info("sw:fetched", e.request);
                 if (
-                    e.request.method !== 'GET' ||
-                    // e.request.url.includes('?') || // No query parameters
-                    // e.request.url.includes('mediacontainer') ||
-                    e.request.url.endsWith('html/message.html') || // No messages
-                    e.request.url.endsWith('js/config.js')  // Not the config
+                    e.request.method !== "GET" ||
+                    // e.request.url.includes("?") || // No query parameters
+                    // e.request.url.includes("mediacontainer") ||
+                    e.request.url.endsWith("html/message.html") || // No messages
+                    e.request.url.endsWith("js/config.js")  // Not the config
                 ) {
                     return res;
                 }
@@ -88,30 +89,30 @@ self.addEventListener('fetch', e => {
                     cache.put(e.request, res.clone()).catch(err => console.log(err));
                     return res;
                 });
-            }).catch(err => console.error('sw:fetch:'+e.request.url, err));
+            }).catch(err => console.error("sw:fetch:"+e.request.url, err));
         })
     );
 });
 
-self.addEventListener('notificationclick', e => {
-    console.log('sw:notificationclick', e.notification.title);
+self.addEventListener("notificationclick", e => {
+    console.log("sw:notificationclick", e.notification.title);
     e.notification.close()
     e.waitUntil(
-        self.openUrl(config.home_url) //+ '#id-' + e.notification.tag)
-            .then(client => client.postMessage('id-' + e.notification.tag))
-            .catch(err => console.error('self.openUrl', err))
+        self.openUrl(config.home_url) //+ "#id-" + e.notification.tag)
+            .then(client => client.postMessage("id-" + e.notification.tag))
+            .catch(err => console.error("self.openUrl", err))
     );
 });
 
-self.addEventListener('notificationclose', e => {
-    console.log('notificationclose', e);
+self.addEventListener("notificationclose", e => {
+    console.log("notificationclose", e);
 });
 
-self.addEventListener('message', e => {
+self.addEventListener("message", e => {
     switch (e.data.type) {
-        case 'action':
+        case "action":
             switch(e.data.text) {
-                case 'clear-cache':
+                case "clear-cache":
                     self.clearCache();
                     return true;
                 default:
@@ -129,7 +130,7 @@ self.openUrl = (url) => new Promise((resolve) => {
     self
         .clients
         .matchAll({
-            type: 'window',
+            type: "window",
             includeUncontrolled: true
         })
         .then((windowClients) => {
@@ -154,15 +155,15 @@ self.openUrl = (url) => new Promise((resolve) => {
 })
 
 self.clearCache = () => {
-   console.log('sw:clearCache');
+   console.log("sw:clearCache");
    caches.delete(config.cache_name).catch(err => console.log(err));
-    self.sendMessage('sw:Clear cache');
+    self.sendMessage("sw:Clear cache");
 }
 
 self.sendMessage = (message) => {
     self
         .clients
-        .matchAll({includeUncontrolled: true, type: 'window'})
+        .matchAll({includeUncontrolled: true, type: "window"})
         .then(clients => {
             clients.forEach((client) => {
                 client.postMessage(message);

@@ -4,15 +4,15 @@
 export default class I18N {
     constructor() {}
 
-    static default = 'en';
-    static selector_id = 'language';
+    static default = "en";
+    static selector_id = "language";
 
-    static _supported_url = './lang/lang.json';
-    static _translations_url = './lang/@@.json';
+    static _supported_url = "./lang/lang.json";
+    static _translations_url = "./lang/@@.json";
     static _supported_locales = null;
 
 
-    static _locale = '';
+    static _locale = "";
 
     static supported_url = this._supported_url;
     static translations_url = this._translations_url;
@@ -37,7 +37,7 @@ export default class I18N {
 
     static set locale(locale)  {
         if (locale === this._locale) { return; }
-        document.getElementsByTagName('html')[0].setAttribute('lang', locale);
+        document.getElementsByTagName("html")[0].setAttribute("lang", locale);
         this.setTranslations(locale).then(() => this._locale = locale);
     }
 
@@ -47,8 +47,8 @@ export default class I18N {
     }
 
     static setTranslations = (locale = this.locale) => new Promise((resolve, reject) => {
-        if ('' === locale) { return reject('No locale set') }
-        fetch(this.translations_url.replace('@@', locale.replaceAll(/\W/g, '')))
+        if ("" === locale) { return reject("No locale set") }
+        fetch(this.translations_url.replace("@@", locale.replaceAll(/\W/g, "")))
             .then(res => res.json())
             .then(json => {
                 this.translations = json;
@@ -60,7 +60,7 @@ export default class I18N {
     });
 
     static getContent = (key, elem) => {
-        if (key.endsWith('_p')) {
+        if (key.endsWith("_p")) {
             return this.translations[key] &&
                 this.translations[key][
                     new Intl
@@ -77,18 +77,18 @@ export default class I18N {
             /\((\w+|\*|\/|\$)\)\[([^\]]*)]/g,
             (_, key, text) => {
                 switch (key) {
-                    case '*': return '<b>'+text+'</b>';
-                    case '/': return '<i>'+text+'</i>';
-                    case '$': return elem.dataset.i18nValue;
+                    case "*": return "<b>"+text+"</b>";
+                    case "/": return "<i>"+text+"</i>";
+                    case "$": return elem.dataset.i18nValue;
                     default:
-                        const data = elem.dataset['i18nTag'+key[0].toUpperCase() + key.slice(1)]
+                        const data = elem.dataset["i18nTag"+key[0].toUpperCase() + key.slice(1)]
                         if (!data) return `(${key})[${text}]`
                         const json = JSON.parse(data);
-                        const tag = document.createElement(json.tag || 'span')
+                        const tag = document.createElement(json.tag || "span")
                         Object.entries(json.attr || {}).forEach(([key, value]) => {
                             tag.setAttribute(key, value);
                         })
-                        tag.innerHTML = text || json.content || '';
+                        tag.innerHTML = text || json.content || "";
                         return tag.outerHTML;
                 }
             }
@@ -105,10 +105,10 @@ export default class I18N {
     static translateElement = (elem) => {
         const content = I18N.getContent(elem.dataset.i18nKey, elem);
         if (undefined === content) {
-            elem.classList.add('i18n-untranslated')
+            elem.classList.add("i18n-untranslated")
         } else {
-            elem.classList.remove('i18n-untranslated')
-            if ('i18nAttr' in elem.dataset) {
+            elem.classList.remove("i18n-untranslated")
+            if ("i18nAttr" in elem.dataset) {
                 elem.setAttribute(
                     elem.dataset.i18nAttr,
                     this.parse(content)
@@ -117,12 +117,12 @@ export default class I18N {
                 elem.innerHTML = this.parse(content, elem);
             }
         }
-        const span = document.createElement('span');
-        span.classList.add('i18n-edit');
+        const span = document.createElement("span");
+        span.classList.add("i18n-edit");
         span.dataset.i18nEditKey = elem.dataset.i18nKey;
 
-        if (['OPTION'].includes(elem.tagName)) { return;  } // Options are difficult to handle
-        if (['BUTTON', 'TEXTAREA'].includes(elem.tagName)) {
+        if (["OPTION"].includes(elem.tagName)) { return;  } // Options are difficult to handle
+        if (["BUTTON", "TEXTAREA"].includes(elem.tagName)) {
             if (
                 null === elem.nextSibling ||
                 elem.nextSibling.nodeType !== Node.ELEMENT_NODE ||
@@ -130,10 +130,10 @@ export default class I18N {
                 elem.nextSibling.dataset.i18nEditKey !== span.dataset.i18nEditKey
             ) {
                 elem.classList.forEach(c => {
-                    if (['left', 'margin', 'right', 'debug']) {
+                    if (["left", "margin", "right", "debug"]) {
                         span.classList.add(c)
                     } else {
-                        console.log('cl', c)
+                        console.log("cl", c)
                     }
                 });
                 elem.parentNode.insertBefore(span, elem.nextSibling);
@@ -141,7 +141,7 @@ export default class I18N {
         } else if (
             null === elem.lastChild ||
             elem.lastChild.nodeType !== Node.ELEMENT_NODE ||
-            !elem.lastChild.classList.contains('i18n-edit')
+            !elem.lastChild.classList.contains("i18n-edit")
         ) {
             elem.appendChild(span);
         }
@@ -157,13 +157,13 @@ export default class I18N {
     static translate = (elem = null) => {
         if (null === elem) { elem = document; }
         elem
-            .querySelectorAll('[data-i18n-key]')
+            .querySelectorAll("[data-i18n-key]")
             .forEach(elem => this.translateElement(elem))
         ;
     }
 
     static translateHtml = (html) => {
-        const div = document.createElement('div');
+        const div = document.createElement("div");
         div.innerHTML = html;
         this.translate(div)
         return div.innerHTML;
@@ -173,20 +173,20 @@ export default class I18N {
         this.supported_locales.then(supported_locales => {
             if ((key in supported_locales) && (!this._supported_locales[key].added)) {
                 this._supported_locales[key].added = true;
-                const option = document.createElement('option')
+                const option = document.createElement("option")
                 option.value = key;
                 option.selected = selected;
-                option.innerText = supported_locales[key].flag + ' ' + supported_locales[key].language;
-                option.classList.add('lang')
+                option.innerText = supported_locales[key].flag + " " + supported_locales[key].language;
+                option.classList.add("lang")
                 select.append(option)
             }
         });
     }
 
-    static setLanguageSelector = (selector_id= this.selector_id, locale = '') => new Promise((resolve, reject) => {
+    static setLanguageSelector = (selector_id= this.selector_id, locale = "") => new Promise((resolve, reject) => {
         const select = document.getElementById(selector_id);
-        if (!select) { return reject('No select Element: '+selector_id); }
-        select.innerHTML = '';
+        if (!select) { return reject("No select Element: "+selector_id); }
+        select.innerHTML = "";
         Promise
             .all(navigator.languages.map(key => this.addLanguageToSelector(key, select, key === locale)))
             .then(()=>this.supported_locales)
@@ -199,11 +199,11 @@ export default class I18N {
 
 }
 
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('i18n-edit')) {
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("i18n-edit")) {
         e.preventDefault();
         const event = new Event(
-            'translate',
+            "translate",
             {
                 view: window,
                 bubbles: true,
@@ -220,15 +220,15 @@ document.addEventListener('click', (e) => {
  })
 
 
-document.addEventListener('change', (e) => {
+document.addEventListener("change", (e) => {
     if (e.target.id === I18N.selector_id) {
         I18N.locale = e.target.value;
     }
 })
 
-document.addEventListener('i18n-translate', (e) => {
+document.addEventListener("i18n-translate", (e) => {
     I18N.translate(e.target);
 })
-document.addEventListener('i18n-translate-element', (e) => {
+document.addEventListener("i18n-translate-element", (e) => {
     I18N.translateElement(e.target);
 })

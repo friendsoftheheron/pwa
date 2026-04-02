@@ -9,16 +9,16 @@ export default class Resize {
     static onMouseDown = e => {
         let target = e.target;
         while(target) {
-            if (target.classList && target.classList.contains('resizable')) {
+            if (target.classList && target.classList.contains("resizable")) {
                 Resize.client_x = e.touches ? e.touches[0].clientX : e.clientX;
                 //Resize.client_y = e.touches ? e.touches[0].clientY : e.clientY;
                 Resize.elem_this = target;
                 Resize.elem_prev = target.previousElementSibling;
                 if (!Resize.elem_prev) {
-                    console.error('Resizable: No previousElementSibling', Resize.elem_this);
+                    console.error("Resizable: No previousElementSibling", Resize.elem_this);
                     Resize.elem_this = null;
                 }
-                Resize.elem_this.classList.add('dragging')
+                Resize.elem_this.classList.add("dragging")
 
                 // Setting absolute sizes when some are still relative gives interesting results.
                 // To solve this we first store the values and then use them.
@@ -26,8 +26,8 @@ export default class Resize {
                     node.dataset.bounds = JSON.stringify(node.getBoundingClientRect());
                 });
                 Array.from(target.parentNode.children).forEach(node => {
-                    node.style.height = JSON.parse(node.dataset.bounds).height + 'px';
-                    node.style.width = JSON.parse(node.dataset.bounds).width + 'px';
+                    node.style.height = JSON.parse(node.dataset.bounds).height + "px";
+                    node.style.width = JSON.parse(node.dataset.bounds).width + "px";
                 })
                 return false;
             }
@@ -52,21 +52,21 @@ export default class Resize {
         Resize.client_x = e.touches ? e.touches[0].clientX : e.clientX;
         //Resize.client_y = e.touches ? e.touches[0].clientY : e.clientY;
 
-        Resize.elem_this.style.width = (bounding_this.width + delta_x) + 'px';
-        Resize.elem_prev.style.width = (bounding_prev.width - delta_x) + 'px';
+        Resize.elem_this.style.width = (bounding_this.width + delta_x) + "px";
+        Resize.elem_prev.style.width = (bounding_prev.width - delta_x) + "px";
     };
 
     static onMouseUp = e => {
         Resize.elem_this &&
-        Resize.elem_this.classList.remove('dragging')
+        Resize.elem_this.classList.remove("dragging")
         Resize.elem_this = null;
     };
 
 }
 
-document.addEventListener('mousedown', Resize.onMouseDown);
-document.addEventListener('touchstart', Resize.onMouseDown);
-document.addEventListener('mousemove', Resize.onMouseMove);
-document.addEventListener('touchmove', Resize.onMouseMove);
-document.addEventListener('mouseup', Resize.onMouseUp);
-document.addEventListener('touchend', Resize.onMouseUp);
+document.addEventListener("mousedown", Resize.onMouseDown);
+document.addEventListener("touchstart", Resize.onMouseDown);
+document.addEventListener("mousemove", Resize.onMouseMove);
+document.addEventListener("touchmove", Resize.onMouseMove);
+document.addEventListener("mouseup", Resize.onMouseUp);
+document.addEventListener("touchend", Resize.onMouseUp);

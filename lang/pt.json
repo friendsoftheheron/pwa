@@ -97,6 +97,8 @@
     "paypal-period": "Duração",
     "paypal-price": "Preço",
     "qr": "Código QR",
+    "quit": "Sair",
+    "scan-qr": "Ler o QR",
     "settings": "Configurações",
     "settings-block-size": "Tamanho do bloco",
     "settings-debug": "Coisas de depuração",

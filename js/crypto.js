@@ -2,8 +2,8 @@
 export default class Crypto {
     static ivLength = 12;
     static length = 256;
-    static mode = 'AES-GCM';
-    static password = 'P@s$w0rd';
+    static mode = "AES-GCM";
+    static password = "P@s$w0rd";
 
 
     // https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
@@ -30,15 +30,15 @@ export default class Crypto {
 
     static _genEncryptionKey = (password, mode, length) => new Promise((resolve) => {
         const algo = {
-            name: 'PBKDF2',
-            hash: 'SHA-256',
-            salt: new TextEncoder().encode('a-unique-salt'),
+            name: "PBKDF2",
+            hash: "SHA-256",
+            salt: new TextEncoder().encode("a-unique-salt"),
             iterations: 1000
         };
         const derived = {name: mode, length: length};
         const encoded = new TextEncoder().encode(password);
-        crypto.subtle.importKey('raw', encoded, {name: 'PBKDF2'}, false, ['deriveKey'])
-            .then(key => resolve(crypto.subtle.deriveKey(algo, key, derived, false,['encrypt', 'decrypt'])))
+        crypto.subtle.importKey("raw", encoded, {name: "PBKDF2"}, false, ["deriveKey"])
+            .then(key => resolve(crypto.subtle.deriveKey(algo, key, derived, false,["encrypt", "decrypt"])))
         ;
     })
 
@@ -75,7 +75,7 @@ export default class Crypto {
     })
 
     static encrypt = (
-        text = '',
+        text = "",
         password = this.password,
         mode = this.mode,
         length = this.length,
@@ -90,7 +90,7 @@ export default class Crypto {
     })
 
     static decrypt = (
-        encrypted = '',
+        encrypted = "",
         password = this.password,
         mode = this.mode,
         length = this.length,

@@ -134,6 +134,8 @@
     "qr": "QR-Code",
     "qr-scan": "Scannen Sie den QR-Code,\r\n(PowerWalkAdventure)[]\r\nauf Ihrem Gerät zu installieren. ",
     "qr-visit": "Oder besuchen Sie:",
+    "quit": "Beenden",
+    "scan-qr": "QR scannen",
     "settings": "Einstellungen",
     "settings-block-size": "Blockgröße",
     "settings-clear-cache": "Cache leeren",

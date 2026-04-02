@@ -1,4 +1,8 @@
 :root {
+    --default-button-background: #e9e9ed;
+    --default-button-hover: #d0d0d7;
+    --default-input-border: #8f8f9d;
+
     --orange: #f15927;
     --light-orange: #f69879;
     --dark-orange: #903517;
@@ -11,19 +15,65 @@
     --yellow: #E98300;
     --white: #f9fcff;
     --black: #00222d;
-    --light-gray: #dddedf;
+    --button-gray: #e9e9ed;
     --gray: #c1c3c7;
-    --dark-gray: #a1a5ae;
-
-    --accent-color: var(--medium-blue);
-
+    --dark-gray: #89a;
     --max-width: 800px;
 
-    --disabled-color: #AAA;
-    --disabled-background: #F5F5F5;
-    --enabled-color: var(--black);
-    --enabled-background: var(--white);
+    --disabled-color: light-dark(#AAA, #555);
+    --disabled-background: light_dark(#F5F5F5, #0A0A0A);
+    --enabled-color: light-dark(var(--black), inherit);
+    --enabled-background: light-dark(var(--white), inherit);
 
     --header-height: 2.5rem;
     --footer-height: 2rem;
+
+    --accent-color: light-dark(var(--medium-blue), var(--medium-blue));
+    --background-color: light-dark(var(--white), var(--black));
+    --background-highlight: light-dark(var(--sky), var(--dark-blue));
+    --text-color: light-dark(var(--black), var(--medium-blue));
+    --text-accent: light-dark(var(--dark-blue), var(--light-blue));
+    --text-highlight: light-dark(var(--medium-blue), var(--sky));
+
+    --h1-color: var(--orange);
+    --h2-color: var(--orange);
+    --h3-color: var(--medium-blue);
+
+    --input-border: light-dark(var(--default-input-border), var(--sky));
+    --button-background: light-dark(var(--default-button-background), var(--dark-blue));
+    --button-hover: light-dark(var(--default-button-hover), var(--light-blue));
+
+    --link-color: light-dark(var(--medium-blue), var(--sky));
+    --link-visited: light-dark(var(--dark-blue), var(--light-blue));
+    --link-hover: var(--orange);
+    --link-active: light-dark(var(--light-blue), var(--white));
+
+    --td-border: light-dark(var(--sky), var(--dark-blue));
+    --th-border: light-dark(var(--orange), var(--orange));
+
+    --bar-border: light-dark(var(--dark-blue), var(--light-blue));
+    --bar-extra: light-dark(var(--light-blue), var(--dark-blue));
+    --bar-main: light-dark(var(--medium-blue), var(--medium-blue));
+    --bar-max-border: light-dark(var(--dark-orange), var(--light-orange));
+    --bar-max-extra: light-dark(var(--light-orange), var(--dark-orange));
+    --bar-max-main: light-dark(var(--orange), var(--orange));
+
+
+    --footer-color: light-dark(var(--white), var(--black));
+    --label-color:  light-dark(var(--white), var(--black));
+    --incexc-background: light-dark(var(--gray), var(--dark-gray));
+
+    --messages-border: light-dark(var(--sky, var(--dark-blue)));
+    --popup-border: light-dark(var(--light-blue), var(--dark-blue));
+    --popup-top:  light-dark(var(--gray), var(--dark-gray));
+
+    --shadow-color: light-dark(#333333cc, #000000cc);
 }
+.darkplus,
+.dark {
+     color-scheme: light dark;
+}
+body.darkplus {
+
+}
+

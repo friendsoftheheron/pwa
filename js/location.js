@@ -34,11 +34,11 @@ export default class Location {
 
     static formatTimestamp(timestamp) {
         const date = new Date(parseInt(timestamp));
-        //return timestamp + ' ' + date.toString();
+        //return timestamp + " " + date.toString();
         if (timestamp - Date.now() < 24*3600*1000) {
-            return `${date.toLocaleString('nl', {hour: 'numeric', minute: 'numeric', second: 'numeric'})}`;
+            return `${date.toLocaleString("nl", {hour: "numeric", minute: "numeric", second: "numeric"})}`;
         } else if (timestamp > Date.now() - 365 *24*3600*1000) {
-            return `${date.getDate()} ${date.toLocaleString('en', {month: "short" })}`;
+            return `${date.getDate()} ${date.toLocaleString("en", {month: "short" })}`;
         } else {
             return `Y ${date.getFullYear()}`;
         }
@@ -49,10 +49,10 @@ export default class Location {
             (this.latitude >= -90) && (this.latitude <= 90) &&
             (this.longitude >= -360) && (this.longitude <= 360)
         ) ? (
-            (this.latitude < 0 ? 'S' : 'N') + this._f2dmm(this.latitude, decimals) +
-            ' ' +
-            (this.longitude < 0 ? 'W' : 'E') + this._f2dmm(this.longitude, decimals)
-        ) : '- -';
+            (this.latitude < 0 ? "S" : "N") + this._f2dmm(this.latitude, decimals) +
+            " " +
+            (this.longitude < 0 ? "W" : "E") + this._f2dmm(this.longitude, decimals)
+        ) : "- -";
     }
 
     // https://www.movable-type.co.uk/scripts/latlong.html
@@ -80,6 +80,6 @@ export default class Location {
         x = (x-d)*60;
         let m = Math.floor(x);
         x = Math.floor((x-m)*10**decimals+0.5);
-        return d+'°'+m+'.'+ ('0'.repeat(decimals)+x).slice(-decimals);
+        return d+"°"+m+"."+ ("0".repeat(decimals)+x).slice(-decimals);
     }
 };

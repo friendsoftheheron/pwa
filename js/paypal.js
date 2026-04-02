@@ -6,22 +6,22 @@ import Labs from "./labs.js";
 export default class PayPal {
     static appendScript = () => new Promise((resolve) => {
         Labs
-            .getData({'special': 'paypal_id'})
+            .getData({"special": "paypal_id"})
             .then(res => {
-                const script = document.createElement('script');
-                script.setAttribute('id', 'paypal-script-loading')
-                script.setAttribute('src', 'https://www.paypal.com/sdk/js?currency=EUR&client-id=' + res['client_id']);
+                const script = document.createElement("script");
+                script.setAttribute("id", "paypal-script-loading")
+                script.setAttribute("src", "https://www.paypal.com/sdk/js?currency=EUR&client-id=" + res["client_id"]);
                 document.head.appendChild(script);
-                script.addEventListener('load', () => {
+                script.addEventListener("load", () => {
                     document
-                        .getElementById('paypal-script-loading')
-                        .setAttribute('id', 'paypal-script')
+                        .getElementById("paypal-script-loading")
+                        .setAttribute("id", "paypal-script")
                     return resolve(script);
                 })
             })
     });
 
-    static friendsBits = (class_name = 'friend-selector') => {
+    static friendsBits = (class_name = "friend-selector") => {
         return Array
             .from(document.getElementsByClassName(class_name))
             .reduce((acc, x) => {
@@ -31,7 +31,7 @@ export default class PayPal {
                 return acc
             }, 0)
     }
-    static friendsPrice = (class_name = 'friend-selector') => {
+    static friendsPrice = (class_name = "friend-selector") => {
         return Array
             .from(document.getElementsByClassName(class_name))
             .reduce((acc, x) => {
@@ -43,28 +43,28 @@ export default class PayPal {
     }
 
     static period = () => {
-        const p = document.querySelector('input[name="friends-period"]:checked');
+        const p = document.querySelector("input[name=\"friends-period\"]:checked");
         return p ? p.value : 11;
     }
 
     static page = () => {
         Promise
             .all([
-                du.waitForSelector('#paypal-script'),
-                du.loadUrlToElem('page', 'html/paypal.html', config),
+                du.waitForSelector("#paypal-script"),
+                du.loadUrlToElem("page", "html/paypal.html", config),
             ])
             .then(() => Labs.getData({
-                'friends': 0,
-                'html': 'friends'
+                "friends": 0,
+                "html": "friends"
             }))
             .then(html => {
-                du.setInnerHtml('friends-container', html);
+                du.setInnerHtml("friends-container", html);
                 paypal.Buttons({
                     style: {
-                        //layout: 'vertical',
-                        //color:  'blue',
-                        //shape:  'rect',
-                        //label:  'paypal',
+                        //layout: "vertical",
+                        //color:  "blue",
+                        //shape:  "rect",
+                        //label:  "paypal",
                         tagline: false,
                     },
                     onInit(data, actions) {
@@ -72,28 +72,28 @@ export default class PayPal {
                             if (PayPal.friendsPrice() * PayPal.period() <= 1000) {
                                 actions.disable();
                                 document
-                                    .getElementById('paypal-button-container')
+                                    .getElementById("paypal-button-container")
                                     .classList
-                                    .add('disabled')
+                                    .add("disabled")
                             } else {
                                 actions.enable();
                                 document
-                                    .getElementById('paypal-button-container')
+                                    .getElementById("paypal-button-container")
                                     .classList
-                                    .remove('disabled')
+                                    .remove("disabled")
                             }
                         });
-                        observer.observe(document.getElementById('friends-price'), {
+                        observer.observe(document.getElementById("friends-price"), {
                             childList: true
                         });
-                        du.dispatchEvent(document.getElementsByClassName('friend-selector')[0], 'change');
+                        du.dispatchEvent(document.getElementsByClassName("friend-selector")[0], "change");
                     },
                     createOrder: (data) => {
                         return Labs
                             .getData({
-                                special: 'buy',
-                                id: this.friendsBits() + ':' +
-                                    this.period() + ':' +
+                                special: "buy",
+                                id: this.friendsBits() + ":" +
+                                    this.period() + ":" +
                                     data.paymentSource
                             })
                             .then(order => order.id)
@@ -101,22 +101,22 @@ export default class PayPal {
                     onApprove: function (data, actions) {
                         return Labs
                             .getData({
-                                'special': 'payed',
-                                'id': data.orderID,
+                                "special": "payed",
+                                "id": data.orderID,
                             })
                             .then(function (orderData) {
                                 let errorDetail = Array.isArray(orderData.details) && orderData.details[0];
-                                if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
+                                if (errorDetail && errorDetail.issue === "INSTRUMENT_DECLINED") {
                                     return actions.restart(); // Recoverable state, per:
                                     // https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
                                 }
                                 if (errorDetail) {
                                     du.setInnerHtml(
-                                        'popup-content',
-                                        document.getElementById('paypal-error-template').innerHTML,
+                                        "popup-content",
+                                        document.getElementById("paypal-error-template").innerHTML,
                                         {
-                                            description: errorDetail.description || '',
-                                            debug_id: orderData.debug_id || '',
+                                            description: errorDetail.description || "",
+                                            debug_id: orderData.debug_id || "",
                                         }
                                     )
                                     console.error(orderData);
@@ -124,12 +124,12 @@ export default class PayPal {
                                 }
                                 const transaction = orderData.purchase_units[0].payments.captures[0];
                                 du.setInnerHtml(
-                                    'paypal-button-container',
-                                        document.getElementById('paypal-succes-template').innerHTML
+                                    "paypal-button-container",
+                                        document.getElementById("paypal-succes-template").innerHTML
                                 )
                             });
                     }
-                }).render('#paypal-button-container')
+                }).render("#paypal-button-container")
             })
             .then(() => du.setChecked("symbol-page"))
     }

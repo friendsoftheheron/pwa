@@ -5,12 +5,12 @@ export default class DomUtils {
     static hash = (str) => Array.from(str).reduce((a, c) => ((a<<5) -a) + c.charCodeAt(0), 0);
     static renderTemplate = (template, obj) =>
         template.replace(/\${(\w+)}/g, (_, k) =>
-            obj.hasOwnProperty(k) ? obj[k] : '${' + k + '}'
+            obj.hasOwnProperty(k) ? obj[k] : "${" + k + "}"
         )
     ;
 
     static escapeHTML = (text) => {
-        const div = document.createElement('div');
+        const div = document.createElement("div");
         div.textContent = text;
         return div.innerHTML;
     }
@@ -32,11 +32,11 @@ export default class DomUtils {
         }
         const elem = node.getElementsByClassName(name)
         if (!elem) {
-            console.error('Class name not found');
+            console.error("Class name not found");
             return null;
         }
         if (number >= elem.length) {
-            console.error('Too few elements:' + elem.length);
+            console.error("Too few elements:" + elem.length);
             return null;
         }
         return elem[number];
@@ -86,8 +86,8 @@ export default class DomUtils {
         while (elem) {
             const overflow = window
                 .getComputedStyle(elem)
-                .getPropertyValue('overflow')
-            elem.style.overflow = 'hidden';
+                .getPropertyValue("overflow")
+            elem.style.overflow = "hidden";
             if (elem.clientWidth && elem.scrollWidth && elem.clientHeight && elem.scrollHeight &&
                 (elem.clientWidth < elem.scrollWidth || elem.clientHeight < elem.scrollHeight)
             ) {
@@ -95,7 +95,7 @@ export default class DomUtils {
                 return true;
             }
             elem.style.overflow = overflow;
-            elem = (['div', 'header'].includes(elem.tagName.toLowerCase())) ? null : elem.parentNode;
+            elem = (["div", "header"].includes(elem.tagName.toLowerCase())) ? null : elem.parentNode;
         }
         return false;
     }
@@ -107,20 +107,20 @@ export default class DomUtils {
         }
         let font_size = +window
             .getComputedStyle(elem)
-            .getPropertyValue('font-size')
+            .getPropertyValue("font-size")
             .slice(0, -2);
         while (this.isOverflow(selector) && font_size && font_size > 1) {
             font_size *= factor;
-            elem.style.fontSize = font_size + 'px';
+            elem.style.fontSize = font_size + "px";
         }
         font_size -= extra;
-        elem.style.fontSize = font_size + 'px';
+        elem.style.fontSize = font_size + "px";
     }
 
     static getElementValue = (elem) => {
         elem = this.elemOrId(elem);
         if (!elem) return;
-        if (["radio", "checkbox"].includes(elem.type)) return elem.checked ? elem.value : '';
+        if (["radio", "checkbox"].includes(elem.type)) return elem.checked ? elem.value : "";
         return elem.value;
     }
 
@@ -146,13 +146,13 @@ export default class DomUtils {
 
     static getRadioValue = (name) => {
         return Array.from(
-            document.querySelectorAll('input[type="radio"][name="'+name+'"]')
+            document.querySelectorAll("input[type=\"radio\"][name=\""+name+"\"]")
         ).filter(elem => elem.checked)[0].value;
     }
 
     static setRadioValue = (name, value) => {
         document
-            .querySelectorAll('input[type="radio"][name="'+name+'"]')
+            .querySelectorAll("input[type=\"radio\"][name=\""+name+"\"]")
             .forEach(elem => {
                 elem.checked = elem.value == value;
             })
@@ -166,7 +166,7 @@ export default class DomUtils {
         if (obj) {
             elem.innerHTML = this.renderTemplate(elem.innerHTML, obj)
         }
-        this.dispatchEvent(elem, 'i18n-translate');
+        this.dispatchEvent(elem, "i18n-translate");
         return html;
     };
 
@@ -174,7 +174,6 @@ export default class DomUtils {
         if (!node) {
             node = document
         }
-        //document.querySelector('.titanic:nth-child(2)')
         const elem =  node.querySelector(query)
         if (!elem) return;
         return this.setInnerHtml(elem, html, obj)
@@ -183,9 +182,9 @@ export default class DomUtils {
     static setSelectOptions = (elem, data) => {
         elem = this.elemOrId(elem);
         if (!elem) return;
-        elem.innerHTML = '';
+        elem.innerHTML = "";
         data.forEach(d => {
-            const option = document.createElement('option')
+            const option = document.createElement("option")
             const key = Object.keys(d)[0]
             option.value = DomUtils.escapeHTML(key)
             option.textContent = d[key]
@@ -218,53 +217,53 @@ export default class DomUtils {
     });
 
     static htmlTitle = (str) => {
-        str = str.replace(/_/g, ' ').trim()
+        str = str.replace(/_/g, " ").trim()
         return str.charAt(0).toUpperCase() + str.slice(1)
     }
 
 
     static tdFromValue = (x) => {
-        let style = ''
+        let style = ""
         if (isNaN(x)) {
-            if (x.startsWith('<<_')) {
-                style = 'left'
-            } else if (x.startsWith('><_')) {
-                style = 'center';
-            } else if (x.startsWith('<>_')) {
-                style = 'justify';
-            } else if (x.startsWith('>>_')) {
-                style = 'right';
+            if (x.startsWith("<<_")) {
+                style = "left"
+            } else if (x.startsWith("><_")) {
+                style = "center";
+            } else if (x.startsWith("<>_")) {
+                style = "justify";
+            } else if (x.startsWith(">>_")) {
+                style = "right";
             }
             if (style) {
                 x = x.slice(3);
             }
         } else { // Number, align right
-            style = 'right';
+            style = "right";
         }
-        return `<td${(style ? ' style="text-align:' + style + '"' : '')}>${x}</td>`
+        return `<td${(style ? " style=\"text-align:" + style + "\"" : "")}>${x}</td>`
     }
 
-    static htmlFromArray = (data) => '' +
-            '<table '+
-                'class="table-from-array' + ('bar' in data[0] ? ' table-bar' : '') + '"' +
-                Object.keys(data[0]).filter(k=>'!'===k[0]).map(k=>` data-${k.slice(1)}="${data[0][k]}"`).join('') +
-            '>' +
-            '<tr>' +
+    static htmlFromArray = (data) => "" +
+            "<table "+
+                "class=\"table-from-array" + ("bar" in data[0] ? " table-bar" : "") + "\"" +
+                Object.keys(data[0]).filter(k=>"!"===k[0]).map(k=>` data-${k.slice(1)}="${data[0][k]}"`).join("") +
+            ">" +
+            "<tr>" +
                 Object
                     .keys(data[0])
-                    .filter(x=>'!'!==x[0])
-                    .map(x => `<th data-i18n-key="${('data-'+x).toLowerCase().replace(/(\s|_|-)+/g, '-')}">${DomUtils.htmlTitle(x)}</th>`)
-                    .join('\n') +
-            '</tr>' +
-            data.map(x => '<tr>' + Object.keys(x).filter(k=>'!'!==k[0]).map(k=>x[k]).map(
+                    .filter(x=>"!"!==x[0])
+                    .map(x => `<th data-i18n-key="${("data-"+x).toLowerCase().replace(/(\s|_|-)+/g, "-")}">${DomUtils.htmlTitle(x)}</th>`)
+                    .join("\n") +
+            "</tr>" +
+            data.map(x => "<tr>" + Object.keys(x).filter(k=>"!"!==k[0]).map(k=>x[k]).map(
                 x => DomUtils.tdFromValue(x)
-            ).join('') + '</tr>').join('') +
-            '</table>';
+            ).join("") + "</tr>").join("") +
+            "</table>";
         ;
-    static htmlFromObject = (data) => '' +
-            '<table>' +
-            Object.keys(data).map((x) => `<tr><th>${DomUtils.htmlTitle(x)}</th>${DomUtils.tdFromValue(data[x])}</tr>`).join('\n') +
-            '</table>'
+    static htmlFromObject = (data) => "" +
+            "<table>" +
+            Object.keys(data).map((x) => `<tr><th>${DomUtils.htmlTitle(x)}</th>${DomUtils.tdFromValue(data[x])}</tr>`).join("\n") +
+            "</table>"
         ;
 
 
@@ -273,7 +272,7 @@ export default class DomUtils {
             return DomUtils.htmlFromArray(data);
         }
         // First check array, because array is also an object (as is null)
-        if (typeof data === 'object') {
+        if (typeof data === "object") {
             return DomUtils.htmlFromObject(data);
         }
         return data;
@@ -300,31 +299,66 @@ export default class DomUtils {
             target = target.parentNode;
         }
     }
+
+    static getColorScheme = () => {
+        let scheme = "light";
+        document.getElementsByName("color-scheme").forEach(elem => {
+            if (document.body.classList.contains(elem.value)) {
+                scheme = elem.value;
+            }
+        });
+        return scheme;
+    }
+
+    static setColorScheme = () => {
+        console.log("setColorScheme")
+        let not_checked = true;
+        const schemes = []
+        document.getElementsByName("color-scheme").forEach(elem => {
+            if (elem.checked) {
+                document.body.classList.add(elem.value);
+                not_checked = false;
+            } else {
+                document.body.classList.remove(elem.value);
+                schemes.push(elem.value);
+            }
+        })
+        if (not_checked) {
+            schemes.forEach(scheme => document.body.classList.remove(scheme));
+            if (
+                window.matchMedia &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+            ) {
+                document.body.classList.add("dark");
+            }
+        }
+    }
+
 }
 
-document.addEventListener('mousedown', DomUtils.onLabelForChecked);
-document.addEventListener('touchstart', DomUtils.onLabelForChecked);
-document.addEventListener('mousedown', DomUtils.onLabelForUnchecked);
-document.addEventListener('touchstart', DomUtils.onLabelForUnchecked);
+document.addEventListener("mousedown", DomUtils.onLabelForChecked);
+document.addEventListener("touchstart", DomUtils.onLabelForChecked);
+document.addEventListener("mousedown", DomUtils.onLabelForUnchecked);
+document.addEventListener("touchstart", DomUtils.onLabelForUnchecked);
 
-document.addEventListener('input', (e) => {
-    if ('INPUT' === e.target.tagName && 'range' === e.target.type) {
+document.addEventListener("input", (e) => {
+    if ("INPUT" === e.target.tagName && "range" === e.target.type) {
         document
-            .querySelectorAll('[data-for-range="'+e.target.id+'"')
+            .querySelectorAll("[data-for-range=\""+e.target.id+"\"")
             .forEach(elem => {
                 let value = +e.target.value;
 
                 const larger_than =
                     elem.dataset.valueLargerThan &&
-                    value === +e.target.getAttribute('max')
+                    value === +e.target.getAttribute("max")
                 if (larger_than) {
-                    value -= e.target.getAttribute('step') || 1;
+                    value -= e.target.getAttribute("step") || 1;
                 }
                 if ("valueToFixed" in elem.dataset) {
                     value = value.toFixed(+elem.dataset.valueToFixed);
                 }
                 if (larger_than) {
-                    value = '>' + value;
+                    value = ">" + value;
                 }
 
                 if ("rangeAttr" in elem.dataset) {
@@ -340,7 +374,7 @@ document.addEventListener('input', (e) => {
     }
 });
 
-document.addEventListener('click', e => {
+document.addEventListener("click", e => {
     let target = e.target;
     let label;
     while (target && target.dataset) {
@@ -358,18 +392,17 @@ document.addEventListener('click', e => {
         if (label) {
             const range = document.getElementById(label);
             if (range) {
-                range.value = +range.value - (+range.getAttribute('step') || 1);
-                DomUtils.dispatchEvent(range, 'input');
+                range.value = +range.value - (+range.getAttribute("step") || 1);
+                DomUtils.dispatchEvent(range, "input");
             }
         }
 
         label = target.dataset.labelForRangeIncrease;
         if (label) {
-            console.warn('Label', label);
             const range = document.getElementById(label);
             if (range) {
-                range.value = +range.value + (+range.getAttribute('step') || 1);
-                DomUtils.dispatchEvent(range, 'input');
+                range.value = +range.value + (+range.getAttribute("step") || 1);
+                DomUtils.dispatchEvent(range, "input");
             }
         }
 
@@ -377,13 +410,13 @@ document.addEventListener('click', e => {
     }
 });
 
-document.addEventListener('dblclick', (e) => {
+document.addEventListener("dblclick", (e) => {
     let target = e.target;
     while (target && target.dataset) {
         const source = target.dataset.dblclickSource;
         const classname = target.dataset.dblclickClass;
         if (source && classname) {
-            document.querySelectorAll('[data-dblclick-target="' + source + '"]').forEach(elem => {
+            document.querySelectorAll("[data-dblclick-target=\"" + source + "\"]").forEach(elem => {
                 if (elem.classList.contains(classname)) {
                     elem.classList.remove(classname);
                 } else {
@@ -395,32 +428,32 @@ document.addEventListener('dblclick', (e) => {
     }
 });
 
-document.addEventListener('input', (e) => {
+document.addEventListener("input", (e) => {
     if (e.target.dataset.sourceUrl) {
         if (DomUtils.timer) {
             window.clearTimeout(DomUtils.timer);
         }
         DomUtils.timer = window.setTimeout(
             () => {
-                if ('' === e.target.value) {
+                if ("" === e.target.value) {
                     const holder = DomUtils.elemOrId(e.target.dataset.targetSelect)
-                    if (holder) { holder.innerHTML = ''; }
+                    if (holder) { holder.innerHTML = ""; }
                     return true;
                 }
                 DomUtils.timer = 0;
                 fetch(
                     e.target.dataset.sourceUrl.replaceAll(
                         /\$\{(.*?)\}/g,
-                        (x,y) => y.split('.').reduce((acc, x) => acc[x], window)
+                        (x,y) => y.split(".").reduce((acc, x) => acc[x], window)
                     ) + encodeURIComponent(e.target.value)
                 )
                     .then(res => res.json())
                     .then(json => {
                         const holder = DomUtils.elemOrId(e.target.dataset.targetSelect)
                         if (holder) {
-                            holder.innerHTML = '';
+                            holder.innerHTML = "";
                             json.forEach(x => {
-                                const node = document.createElement('option')
+                                const node = document.createElement("option")
                                 node.text = x.username;
                                 node.value = x.id;
                                 holder.append(node);
@@ -434,11 +467,19 @@ document.addEventListener('input', (e) => {
     }
 });
 
-document.addEventListener('change', e => {
+document.addEventListener("change", e => {
     if (e.target.dataset.targetSelect) {
         DomUtils.dispatchEvent(
             DomUtils.elemOrId(e.target.dataset.targetSelect),
-            'change'
+            "change"
         );
     }
+    if ("color-scheme" === e.target.name) {
+        DomUtils.setColorScheme();
+    }
 });
+
+if (window.matchMedia) {
+    const colorSchemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    colorSchemeQuery.addEventListener("change", () => DomUtils.setColorScheme());
+}

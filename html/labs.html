@@ -4,7 +4,7 @@
         <a href="${firebase_dynamic_link}" aria-label="${title}"><div class="compass ${needle_class}"></div></a>
         <label for="details-${id}" class="image"><img src="${key_image_url}" alt="" /></label>
         <label for="details-${id}">
-            <div for="details-${id}" class="title dark-blue"><span class="${linear_class}">${_nr}</span>) ${title}</div>
+            <div for="details-${id}" class="title text-accent"><span class="${linear_class}">${_nr}</span>) ${title}</div>
         </label>
         <div class="flex plain">
            <a href="#id-${adventure_id}" class="adventure">${adventure}</a>
@@ -55,7 +55,7 @@
             <div class="answer">
                 <select><option data-i18n-key="labs-select" value="">Select:</option></select>
                 <input value="An African or European swallow?" />
-                <button data-id="${id}"  data-i18n-key="labs-log" class="log-button">Log</button>
+                &nbsp;<button data-id="${id}"  data-i18n-key="labs-log" class="log-button">Log</button>
             </div>
             <label for="details-${id}" id="journal-${id}" class="journal hidden"></label>
         </div>
@@ -72,7 +72,7 @@
 
 <template id="no-labs-template">
     <input id="details-no-labs" class="details hidden" type="checkbox" checked="checked"/>
-    <div class="lab border-orange background-sky">
+    <div class="lab border-orange background-highlight">
         <div  class="description">
             <h2 data-i18n-key="labs-no-adventures">No Adventures found</h2>
             <div data-i18n-key="labs-no-adventures-explanation">
@@ -91,7 +91,7 @@
 </div>
 
 <input id="details-loading-labs" class="details hidden" type="checkbox" checked="checked"/>
-<div class="lab border-orange background-sky">
+<div class="lab border-orange background-highlight">
     <div class="description">
         <h2 data-i18n-key="labs-loading-adventures">Adventures loading</h2>
         <div data-i18n-key="labs-loading-adventures-explanation">

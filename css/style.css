@@ -3,10 +3,18 @@
 @import url('../css/ratings.css');
 @import url('../css/resize.css');
 * {
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 0px;
     box-sizing: border-box;
     accent-color: var(--accent-color);
+    /* transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; */
+}
+
+/* Disable transitions for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
 }
 
 .table-navigation {
@@ -15,8 +23,8 @@
 }
 
 body {
-    background: var(--sky);
-    color: var(--black);
+    background: var(--background-highlight);
+    color: var(--text-color);
     font-family: "Noto Sans", Arial, Helvetica, sans-serif;
     font-size: 1rem;
     line-height: 1.1rem;
@@ -26,7 +34,7 @@ body {
 }
 
 header {
-    background: var(--white);
+    background: var(--background-color);
     border-bottom: 1px solid var(--orange);
     height: var(--header-height);
     max-width: var(--max-width);
@@ -40,7 +48,7 @@ header {
 footer {
     background: var(--orange);
     bottom: 0;
-    color: var(--white);
+    color: var(--footer-color);
     height: var(--footer-height);
     margin: auto;
     max-width: var(--max-width);
@@ -49,6 +57,10 @@ footer {
     padding-left: 1rem;
     position:absolute;
     width: 100%;
+
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 }
 
 main {
@@ -56,42 +68,133 @@ main {
     position: absolute;
     top: var(--header-height);
     bottom: var(--footer-height);
-    background: var(--white);
+    background: var(--background-color);
     padding: 1rem;
     overflow: auto;
     width: 100%;
 }
 
 h1 {
-    color: var(--orange);
+    color: var(--h1-color);
     font-size: 1.5rem;
     line-height: 1.7rem;
 }
 h2 {
-    color: var(--orange);
+    color: var(--h2-color);
     font-size: 1.2rem;
     line-height: 1.32rem;
 }
 h3 {
-    color: var(--medium-blue);
+    color: var(--h3-color);
     font-size: 1.1rem;
     line-height: 1.21rem;
 }
 
-a:link { color: var(--medium-blue); }
-a:visited { color: var(--dark-blue); }
-a:hover { color: var(--orange); }
-a:active { color: var(--light-blue); }
+a:link { color: var(--link-color); }
+a:visited { color: var(--link-visited); }
+a:hover { color: var(--link-hover); }
+a:active { color: var(--link-active); }
+
+*,
+.darkplus,
+.lightplus {
+    input:not([type]),
+    input[type]:not([type='range']) {
+        background: var(--background-color);
+        border: 1px solid var(--input-border);
+        border-radius: 2px;
+        color: var(--text-color);
+        padding: 1px;
+    }
+
+    select {
+        background: light-dark(var(--button-background), var(--background-color));
+        border: 1px solid var(--input-border);
+        border-radius: 4px;
+        color: var(--text-color);
+        padding: 1px;
+    }
+
+    select:hover {
+        background: light-dark(var(--button-hover), var(--button-background));
+    }
+    option {
+        background: var(--background-color);
+    }
+    option:active,
+    option:hover {
+        background: var(--button-background);
+    }
+    /*
+    input[type="range"] {
+        border: none;
+    }
+    */
+    button {
+        background-color: var(--button-background);
+        border: 1px solid var(--input-border);
+        border-radius: 3px;
+        color: var(--text-color);
+        padding: 1px;
+    }
+    button:hover,
+    button:focus {
+        background-color: var(--button-hover);
+    }
+}
+          .button-8 {
+            background-color: #e1ecf4;
+            border-radius: 3px;
+            border: 1px solid #7aa7c7;
+            box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #39739d;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            margin: 0;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+          }
+
+          .button-8:hover,
+          .button-8:focus {
+            background-color: #b3d3ea;
+            color: #2c5777;
+          }
+
+          .button-8:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+          }
+
+          .button-8:active {
+            background-color: #a0c7e4;
+            box-shadow: none;
+            color: #2c5777;
+          }
+
+
 
 td,th {
     text-align: left;
     vertical-align: top;
 }
 td {
-    border-bottom: 1px solid var(--sky);
+    border-bottom: 1px solid var(--td-border);
 }
 th {
-    border-bottom: 1px solid var(--orange);
+    border-bottom: 1px solid var(--th-border);
 }
 
 [id^="map-"],
@@ -114,7 +217,8 @@ li {
 .table-bar td:last-child { width: 100%; } /* well, it's less than 100% in the end, but this still works for me */
 
 
-.background-sky { background-color: var(--sky); }
+.background-highlight { background-color: var(--background-highlight); }
+.text-accent { color: var(--text-accent); }
 .border-green {    border-color: var(--green); }
 .border-red { border-color: var(--red); }
 .border-yellow { border-color: var(--yellow); }
@@ -129,7 +233,7 @@ li {
 .blur { filter: blur(0.25rem); }
 .clear { clear: both; display: block; }
 .colon:after { content: ':'; }
-.flex {    display: flex; }
+.flex { display: flex; }
 .line-through { text-decoration: line-through; }
 .relative { position: relative; }
 .w100 { width: 100% }
@@ -158,8 +262,8 @@ li {
 
 /* color out of the not empty, so it can be overwritten with a simple class */
 .label {
-    background-color: var(--dark-blue);
-    color: var(--white);
+    background-color: var(--text-accent);
+    color: var(--label-color);
 }
 .label:not(:empty) {
     font-size: 0.84rem;
@@ -228,7 +332,7 @@ li {
 }
 
 .wait * {
-    background-color: var(--sky);
+    background-color: var(--background-highlight);
 }
 .wait .description::before {
     animation: animatedBackground 2.5s linear infinite;
@@ -326,8 +430,8 @@ li {
     100% { content: "🌍"; }
 }
 
-.warning {
-    color: var(--red);
+* *.warning {
+    color: var(--red) !important;
 }
 
 .symbol {
@@ -354,10 +458,10 @@ li {
 }
 
 .plain a { text-decoration: none; }
-.plain a:link { color: var(--black); }
-.plain a:visited { color: var(--dark-blue); }
-.plain a:hover { color: var(--orange); }
-.plain a:active { color: var(--light-blue); }
+.plain a:link { color: var(--text-color); }
+.plain a:visited { color: var(--link-visited); }
+.plain a:hover { color: var(--link-hover); }
+.plain a:active { color: var(--link-active); }
 
 
 #leaflet,
@@ -367,7 +471,7 @@ li {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--sky);
+    background-color: var(--background-highlight);
 }
 
 #center_position ~ * #center_div {
@@ -403,9 +507,9 @@ li {
 }
 
 .messages {
-    border: 3px solid var(--sky);
+    border: 3px solid var(--messages-border);
     border-radius: 10px;
-    box-shadow: 5px 5px 5px gray;
+    box-shadow: 5px 5px 5px var(--shadow-color);
     margin-bottom: 0.5rem;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -427,10 +531,10 @@ li {
 
 .popup {
     position: absolute; /* Not fixed because I want it to be relative to the border */
-    background-color: var(--white);
-    border: 0.25rem solid var(--light-blue);
+    background-color: var(--background-color);
+    border: 0.25rem solid var(--popup-border);
     border-radius: 1rem;
-    box-shadow: 6px 7px 4px #333333cc;
+    box-shadow: 6px 7px 4px var(--shadow-color);
     z-index: 9999;
     padding: 1.3rem 0.5rem 1rem 1rem;
     margin-left: 1rem;
@@ -441,10 +545,10 @@ li {
 
 .popup::before {
     position:absolute;
-    color: var(--white);
+    color: var(--background-color);
     border-radius: 1rem 1rem 0 0;
-    border: 0.2rem solid var(--light-blue);
-    background-color: var(--gray);
+    border: 0.2rem solid var(--popup-border);
+    background-color: var(--popup-top);
     content: 'X \00a0';
     width: 100%;
     height: 0.9rem;
@@ -549,8 +653,8 @@ div.friends-desc {
 }
 
 .bar {
-    background-color: var(--medium-blue);
-    border: 1px solid var(--dark-blue);
+    background-color: var(--bar-main);
+    border: 1px solid var(--bar-border);
     border-radius: 3px;
     display: block;
     height: 1rem;
@@ -559,11 +663,11 @@ div.friends-desc {
     position:relative;
 }
 .bar.max {
-    background-color: var(--orange);
-    border: 1px solid var(--dark-orange);
+    background-color: var(--bar-max-main);
+    border: 1px solid var(--bar-max-border);
 }
 .bar.active {
-    background-color: var(--medium-blue);
+    background-color: var(--bar-main);
     height: calc(1rem - 2px);
     z-index: 20;
     border-bottom-right-radius: 5px;
@@ -573,16 +677,16 @@ div.friends-desc {
     border-top-width: 0;
 }
 .bar.max.active {
-    background-color: var(--orange);
+    background-color: var(--bar-max-main);
 }
 .bar.active+.bar {
-    background-color: var(--light-blue);
+    background-color: var(--bar-extra);
     margin-top: calc(+1px - 1.1rem);
     position:relative;
     z-index: 10
 }
 .bar.active+.bar.max {
-    background-color: var(--light-orange);
+    background-color: var(--bar-max-extra);
 }
 
 .lab {
@@ -619,9 +723,12 @@ input.details:checked ~ .lab {
 
 [data-distance] .answer input,
 [data-distance] .answer select {
-    pointer-events: none;
-    color: var(--disabled-color);
     background: var(--disabled-background);
+    border: 1px solid gray;
+    border-radius: 2px;
+    color: var(--disabled-color);
+    padding: 1px;
+    pointer-events: none;
 }
 .border-red .answer input,
 .border-red .answer select,
@@ -640,11 +747,20 @@ input.details:checked ~ .lab {
     color: var(--disabled-color);
 }
 
+#scan-video {
+  width: 100%;
+  --max-width: 600px;
+  border: 2px solid var(--orange);
+  border-radius: 8px;
+  display: block;
+}
+
+
 .theme {
     -webkit-mask-position: center;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
-    background-color: var(--medium-blue);
+    background-color: var(--text-accent);
     display: inline-block;
     height: 0.84rem;
     width: 0.84rem;
@@ -681,6 +797,12 @@ input.details:checked ~ .lab {
 .theme.wildlife { -webkit-mask-image: url("../images/themes/Wildlife.svg");}
 .theme.other { -webkit-mask-image: url("../images/svg/ph/regular/dots-three-circle.svg");}
 .theme.none { -webkit-mask-image: url("../images/svg/ph/regular/x-circle.svg");}
+
+.theme.moon { -webkit-mask-image: url("../images/svg/ph/regular/moon.svg");}
+.theme.moonstars { -webkit-mask-image: url("../images/svg/ph/regular/moon-stars.svg");}
+.theme.sun { -webkit-mask-image: url("../images/svg/ph/regular/sun.svg");}
+.theme.sunhorizon { -webkit-mask-image: url("../images/svg/ph/regular/sun-horizon.svg");}
+
 
 .lab .image {
     height: 3.3rem;
@@ -753,7 +875,7 @@ input.details:checked ~ .lab .image {
 }
 
 .random {
-    color: var(--medium-blue);
+    color: var(--text-accent);
 }
 
 .random::after {
@@ -788,7 +910,7 @@ input.details:checked ~ .lab .image {
 }
 
 .lab .properties .icon {
-    background-color: var(--dark-blue);
+    background-color: var(--text-accent);
     height: 0.84rem;
     width: 0.84rem;
 }
@@ -815,7 +937,7 @@ input.details:checked ~ .lab [id^="country-"]:checked + .country {
     font-size: 0.84rem;
     line-heigt: 0.924rem;
     margin-right: 0.5rem;
-    color: var(--medium-blue);
+    color: var(--text-accent);
 }
 
 .lab .owner,
@@ -824,7 +946,7 @@ input.details:checked ~ .lab [id^="country-"]:checked + .country {
 .lab .flag {
     font-size: 0.84rem;
     line-height: 0.924rem;
-    color: var(--dark-blue);
+    color: var(--text-accent);
 }
 .lab .owner {
     overflow: hidden;
@@ -862,11 +984,11 @@ input.details:checked ~ .border-yellow .title::before {
     padding-right: 0.1rem;
 }
 .lab .properties div {
-    color: var(--dark-blue);
+    color: var(--text-accent);
     white-space: nowrap;
 }
 .lab .properties span {
-    color: var(--medium-blue);
+    color: var(--text-highlight);
 }
 .lab .properties .published-holder {
     justify-self: right;
@@ -920,7 +1042,7 @@ input.details:checked ~ .border-yellow .title::before {
     display: block;
     padding-left: 0.3rem;
     margin-right: 3.5rem;
-    color: var(--medium-blue);
+    color: var(--text-accent);
 }
 
 .lab .answer {
@@ -942,7 +1064,7 @@ input.details:checked ~ .border-yellow .title::before {
     font-size: 0.84rem;
     line-height: 0.924rem;
     padding-left: 0.3rem;
-    color: var(--dark-blue);
+    color: var(--text-accent);
 }
 
 .answer + .journal {
@@ -1036,7 +1158,7 @@ input.inc-exc[type="radio"]:checked + * + * + .label::before { content: '✔\fe0
 input.inc-exc[type="radio"]:checked + * + .label { background-color: var(--red); }
 input.inc-exc[type="radio"]:checked + * + .label::before { content: '✘'; }
 input.inc-exc[type="radio"] + .label {
-    background-color: var(--gray);
+    background-color: var(--incexc-background);
     display: flex;
     margin-right: 0.1rem;
 }
@@ -1066,7 +1188,10 @@ input[id^="disable-"]:checked + * + * > * {
 }
 
 .label .theme {
-    background-color: var(--white);
+    background-color: var(--label-color);
+}
+footer .theme {
+    background-color: var(--footer-color);
 }
 
 
@@ -1166,6 +1291,7 @@ input[id^="disable-"]:checked + * + * > * {
 
 
 label[for^="bit-"],
+label[for^="color-"],
 label[for^="symbol-"],
 label[for="translate"],
 label[for="debug"] {
@@ -1194,6 +1320,10 @@ label[for="debug"] {
 #bit-rooster:checked ~ * label[for="bit-rooster"],
 #bit-swan:checked ~ * label[for="bit-swan"],
 #bit-turkey:checked ~ * label[for="bit-turkey"],
+#color-dark:checked ~ * label[for="color-dark"],
+#color-darkplus:checked ~ * label[for="color-darkplus"],
+#color-light:checked ~ * label[for="color-light"],
+#color-lightplus:checked ~ * label[for="color-lightplus"],
 #debug:checked ~ * label[for="debug"] {
     filter: grayscale(0);
     opacity: 1;
@@ -1225,6 +1355,8 @@ input.details:checked ~ .lab .flag,
     display: block;
     visibility: visible;
 }
+#debug:checked ~ * .debug.inline { display: inline; }
+#debug:checked ~ * .debug.inline-block { display: inline-block; }
 
 #labs,
 #map,
@@ -1268,7 +1400,7 @@ input[id^="country-"],
     text-decoration: var(--orange) wavy underline;
 }
 #translate:checked ~ * .i18n-edit:after {
-    color: var(--medium-blue);
+    color: var(--text-accent);
     content: '✎'; /* ✏️ */
     cursor: pointer;
     display: inline-block;
@@ -1277,4 +1409,37 @@ input[id^="country-"],
 
     font-weight: normal;
     text-decoration-line: none;
+}
+
+.leaflet-control.leaflet-control-attribution {
+    --max-width: calc(100% - 120px);
+    z-index: 700;
+}
+
+body.dark .leaflet-bar a,
+body.dark .leaflet-control-attribution,
+body.dark .leaflet-control-layers-expanded,
+body.dark .leaflet-control-layers-toggle
+{
+    background-color: var(--black);
+    color: var(--button-background);
+}
+body.dark .leaflet-bar a:hover {
+    background-color: var(--button-hover);
+}
+body.dark .leaflet-control-scale-line {
+    border-color: var(--gray);
+    color: var(--white);
+    text-shadow: 1px 1px var(--black);
+}
+
+body.dark .leaflet-control-attribution,
+body.dark .leaflet-control-scale-line {
+   background-color: rgb(from var(--black) r g b / 0.8);
+}
+
+body .leaflet-popup-content-wrapper,
+body .leaflet-popup-tip {
+    background-color: var(--background-color);
+    color: var(--text-color);
 }

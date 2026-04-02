@@ -2,12 +2,12 @@
 
 .dual-range {
     position: relative;
-    border: 0.0625rem solid var(--dark-gray);
+    border: 0.0625rem solid var(--input-border);
     border-radius: 0.375rem;
     background-size: 100% 1rem;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: gray;
+    background-color: var(--button-background);
     height: 0.4375rem;
     margin: 0.375rem 0;
     width: 100%;
