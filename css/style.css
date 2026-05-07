@@ -842,19 +842,19 @@ input.details:checked ~ .lab .image {
     right: 3.2rem;
 }
 
-.border-green .title::before{
+.lab .border-green .title::before{
     color: var(--green);
     content: '✔\fe0e'; /* convert to character for iOS */
 }
-.border-orange .title::before{
+.lab .border-orange .title::before{
     color: var(--orange);
     content: '⌘';
 }
-.border-red .title::before{
+.lab .border-red .title::before{
     color: var(--red);
     content: '✘';
 }
-.border-yellow .title::before{
+.lab .border-yellow .title::before{
     color: var(--yellow);
     content: '✽';
 }
@@ -1122,7 +1122,9 @@ input.details:checked ~ .lab .distance {
     padding-right: 0.1rem;
 }
 
-.map .adventure {
+
+.map .adventure,
+.map .stages {
     font-size: 0.84rem;
     line-height: 0.924rem;
     white-space: nowrap;
@@ -1133,6 +1135,7 @@ input.details:checked ~ .lab .distance {
     padding-right: 0.2rem;
     float: left;
 }
+
 
 #timestamp {
     float:right; 
@@ -1350,6 +1353,7 @@ input.details:checked ~ .lab .flag,
 #translate:checked ~ * .translate,
 [id^="themes-"]:checked + * .tag,
 .border-orange.lab .stages,
+.border-orange.map .stages,
 .block
 {
     display: block;
@@ -1376,6 +1380,7 @@ input[id^="country-"],
 .border-orange .answer,
 .border-orange .challenge,
 .lab .stages,
+.map .stages,
 .country,
 .debug,
 .filter,

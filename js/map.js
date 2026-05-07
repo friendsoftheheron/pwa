@@ -23,8 +23,10 @@ export default class Map {
     //static labs = {}
 
     static weight = {
-        yellow: 0,
+        orange: 11,
         red: 3,
+        yellow: 0,
+
     }
 
     // https://leaflet-extras.github.io/leaflet-providers/preview/
@@ -84,18 +86,6 @@ export default class Map {
                 maxZoom: 18,
             }
         ],
-        /*
-        "Geoportail France Orthos": [
-            "https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}", {
-                attribution: "<a href=\"https://www.geoportail.gouv.fr/\">Geoportail France</a>",
-                bounds: [[-75, -180], [81, 180]],
-                format: "image/jpeg",
-                maxZoom: 19,
-                minZoom: 2,
-                style: "normal",
-            }
-        ],
-        */
     }).map(x => [x[0], L.tileLayer(x[1][0], x[1][1])])
         .reduce(function(acc, x) {
             acc[x[0]] = x[1];
@@ -285,6 +275,7 @@ export default class Map {
     }
 
     static setCircleColor = (id, color) => {
+        console.warn(`setCircleColor(${id}, ${color})`);
         const circle = Map.id2layer(id);
         if (circle) {
             circle.setStyle({

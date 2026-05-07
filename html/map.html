@@ -1,7 +1,11 @@
 <template id="map_template">
-    <div id="map-${id}">
+    <div id="map-${id}" class="map border-${color}">
         <div class="title text-accent"><span class="${linear_class}">${_nr}</span>) ${title}</div>
-        <div class="small">${adventure}</div>
+        <div class="small">
+            <span class="adventure">${adventure}</span>
+            <span class="stages">${stages} <span data-i18n-key="labs-stages">locations</span></span>
+            <br />
+        </div>
     </div>
 </template>
 <input id="center_position" type="checkbox" />
