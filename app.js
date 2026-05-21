@@ -504,20 +504,22 @@ const rateAdventure = (data=null) => {
         });
     return false
 }
-const startCam = (video) => {
+
+const startCam = (video) => new Promise((resolve, reject) => {
     console.log("startCam()", video);
     if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({video:  {facingMode: {ideal: "environment" }}})
             .then(stream => {
                 video.srcObject = stream;
+                resolve(video)
             })
             .catch(error => {
-                console.error("Something went wrong!", error);
+                reject("Something went wrong! " + error);
             });
     } else {
-        console.log("Browser doesn't support getUserMedia");
+        reject("Browser doesn't support getUserMedia");
     }
-};
+});
 
 const stopCam = (video) => {
     console.log("stopCam()", video);
@@ -536,8 +538,8 @@ const scanQR = () => {
             du.setChecked("symbol-page");
             const video = document.getElementById("scan-video");
             const result = document.getElementById("scan-result");
-            if (!video) { console.error("No video"); }
-            if (!result) { console.error("No result"); }
+            if (!video) { console.error("No video"); return; }
+            if (!result) { console.error("No result"); return; }
 
             const observer = new MutationObserver((mutations, observer) => {
                 mutations.forEach((mutation) => {
@@ -562,41 +564,50 @@ const scanQR = () => {
                 }
             }), 300);
 
-            startCam(video);
-
             if (undefined === window.BarcodeDetector) {
                 result.textContent = "Browser doesn't support BarcodeDetector";
                 result.classList.add("warning");
                 return;
             }
-            const detector = new BarcodeDetector({formats: ["qr_code"]});
-            const barcode_interval = window.setInterval(() => {
-                detector
-                    .detect(video)
-                    .then(barcodes => {
-                        if (barcodes.length > 0) {
-                            result.textContent = barcodes[0].rawValue + "\n";
 
-                            const match = barcodes[0]
-                                .rawValue
-                                .match(/https:\/\/labs.geocaching.com\/goto\/([0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12})/i);
-                            if (match) {
-                                result.textContent = match[1];
-                                result.classList.remove("warning");
-                                stopCam(video);
-                                video.classList.add("wait");
-                                clearInterval(barcode_interval);
-                                Labs.openLab(match[1]);
-                            }
+            startCam(video)
+                .then((video) => {
+                    const detector = new BarcodeDetector({formats: ["qr_code"]});
+                    const barcode_interval = window.setInterval(() => {
+                        if (! document.getElementById("")) {
+                            document.clearInterval(barcode_interval);
+                            return;
                         }
-                    })
-                    .catch((err) => {
-                        result.textContent += err;
-                        result.classList.add("warning");
-                    })
-                ;
-            }, 1000);
-        });
+                        detector
+                            .detect(video)
+                            .then(barcodes => {
+                                if (barcodes.length > 0) {
+                                    result.textContent = barcodes[0].rawValue + "\n";
+
+                                    const match = barcodes[0]
+                                        .rawValue
+                                        .match(/https:\/\/labs.geocaching.com\/goto\/([0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12})/i);
+                                    if (match) {
+                                        result.textContent = match[1];
+                                        result.classList.remove("warning");
+                                        stopCam(video);
+                                        video.classList.add("wait");
+                                        document.clearInterval(barcode_interval);
+                                        Labs.openLab(match[1]);
+                                    }
+                                }
+                            })
+                            .catch((err) => {
+                                result.textContent += err;
+                                result.classList.add("warning");
+                            })
+                        ;
+                    }, 1000);
+                })
+                .catch((err) => console.error(err))
+            ;
+        })
+    ;
 }
 
 const translate = (page = 1) => {
@@ -1034,7 +1045,6 @@ document.addEventListener("click", (e) => {
                 st.updateSetting(bits);
         }
 
-
         if (target.id.startsWith("symbol-")) {
             // Handled by the change listener
             // Don't close the popups
@@ -1083,7 +1093,7 @@ document.addEventListener("click", (e) => {
                         du.setChecked("symbol-popup")
                     })
                 return false;
-            case "cancel":
+            case "cancel": // Fall through to save and exit
             case "save-and-exit":
                 st.getSetting("primary-page").then(primary_page => {
                     du.setChecked("symbol-" + primary_page)
@@ -1093,6 +1103,12 @@ document.addEventListener("click", (e) => {
                 return postReview();
             case "restore-default-settings":
                 st.clearSettings();
+                return false;
+            case "scan-video":
+                console.warn("click scan-video");
+                target.remove();
+                document.getElementById("scan-result").innerText = "";
+                document.getElementById("scan-area").classList.remove("hidden");
                 return false;
             case "translate-save":
                 e.preventDefault();
@@ -1247,6 +1263,26 @@ document.addEventListener("change", (e) => {
         default:
             //console.log("change event not handled:", e.target.id);
             return true;
+    }
+});
+
+document.addEventListener("input", (e) => {
+    switch(e.target.id) {
+        case "scan-area":
+            const result = document.getElementById("scan-result");
+            result.textContent = "";
+            e.target.value
+			    .match(/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/gi)
+			    .filter((value, index, array) => array.indexOf(value) === index)
+			    .forEach((uuid) => {
+                    result.textContent = uuid;
+                    result.classList.remove("warning");
+                    Labs.openLab(uuid);
+                })
+            ;
+            return false;
+        default:
+            return false;
     }
 });
 

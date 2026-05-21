@@ -219,7 +219,7 @@ li {
 
 .background-highlight { background-color: var(--background-highlight); }
 .text-accent { color: var(--text-accent); }
-.border-green {    border-color: var(--green); }
+.border-green { border-color: var(--green); }
 .border-red { border-color: var(--red); }
 .border-yellow { border-color: var(--yellow); }
 .border-sky { border-color: var(--sky); }
@@ -747,12 +747,13 @@ input.details:checked ~ .lab {
     color: var(--disabled-color);
 }
 
+#scan-area,
 #scan-video {
-  width: 100%;
-  --max-width: 600px;
-  border: 2px solid var(--orange);
-  border-radius: 8px;
-  display: block;
+    border: 2px solid var(--orange);
+    border-radius: 8px;
+    display: block;
+    outline: none;
+    width: 100%;
 }
 
 
@@ -833,28 +834,28 @@ input.details:checked ~ .lab .image {
     padding-right: 4.0rem;
 }
 
-.border-green .title::before,
-.border-orange .title::before,
-.border-red .title::before,
-.border-yellow .title::before {
+.lab.border-green .title::before,
+.lab.border-orange .title::before,
+.lab.border-red .title::before,
+.lab.border-yellow .title::before {
     position: absolute;
     overflow: visible;
     right: 3.2rem;
 }
 
-.lab .border-green .title::before{
+.lab.border-green .title::before {
     color: var(--green);
     content: '✔\fe0e'; /* convert to character for iOS */
 }
-.lab .border-orange .title::before{
+.lab.border-orange .title::before {
     color: var(--orange);
     content: '⌘';
 }
-.lab .border-red .title::before{
+.lab.border-red .title::before {
     color: var(--red);
     content: '✘';
 }
-.lab .border-yellow .title::before{
+.lab.border-yellow .title::before {
     color: var(--yellow);
     content: '✽';
 }
@@ -935,7 +936,7 @@ input.details:checked ~ .lab [id^="country-"]:checked + .country {
 
 .lab .themes .tag {
     font-size: 0.84rem;
-    line-heigt: 0.924rem;
+    line-height: 0.924rem;
     margin-right: 0.5rem;
     color: var(--text-accent);
 }

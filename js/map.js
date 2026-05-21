@@ -275,7 +275,7 @@ export default class Map {
     }
 
     static setCircleColor = (id, color) => {
-        console.warn(`setCircleColor(${id}, ${color})`);
+        //console.log(`setCircleColor(${id}, ${color})`);
         const circle = Map.id2layer(id);
         if (circle) {
             circle.setStyle({
